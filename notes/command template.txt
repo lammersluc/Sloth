@@ -1,0 +1,12 @@
+module.exports = {
+    name: '',
+    aliases: [],
+    description: '',
+    usage: '',
+    enabled: true,
+    devOnly: false,
+    servAdmin: false,
+    run: async (client, message, args) => {
+
+    }
+}
