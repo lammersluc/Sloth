@@ -1,7 +1,7 @@
 require('./addons')
 const express = require('express')
 const app = express()
-const port = 80
+const port = 8080
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, , Intents.FLAGS.GUILD_MESSAGES] })
