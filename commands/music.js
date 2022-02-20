@@ -1,5 +1,3 @@
-const voice = require('@discordjs/voice')
-
 module.exports = {
     name: 'play',
     aliases: ['music', 'add'],
@@ -14,6 +12,6 @@ module.exports = {
             return message.channel.send('You are not in a voice channel.')
         }
 
-        
+
     }
 }
