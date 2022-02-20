@@ -1,3 +1,4 @@
+require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
@@ -27,4 +28,4 @@ client.on('messageCreate', message => {
   require('./event/messageCreate') (client, message)
 })
 
-client.login('OTAwMTA4NzM5MzcyMjY1NTEy.YW8hlg.aIJc46zAiRJo0D4FlW7W2Pbuzxc')
+client.login(process.env.TOKEN)
