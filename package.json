@@ -11,6 +11,7 @@
   "keywords": [],
   "description": "",
   "dependencies": {
+    "@discordjs/voice": "^0.8.0",
     "axios": "^0.26.0",
     "discord-api-types": "^0.27.2",
     "discord.js": "^13.6.0",

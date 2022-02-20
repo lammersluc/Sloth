@@ -4,14 +4,14 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
     name: 'covid',
     aliases: ['corona', 'covid-19', 'covid19'],
-    description: 'Shows current COVID-19 data for a country',
+    description: 'Shows current COVID-19 data for a country.',
     usage: 'Covid (Country)',
     enabled: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
         if(!args[0]) {
-            return message.channel.send(`Supply a country`)
+            return message.channel.send(`Please supply a country.`)
         }
 
         try {
@@ -27,7 +27,7 @@ module.exports = {
                 embeds: [embed]
             })
         } catch(e) {
-            message.channel.send('Country doesn\'t exist')
+            message.channel.send('Country doesn\'t exist.')
         }
     }
 }
