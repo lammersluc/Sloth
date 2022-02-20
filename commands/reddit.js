@@ -4,9 +4,9 @@ const moment = require('moment')
 
 module.exports = {
     name: 'reddit',
-    aliases: [],
+    aliases: ['r', 'r/'],
     description: 'Searches a random post from subreddit.',
-    usage: 'Reddit (subreddit)',
+    usage: 'Reddit (Subreddit)',
     enabled: true,
     devOnly: false,
     servAdmin: false,
@@ -22,7 +22,8 @@ module.exports = {
                 .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('MMMM Do YYYY, h:mm a')}`})
                 .setTitle(`${data.data[0].data.children[0].data.title}`)
                 .setImage(`${data.data[0].data.children[0].data.url}`)
-                .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comments`})
+                .setDescription(`${data.data[0].data.children[0].data.selftext}`)
+                .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)`})
                 .setURL(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`)
 
             message.channel.send({

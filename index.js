@@ -2,10 +2,10 @@ require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, , Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] })
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, , Intents.FLAGS.GUILD_MESSAGES] })
 const fs = require('fs')
 
-client.prefix = '$'
+client.prefix = ','
 client.commands = new Discord.Collection()
 client.usage = new Discord.Collection()
 client.aliases = new Discord.Collection()
@@ -19,7 +19,7 @@ client.on('ready', () => {
       client.aliases.set(command.aliases[alias], command.name)
     }
   })
-  client.user.setActivity('$Help for commands')
+  client.user.setActivity(`${client.prefix}Help for commands`)
   console.log(client.commands)
   console.log(`Logged in as ${client.user.tag}!`)
 })
