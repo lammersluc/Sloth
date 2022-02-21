@@ -1,12 +1,11 @@
-const { joinVoiceChannel } = require('@discordjs/voice')
-const { createAudioPlayer } = require('@discordjs/voice')
-const { createAudioResource, StreamType } = require('@discordjs/voice')
-const Voice = require('@discordjs/voice')
 const fs = require('fs')
+const ytdl = require('ytdl-core')
+const { join } = require('path')
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice')
 
 module.exports = {
     name: 'play',
-    aliases: ['music'],
+    aliases: ['p' ,'music'],
     description: 'Plays music in your voice channel',
     usage: 'Play (Search/URL)',
     enabled: true,
@@ -20,22 +19,31 @@ module.exports = {
             return message.channel.send('You are not in any voice channel.')
         }
 
-        const connection = await joinVoiceChannel({
+        const url = args.join('')
+
+        // try {
+        //     ytdl(url).pipe(fs.createWriteStream('../audio.mp3'))
+        // } catch(e) {
+        //     message.channel.send('URL not found.')
+        // }
+
+        const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
             adapterCreator: channel.guild.voiceAdapterCreator,
         })
 
-        message.channel.send('The bot has connected to voice channel.')
+        resource = createAudioResource(join('../audio.mp3'), { inlineVolume: true })
+        
+        resource.volume.setVolume(0.5)
 
-        const resource = createAudioResource('/File.mp3')
         const player = createAudioPlayer()
+        connection.subscribe(player)
 
         try {
             player.play(resource)
-
-             message.channel.send('Started playing.')
-             
+            message.channel.send('The bot started playing.')
+            
         } catch (e) {
             message.channel.send('There was an error trying to play.')
             console.log(e)

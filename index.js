@@ -20,7 +20,6 @@ client.on('ready', () => {
     }
   })
   client.user.setActivity(`${client.prefix}Help for commands`)
-  console.log(client.commands)
   console.log(`Logged in as ${client.user.tag}!`)
 })
 

@@ -2,9 +2,9 @@ const { getVoiceConnection } = require('@discordjs/voice');
 
 module.exports = {
     name: 'leave',
-    aliases: ['stop'],
-    description: '',
-    usage: '',
+    aliases: ['l' ,'stop', 's'],
+    description: 'Makes the bot leave voice channel',
+    usage: 'Leave',
     enabled: true,
     devOnly: false,
     servAdmin: false,
@@ -13,7 +13,8 @@ module.exports = {
         const connection = getVoiceConnection(message.member.guild.id)
 
         try {
-
+            message.member.guild.me.edit({servermute:false})
+            
             connection.destroy()
             message.channel.send('The bot has left the voice channel.')
 
