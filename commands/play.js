@@ -21,11 +21,11 @@ module.exports = {
 
         const url = args.join('')
 
-        // try {
-        //     ytdl(url).pipe(fs.createWriteStream('../audio.mp3'))
-        // } catch(e) {
-        //     message.channel.send('URL not found.')
-        // }
+        try {
+            ytdl(url).pipe(fs.createWriteStream('../audio.mp3'))
+        } catch(e) {
+            message.channel.send('URL not found.')
+        }
 
         const connection = joinVoiceChannel({
             channelId: channel.id,
@@ -34,7 +34,7 @@ module.exports = {
         })
 
         resource = createAudioResource(join('../audio.mp3'), { inlineVolume: true })
-        
+        console.log
         resource.volume.setVolume(0.5)
 
         const player = createAudioPlayer()
@@ -46,7 +46,6 @@ module.exports = {
             
         } catch (e) {
             message.channel.send('There was an error trying to play.')
-            console.log(e)
         }
     }
 }

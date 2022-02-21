@@ -11,6 +11,7 @@
   "keywords": [],
   "description": "",
   "dependencies": {
+    "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.8.0",
     "axios": "^0.26.0",
     "discord-api-types": "^0.27.2",
@@ -20,9 +21,13 @@
     "ffmpeg-static": "^4.4.1",
     "fluent-ffmpeg": "^2.1.2",
     "fs": "^0.0.1-security",
+    "libsodium": "^0.7.9",
     "libsodium-wrappers": "^0.7.9",
     "moment": "^2.29.1",
+    "node": "^17.4.0",
+    "nodemon": "^2.0.15",
     "opus": "^0.0.0",
+    "prism-media": "github:amishshah/prism-media",
     "ytdl-core": "^4.10.1"
   }
 }
