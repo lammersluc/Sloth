@@ -19,7 +19,7 @@ module.exports = {
             let data = await axios.get(`https://www.reddit.com/r/${args[0]}/random/.json`)
             let embed = new MessageEmbed()
 
-                .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('MMMM Do YYYY, h:mm a')}`})
+                .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}`})
                 .setTitle(`${data.data[0].data.children[0].data.title}`)
                 .setDescription(`${data.data[0].data.children[0].data.selftext}`)
                 .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)`})
