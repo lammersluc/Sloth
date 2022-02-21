@@ -31,7 +31,7 @@ module.exports = {
         try {
 
             ytdl(Results[0].Video.URL).pipe(fs.createWriteStream('./audio/audio.mp3', { quality: 'lowestvideo', quality: 'highestaudio' }))
-            await sleep(2000)
+            await sleep(1000)
 
             const connection = joinVoiceChannel({
                 channelId: channel.id,
