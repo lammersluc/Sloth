@@ -9,6 +9,7 @@ client.prefix = '$'
 client.commands = new Discord.Collection()
 client.usage = new Discord.Collection()
 client.aliases = new Discord.Collection()
+client.alias = new Discord.Collection()
 client.devs = ['431882442035691550']
 
 client.on('ready', () => {

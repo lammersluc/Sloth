@@ -1,6 +1,7 @@
 module.exports = {
     name: 'ping',
-    aliases: [],
+    aliases: ['delay'],
+    aliasesText: 'Delay',
     description: 'Ping to test delay.',
     usage: 'Ping',
     enabled: true,

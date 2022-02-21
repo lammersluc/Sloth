@@ -5,6 +5,7 @@ const moment = require('moment')
 module.exports = {
     name: 'reddit',
     aliases: ['r/'],
+    aliasesText: 'R/',
     description: 'Searches a random post from subreddit.',
     usage: 'Reddit (Subreddit)',
     enabled: true,

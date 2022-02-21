@@ -10,7 +10,8 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 module.exports = {
     name: 'play',
-    aliases: ['p' ,'music'],
+    aliases: ['music' ,'p'],
+    aliasesText: 'Music, P',
     description: 'Plays music in your voice channel',
     usage: 'Play (Search/URL)',
     enabled: true,

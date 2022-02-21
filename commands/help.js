@@ -2,7 +2,8 @@ const {MessageEmbed, Client} = require('discord.js')
 
 module.exports = {
     name: 'help',
-    aliases: [],
+    aliases: ['commands'],
+    aliasesText: 'Commands',
     description: 'Help command.',
     usage: 'Help',
     enabled: true,
@@ -11,7 +12,7 @@ module.exports = {
     run: async (client, message, args) => {
         let commands = ''
         client.commands.map(cmd => {
-            commands += `**${cmd.name.capitalize()}**\n${cmd.description}\n*Usage\: ${client.prefix + cmd.usage}*\n\n`
+            commands += `**${cmd.name.capitalize()}**\n${cmd.description}\n*Usage\: ${client.prefix + cmd.usage}\nAliases: ${cmd.aliasesText}*\n\n`
         })
 
         message.channel.send({embeds: [

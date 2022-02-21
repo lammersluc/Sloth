@@ -1,6 +1,7 @@
 module.exports = {
     name: 'random',
     aliases: ['rng'],
+    aliasesText: 'Rng',
     description: 'Chooses a randum number between 1 and the input',
     usage: 'Random (Max output)',
     enabled: true,

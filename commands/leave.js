@@ -3,6 +3,7 @@ const { getVoiceConnection } = require('@discordjs/voice');
 module.exports = {
     name: 'leave',
     aliases: ['l' ,'stop', 's'],
+    aliasesText: 'L, Stop, S',
     description: 'Makes the bot leave voice channel',
     usage: 'Leave',
     enabled: true,
