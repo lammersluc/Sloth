@@ -1,12 +1,7 @@
-const fs = require('fs')
-const YTK = require('yt-toolkit')
-const ytdl = require('ytdl-core')
-const Query = new YTK.Query(process.env.YOUTUBEAPI)
+const play = require('play-dl')
 const moment = require('moment')
-const { join } = require('path')
 const { MessageEmbed } = require('discord.js')
 const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice')
-const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 module.exports = {
     name: 'play',
@@ -28,9 +23,12 @@ module.exports = {
         message.channel.send('Searching...')
 
         try {
-            Query.Search(args.join(' '), async (Results) => {
-                
-            const audioStream = ytdl(Results[0].Video.URL, { filter: 'audioonly', quality: 'highestaudio' })
+            let videoArgs = args.join(' ')
+            let yt_info = await play.search(videoArgs, {
+                limit: 1
+            })
+
+            let stream = await play.stream(yt_info[0].url)
 
             const connection = joinVoiceChannel({
                 channelId: channel.id,
@@ -38,9 +36,10 @@ module.exports = {
                 adapterCreator: channel.guild.voiceAdapterCreator,
             })
 
-            resource = createAudioResource(audioStream, { inlineVolume: true })
-            resource.volume.setVolume(0.5)
-
+            resource = createAudioResource(stream.stream, {
+                inputType: stream.type
+            })
+            
             const player = createAudioPlayer()
             connection.subscribe(player)
 
@@ -48,19 +47,20 @@ module.exports = {
 
             let embed = new MessageEmbed()
 
-                .setAuthor({name:`Now Playing:`})
-                .setTitle(`${Results[0].Video.Title}`)
-                .setDescription(`${Results[0].Video.Description}`)
-                .setFooter({text:`${Results[0].Video.Channel.Name} | ${moment(Results[0].Video.Date).format('Do MMMM YYYY, h:mm a')}`})
-                .setURL(`${Results[0].Video.URL}`)
-                .setImage(`https://img.youtube.com/vi/${Results[0].Video.ID}/maxresdefault.jpg`)
+                .setAuthor({name:`\u25BA Now Playing:`})
+                .setTitle(`${yt_info[0].title}`)
+                .setDescription(`Duration: ${yt_info[0].durationRaw}`)
+                .setFooter({text:`${yt_info[0].channel.name} | ${yt_info[0].uploadedAt}`})
+                .setURL(`${yt_info[0].url}`)
+                .setImage(`https://img.youtube.com/vi/${yt_info[0].id}/maxresdefault.jpg`)
 
             message.channel.send({
                 embeds: [embed]
             })
-        })
-        } catch(e) {
+
+        } catch(error) {
             message.channel.send(`There was an error trying to play.`)
+            console.log(error)
         }
     }
 }
