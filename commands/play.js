@@ -1,6 +1,6 @@
 const fs = require('fs')
-const ytdl = require('ytdl-core')
 const YTK = require('yt-toolkit')
+const ytdl = require('ytdl-core')
 const Query = new YTK.Query(process.env.YOUTUBEAPI)
 const moment = require('moment')
 const { join } = require('path')
@@ -27,12 +27,10 @@ module.exports = {
 
         message.channel.send('Searching...')
 
-        Query.Search(args.join(' '), async (Results) => {
-
         try {
-
-            ytdl(Results[0].Video.URL).pipe(fs.createWriteStream('./audio/audio.mp3', { quality: 'lowestvideo', quality: 'highestaudio' }))
-            await sleep(1000)
+            Query.Search(args.join(' '), async (Results) => {
+                
+            const audioStream = ytdl(Results[0].Video.URL, { filter: 'audioonly', quality: 'highestaudio' })
 
             const connection = joinVoiceChannel({
                 channelId: channel.id,
@@ -40,8 +38,7 @@ module.exports = {
                 adapterCreator: channel.guild.voiceAdapterCreator,
             })
 
-            resource = createAudioResource(join('./audio/audio.mp3'), { inlineVolume: true })
-            console.log
+            resource = createAudioResource(audioStream, { inlineVolume: true })
             resource.volume.setVolume(0.5)
 
             const player = createAudioPlayer()
@@ -61,11 +58,9 @@ module.exports = {
             message.channel.send({
                 embeds: [embed]
             })
-
-                
-            } catch(e) {
-                message.channel.send(`There was an error trying to play.`)
-            }
         })
+        } catch(e) {
+            message.channel.send(`There was an error trying to play.`)
+        }
     }
 }
