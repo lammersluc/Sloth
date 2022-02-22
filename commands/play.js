@@ -60,7 +60,6 @@ module.exports = {
 
         } catch(error) {
             message.channel.send(`There was an error trying to play.`)
-            console.log(error)
         }
     }
 }
