@@ -1,5 +1,4 @@
 const play = require('play-dl')
-const moment = require('moment')
 const { MessageEmbed } = require('discord.js')
 const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice')
 
@@ -58,8 +57,9 @@ module.exports = {
                 embeds: [embed]
             })
 
-        } catch(error) {
+        } catch(e) {
             message.channel.send(`There was an error trying to play.`)
+            console.log(e)
         }
     }
 }
