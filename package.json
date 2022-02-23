@@ -11,25 +11,13 @@
   "keywords": [],
   "description": "",
   "dependencies": {
-    "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.8.0",
     "axios": "^0.26.0",
-    "discord-api-types": "^0.27.2",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
-    "ffmpeg": "^0.0.4",
-    "ffmpeg-static": "^4.4.1",
-    "fluent-ffmpeg": "^2.1.2",
-    "fs": "^0.0.1-security",
-    "libsodium": "^0.7.9",
     "libsodium-wrappers": "^0.7.9",
     "moment": "^2.29.1",
-    "node": "^17.4.0",
     "nodemon": "^2.0.15",
-    "opusscript": "^0.0.8",
-    "play-dl": "^1.8.8",
-    "prism-media": "github:amishshah/prism-media",
-    "usetube": "^2.1.4",
-    "ytdl-core": "^4.10.1"
+    "play-dl": "^1.8.8"
   }
 }
