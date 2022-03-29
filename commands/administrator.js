@@ -1,6 +1,7 @@
 module.exports = {
     name: 'administrator',
     aliases: ['admin'],
+    aliasesText: 'Admin',
     description: 'Administrator commands.',
     usage: 'Administrator',
     enabled: true,
