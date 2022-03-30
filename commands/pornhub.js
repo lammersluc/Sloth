@@ -20,7 +20,7 @@ module.exports = {
                 message.channel.send('There was no image found.')
             })
         } else {
-            message.channel.send('Channel must be NSFW')
+            message.channel.send('Channel must be NSFW.')
         }
     }
 }
