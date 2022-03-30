@@ -34,6 +34,7 @@ module.exports = {
                 channelId: channel.id,
                 guildId: channel.guild.id,
                 adapterCreator: channel.guild.voiceAdapterCreator,
+                selfDeaf: true,
             })
 
             resource = createAudioResource(stream.stream, {
