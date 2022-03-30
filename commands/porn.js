@@ -4,7 +4,7 @@ module.exports = {
     name: 'porn',
     aliases: [''],
     aliasesText: '',
-    description: 'Search for a porn image.',
+    description: 'Search for a random porn image.',
     usage: 'Porn (Search)',
     enabled: true,
     visible: true,
