@@ -3,7 +3,7 @@ module.exports = {
     aliases: ['directmessage'],
     aliasesText: 'Directmessage',
     description: 'Get a \'hi\' in you direct message.',
-    usage: 'dm',
+    usage: 'DM',
     enabled: true,
     visible: true,
     devOnly: false,
