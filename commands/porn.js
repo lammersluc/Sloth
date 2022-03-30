@@ -15,7 +15,8 @@ module.exports = {
             porny.get({
                 search: args.join(''),
             }).then((res) => {
-                message.channel.send(res[0].url)
+                random = Math.round(Math.random * res.size)
+                message.channel.send(res[random].url)
             }).catch((err) => {
                 message.channel.send('There was no image found.')
             })
