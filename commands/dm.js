@@ -5,6 +5,7 @@ module.exports = {
     description: 'Get a \'hi\' in you direct message.',
     usage: 'dm',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

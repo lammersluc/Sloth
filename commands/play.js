@@ -9,6 +9,7 @@ module.exports = {
     description: 'Plays music in your voice channel',
     usage: 'Play (Search/URL)',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

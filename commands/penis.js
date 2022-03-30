@@ -7,6 +7,7 @@ module.exports = {
     description: 'Gives a random pp size',
     usage: 'Penis',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

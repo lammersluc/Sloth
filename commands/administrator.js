@@ -5,6 +5,7 @@ module.exports = {
     description: 'Administrator commands.',
     usage: 'Administrator',
     enabled: true,
+    visible: false,
     devOnly: true,
     servAdmin: false,
     run: async (client, message, args) => {

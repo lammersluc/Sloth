@@ -8,6 +8,7 @@ module.exports = {
     description: 'Shows current COVID-19 data for a country.',
     usage: 'Covid (Country)',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

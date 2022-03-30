@@ -2,17 +2,20 @@ const {MessageEmbed} = require('discord.js')
 
 module.exports = {
     name: 'help',
-    aliases: ['commands'],
-    aliasesText: 'Commands',
+    aliases: ['commands', 'cmd', 'cmds'],
+    aliasesText: 'Commands, Cmd, Cmds',
     description: 'Help command.',
     usage: 'Help',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
         let commands = ''
         client.commands.map(cmd => {
-            commands += `**${cmd.name.capitalize()}**\n${cmd.description}\n*Usage\: ${client.prefix + cmd.usage}\nAliases: ${cmd.aliasesText}*\n\n`
+            if (cmd.visible) {
+                commands += `**${cmd.name.capitalize()}**\n${cmd.description}\n*Usage\: ${client.prefix + cmd.usage}\nAliases: ${cmd.aliasesText}*\n\n`
+            }
         })
 
         message.channel.send({embeds: [

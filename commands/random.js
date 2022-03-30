@@ -5,6 +5,7 @@ module.exports = {
     description: 'Chooses a randum number between 1 and the argument',
     usage: 'Random (Max output)',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

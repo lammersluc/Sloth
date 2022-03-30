@@ -7,6 +7,7 @@ module.exports = {
     description: 'Makes the bot leave voice channel',
     usage: 'Leave',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

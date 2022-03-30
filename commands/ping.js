@@ -5,6 +5,7 @@ module.exports = {
     description: 'Ping to test delay.',
     usage: 'Ping',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {

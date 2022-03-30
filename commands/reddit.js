@@ -9,6 +9,7 @@ module.exports = {
     description: 'Searches a random post from subreddit.',
     usage: 'Reddit (Subreddit)',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
