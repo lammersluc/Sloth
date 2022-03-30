@@ -15,10 +15,10 @@ module.exports = {
             porny.get({
                 search: args.join(''),
             }).then((res) => {
-                random = Math.round(Math.random * res.size)
-                message.channel.send(res[random].url)
+                message.channel.send(res[0].url)
             }).catch((err) => {
                 message.channel.send('There was no image found.')
+                console.log(err)
             })
         } else {
             message.channel.send('Channel must be NSFW.')
