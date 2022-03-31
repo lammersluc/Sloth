@@ -14,6 +14,6 @@ module.exports = {
         const q = queue.songs
             .map((song, i) => `${i === 0 ? 'Playing:' : `${i}.`} ${song.name} - \`${song.formattedDuration}\``)
             .join('\n')
-        message.channel.send(`**Server Queue**\n${q}` + message)
+        message.channel.send(`**Server Queue**\n${q}`)
     }
 }
