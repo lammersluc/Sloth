@@ -10,9 +10,12 @@ module.exports = {
     servAdmin: false,
     run: async (client, message, args) => {
         try {
-            if (args[0].toLowerCase() === 'ban') {
-            message.delete()
-            message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).ban()
+            if (!args[0]) {
+                message.delete()
+                message.author.send('Arguments don\'t exist.')
+            } else if (args[0].toLowerCase() === 'ban') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).ban()
             } else if (args[0].toLowerCase() === 'kick') {
                 message.delete()
                 message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).kick()
@@ -49,6 +52,16 @@ module.exports = {
                     
                 message.author.send(`**${bans.size} Banned user(s) in ${message.guild}:**\n${list}`)
                 })
+            } else if (args[0].toLowerCase() === 'checkadministrator') {
+                message.delete()
+                if (message.guild.me.hasPermission('ADMINISTRATOR')) {
+                    message.author.send('The bot has administrator permissions.')
+                } else {
+                    message.author.send('The bot does not have administrator permissions.')
+                }
+            } else {
+                message.delete()
+                message.author.send('Arguments don\'t exist.')
             }
         } catch(e) {
             console.log(e)
