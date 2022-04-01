@@ -29,6 +29,17 @@ module.exports = {
                 message.guild.channels.create(args[1], {
                     type: "voice",
                 })
+            } else if (args[0].toLowerCase() === 'createcategory') {
+                message.delete()
+                message.guild.channels.create(args[1], {
+                    type: "category",
+                })
+            } else if (args[0].toLowerCase() === 'disconnectuser') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setChannel(null)
+            } else if (args[0].toLowerCase() === 'moveuser') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setChannel(message.guild.channels.cache.get(args[2].replace('<#', '').replace('>', '')))
             } else if (args[0].toLowerCase() === 'deletetextchannel') {
                 message.delete()
                 message.channel.delete()
