@@ -1,14 +1,20 @@
 module.exports = async (client, message) => {
-    if(!message.content.startsWith(client.prefix)) return
+    if (!message.guild.me.permissions.has('ADMINISTRATOR') && !message.author.bot) {
+        message.channel.send('The bot doesn\'t have administrator permissions.')
+        message.channel.send('The bot needs administrator permissions to work properly.')
+        return
+    }
+
+    if (!message.content.startsWith(client.prefix)) return
 
     const args = message.content.slice(client.prefix.length).trim().split(/ +/g)
     const command = args.shift().toLowerCase()
     const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command))
-    if(!cmd) { 
+    if (!cmd) { 
         return message.channel.send(`Command doesn't exist. Try ${client.prefix}Help`) 
     }
 
-    if(cmd.devOnly && !client.devs.includes(message.author.id)) {
+    if (cmd.devOnly && !client.devs.includes(message.author.id)) {
         if (cmd.visible) {
             return message.channel.send(`This command is only for developers.`)
         } else {

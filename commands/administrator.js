@@ -52,13 +52,6 @@ module.exports = {
                     
                 message.author.send(`**${bans.size} Banned user(s) in ${message.guild}:**\n${list}`)
                 })
-            } else if (args[0].toLowerCase() === 'checkadministrator') {
-                message.delete()
-                if (message.guild.me.hasPermission('ADMINISTRATOR')) {
-                    message.author.send('The bot has administrator permissions.')
-                } else {
-                    message.author.send('The bot does not have administrator permissions.')
-                }
             } else {
                 message.delete()
                 message.author.send('Arguments don\'t exist.')
