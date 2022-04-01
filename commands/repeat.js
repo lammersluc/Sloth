@@ -25,6 +25,6 @@ module.exports = {
         }
         mode = queue.setRepeatMode(mode)
         mode = mode ? (mode === 2 ? 'Repeat queue' : 'Repeat song') : 'Off'
-        message.channel.send(`Set repeat mode to \`${mode}\``)
+        message.channel.send(`Set repeat mode to \`${mode}\`.`)
     }
 }
