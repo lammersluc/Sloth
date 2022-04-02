@@ -1,5 +1,6 @@
 module.exports = {
     name: 'repeat',
+    helpname: 'Repeat',
     aliases: ['loop' ,'rp'],
     aliasesText: 'Loop, RP',
     description: 'Switches the repeat mode',

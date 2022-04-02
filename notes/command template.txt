@@ -1,5 +1,6 @@
 module.exports = {
     name: '',
+    helpname: '',
     aliases: [],
     aliasesText: '',
     description: '',

@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'covid',
+    helpname: 'COVID',
     aliases: ['corona', 'covid-19', 'covid19'],
     aliasesText: 'Corona, Covid-19, Covid19',
     description: 'Shows current COVID-19 data for a country.',

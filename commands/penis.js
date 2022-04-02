@@ -2,6 +2,7 @@ const {MessageEmbed} = require('discord.js')
 
 module.exports = {
     name: 'penis',
+    helpname: 'Penis',
     aliases: ['pp'],
     aliasesText: 'PP',
     description: 'Gives a random pp size',

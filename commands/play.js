@@ -1,5 +1,6 @@
 module.exports = {
     name: 'play',
+    helpname: 'Play',
     aliases: ['add', 'music' ,'p'],
     aliasesText: 'Add, Music, P',
     description: 'Plays music in your voice channel',

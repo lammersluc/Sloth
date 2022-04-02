@@ -1,5 +1,6 @@
 module.exports = {
     name: 'dm',
+    helpname: 'DM',
     aliases: ['directmessage'],
     aliasesText: 'Directmessage',
     description: 'Get a \'hi\' in you direct message.',

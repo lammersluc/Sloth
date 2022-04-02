@@ -1,5 +1,6 @@
 module.exports = {
     name: 'shuffle',
+    helpname: 'Shuffle',
     aliases: [],
     aliasesText: '',
     description: 'Shuffles the queue.',

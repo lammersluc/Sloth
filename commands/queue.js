@@ -1,5 +1,6 @@
 module.exports = {
     name: 'queue',
+    helpname: 'Queue',
     aliases: ['q'],
     aliasesText: 'Q',
     description: 'Shows the queue.',
