@@ -1,8 +1,8 @@
 module.exports = {
     name: 'leave',
     helpname: 'Leave',
-    aliases: ['l' ,'stop', 's'],
-    aliasesText: 'L, Stop, S',
+    aliases: ['l' ,'stop'],
+    aliasesText: 'L, Stop',
     description: 'Makes the bot leave voice channel',
     usage: 'Leave',
     enabled: true,
