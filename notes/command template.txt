@@ -1,9 +1,11 @@
 module.exports = {
     name: '',
     aliases: [],
+    aliasesText: '',
     description: '',
     usage: '',
     enabled: true,
+    visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
