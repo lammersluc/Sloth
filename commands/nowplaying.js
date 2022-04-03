@@ -12,7 +12,8 @@ module.exports = {
     run: async (client, message, args) => {
         const queue = client.distube.getQueue(message)
         if (!queue) return message.channel.send(`There is nothing playing!`)
-        queue.textChannel.send(
+        const song = queue.song
+        message.channel.send(
             `Now playing: \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${
               song.user}`
           )
