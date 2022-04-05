@@ -35,6 +35,18 @@ module.exports = {
                 message.guild.channels.create(args[1], {
                     type: "category",
                 })
+            } else if (args[0].toLowerCase() === 'muteuser') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setMute(true)
+            } else if (args[0].toLowerCase() === 'unmuteuser') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setMute(false)
+            } else if (args[0].toLowerCase() === 'deafenuser') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setDeaf(true)
+            } else if (args[0].toLowerCase() === 'undeafenuser') {
+                message.delete()
+                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setDeaf(false)
             } else if (args[0].toLowerCase() === 'disconnectuser') {
                 message.delete()
                 message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setChannel(null)
