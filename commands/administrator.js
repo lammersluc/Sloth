@@ -10,6 +10,8 @@ module.exports = {
     devOnly: true,
     servAdmin: false,
     run: async (client, message, args) => {
+        if (!message.guild.me.permissions.has('ADMINISTRATOR') && !message.author.bot) return message.author.send('The bot doesn\'t have administrator permissions.')
+
         try {
             if (!args[0]) {
                 message.delete()

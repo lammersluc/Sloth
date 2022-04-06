@@ -41,10 +41,6 @@ client.on('messageCreate', message => {
 client.on("guildCreate", guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
   channel.send("Thanks for adding me to the server.")
-  if (!guild.me.permissions.has('ADMINISTRATOR')) {
-    channel.send('The bot doesn\'t have administrator permissions.')
-    channel.send('The bot needs administrator permissions to work properly.')
-  }
 })
 
 client.distube

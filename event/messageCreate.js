@@ -1,10 +1,4 @@
 module.exports = async (client, message) => {
-    if (!message.guild.me.permissions.has('ADMINISTRATOR') && !message.author.bot) {
-        message.channel.send('The bot doesn\'t have administrator permissions.')
-        message.channel.send('The bot needs administrator permissions to work properly.')
-        return
-    }
-
     if (!message.content.startsWith(client.prefix)) return
 
     const args = message.content.slice(client.prefix.length).trim().split(/ +/g)
