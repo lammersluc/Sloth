@@ -10,26 +10,16 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        if (!args[0] || !['rock', 'r',  'paper', 'p', 'scissors', 's'].includes(args[0].toLowerCase())) {
-            return message.channel.send('Please choose Rock, Paper or Scissors.')
-        }
+        let embed = new MessageEmbed()
 
-        if (args[0].toLowerCase() === 'r') {
-            playerChoise = 'rock'
-        } else if (args[0].toLowerCase() === 'p') {
-            playerChoise = 'paper'
-        } else if (args[0].toLowerCase() === 's') {
-            playerChoise = 'scissors'
-        }
+            .setTitle('Rock Paper Scissors')
 
-        let botChoice = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)]
-
-        if (playerChoise === botChoice) {
-            return message.channel.send(`You chose ${playerChoise} and the bot chose ${botChoice}. It's a draw!`)
-        } else if (playerChoise === 'rock' && botChoice === 'scissors' || playerChoise === 'paper' && botChoice === 'rock' || playerChoise === 'scissors' && botChoice === 'paper') {
-            return message.channel.send(`You chose ${playerChoise} and the bot chose ${botChoice}. You win!`)
-        } else {
-            return message.channel.send(`You chose ${playerChoise} and the bot chose ${botChoice}. You lose!`)
-        }
+        message.channel.send({
+            embeds: [embed]
+        }).then(msg => {
+            msg.react(':fist:')
+            msg.react(':raised_back_of_hand:')
+            msg.react(':v:')
+        })
     }
 }
