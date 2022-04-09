@@ -14,7 +14,7 @@ module.exports = {
         if (!queue) return message.channel.send(`There is nothing playing!`)
         const song = queue.songs[0]
         message.channel.send(
-            `Now playing: \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${
+            `${song.url}\nNow playing: \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${
               song.user}`
           )
     }
