@@ -15,7 +15,7 @@ module.exports = {
         const song = queue.songs[0]
         message.channel.send(
             `Now playing: \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${
-              song.user}\n${song.url}`
+                song.user}\n${song.url}`
           )
     }
 }
