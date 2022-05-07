@@ -39,22 +39,22 @@ module.exports = {
                 })
             } else if (args[0].toLowerCase() === 'muteuser') {
                 message.delete()
-                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setMute(true)
+                message.guild.members.cache.get(args[1].replace('<@', '').replace('>', '')).voice.setMute(true)
             } else if (args[0].toLowerCase() === 'unmuteuser') {
                 message.delete()
-                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setMute(false)
+                message.guild.members.cache.get(args[1].replace('<@', '').replace('>', '')).voice.setMute(false)
             } else if (args[0].toLowerCase() === 'deafenuser') {
                 message.delete()
-                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setDeaf(true)
+                message.guild.members.cache.get(args[1].replace('<@', '').replace('>', '')).voice.setDeaf(true)
             } else if (args[0].toLowerCase() === 'undeafenuser') {
                 message.delete()
-                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setDeaf(false)
+                message.guild.members.cache.get(args[1].replace('<@', '').replace('>', '')).voice.setDeaf(false)
             } else if (args[0].toLowerCase() === 'disconnectuser') {
                 message.delete()
-                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setChannel(null)
+                message.guild.members.cache.get(args[1].replace('<@', '').replace('>', '')).voice.setChannel(null)
             } else if (args[0].toLowerCase() === 'moveuser') {
                 message.delete()
-                message.guild.members.cache.get(args[1].replace('<@!', '').replace('>', '')).voice.setChannel(message.guild.channels.cache.get(args[2].replace('<#', '').replace('>', '')))
+                message.guild.members.cache.get(args[1].replace('<@', '').replace('>', '')).voice.setChannel(message.guild.channels.cache.get(args[2]))
             } else if (args[0].toLowerCase() === 'deletetextchannel') {
                 message.delete()
                 message.channel.delete()
