@@ -22,6 +22,6 @@
     "ffmpeg": "^0.0.4",
     "libsodium-wrappers": "^0.7.10",
     "moment": "^2.29.1",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.16"
   }
 }

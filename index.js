@@ -58,7 +58,12 @@ client.distube
     )
   )
 
-  .on('empty', channel => channel.send('Voice channel is empty. Leaving the channel...'))
+  .on('finish', queue => {
+      queue.textChannel?.send('Queue empty, leaving voice channel.')
+      queue.textChannel?.send('$leave').then(msg => {
+        msg.delete()
+      })
+    })
 
   .on('searchNoResult', (message, query) =>
     message.channel.send(`No result found for \`${query}\`.`)
