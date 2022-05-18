@@ -1,4 +1,3 @@
-require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
@@ -69,4 +68,4 @@ client.distube
     message.channel.send(`No result found for \`${query}\`.`)
   )
 
-client.login(process.env.TOKEN)
+client.login('OTAwMTA4NzM5MzcyMjY1NTEy.GKV7ZF.-ng_LZjiNsOI4rl3dUElcMVy9tec2WAOyNf3us')
