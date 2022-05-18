@@ -1,4 +1,3 @@
-require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
