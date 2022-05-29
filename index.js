@@ -13,8 +13,10 @@ client.alias = new Discord.Collection()
 client.devs = ['431882442035691550']
 
 client.distube = new DisTube(client, {
+  leaveOnEmpty: true,
+  leaveOnEmptyDelay: 5000,
+  leaveOnFinish: true,
   leaveOnStop: true,
-  emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
   plugins: [
