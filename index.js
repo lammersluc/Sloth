@@ -14,6 +14,7 @@ client.devs = ['431882442035691550']
 
 client.distube = new DisTube(client, {
   leaveOnEmpty: true,
+  emptyCooldown: 0,
   leaveOnFinish: true,
   leaveOnStop: true,
   emitAddSongWhenCreatingQueue: false,
