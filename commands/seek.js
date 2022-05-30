@@ -18,8 +18,7 @@ module.exports = {
         const time = Number(args[0])
         if (isNaN(time)) return message.channel.send('Please enter a valid number.')
         if (time < 0) return message.channel.send('Please enter a positive number.')
-        if (time > queue.current.duration) return message.channel.send('Please enter a number smaller than the song\'s duration.')
         queue.seek(time)
-        message.channel.send(`Seeked to ${queue.current.formattedTime(time)}`)
+        message.channel.send(`Seeked to ${time} Seconds.`)
     }
 }
