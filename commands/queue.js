@@ -11,7 +11,7 @@ module.exports = {
     servAdmin: false,
     run: async (client, message, args) => {
         const queue = client.distube.getQueue(message)
-        if (!queue) return message.channel.send(`There is nothing playing!`)
+        if (!queue) return message.channel.send(`There is nothing playing right now.`)
         const q = queue.songs
             .map((song, i) => `${i === 0 ? 'Playing:' : `${i}.`} \`${song.name}\` - \`${song.formattedDuration}\``)
             .join('\n')

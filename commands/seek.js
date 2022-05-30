@@ -1,0 +1,25 @@
+module.exports = {
+    name: 'seek',
+    helpname: 'Seek',
+    aliases: [],
+    aliasesText: '',
+    description: 'Seek a position in the current song.',
+    usage: 'Seek (time)',
+    enabled: true,
+    visible: true,
+    devOnly: false,
+    servAdmin: false,
+    run: async (client, message, args) => {
+        const queue = client.distube.getQueue(message)
+        if (!queue) return message.channel.send(`There is nothing playing right now.`)
+        if (!args[0]) {
+            return message.channel.send('Please provide position (in seconds) to seek.')
+          }
+        const time = Number(args[0])
+        if (isNaN(time)) return message.channel.send('Please enter a valid number.')
+        if (time < 0) return message.channel.send('Please enter a positive number.')
+        if (time > queue.current.duration) return message.channel.send('Please enter a number smaller than the song\'s duration.')
+        queue.seek(time)
+        message.channel.send(`Seeked to ${queue.current.formattedTime(time)}`)
+    }
+}
