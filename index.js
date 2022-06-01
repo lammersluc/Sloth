@@ -50,10 +50,8 @@ client.distube
   .on('playSong', (queue, song) => {
     let embed = new MessageEmbed()
     .setAuthor('Now Playing')
-    .setTitle(song.title)
-    .setDescription(song.formattedDuration)
-    .addField('Requested by', song.user)
-    .setImage(`${data.data.countryInfo.flag.toLocaleString()}`)
+    .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+    .addField('Requested by', `${song.user.username}#${song.user.discriminator}`)
 
     queue.textChannel.send({
         embeds: [embed]
@@ -61,12 +59,11 @@ client.distube
   })
 
   .on('addSong' , (queue, song) => {
+    if (!queue.songs) return
     let embed = new MessageEmbed()
     .setAuthor('Added to Queue')
-    .setTitle(song.title)
-    .setDescription(song.formattedDuration)
-    .addField('Requested by', song.user)
-    .setImage(`${data.data.countryInfo.flag.toLocaleString()}`)
+    .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+    .addField('Requested by', `${song.user.username}#${song.user.discriminator}`)
 
     queue.textChannel.send({
         embeds: [embed]
