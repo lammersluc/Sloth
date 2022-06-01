@@ -3,6 +3,7 @@ require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]})
+const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
@@ -46,19 +47,31 @@ client.on("guildCreate", guild => {
 })
 
 client.distube
-  .on('playSong', (queue, song) =>
-    queue.textChannel.send(
-      `Now playing: \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${
-        song.user}`
-    )
-  )
+  .on('playSong', (queue, song) => {
+    let embed = new MessageEmbed()
+    .setAuthor('Now Playing')
+    .setTitle(song.title)
+    .setDescription(song.formattedDuration)
+    .addField('Requested by', song.user)
+    .setImage(`${data.data.countryInfo.flag.toLocaleString()}`)
 
-  .on('addSong' , (queue, song) =>
-    queue.textChannel.send(
-      `Added song: \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${
-        song.user}`
-    )
-  )
+    queue.textChannel.send({
+        embeds: [embed]
+    })
+  })
+
+  .on('addSong' , (queue, song) => {
+    let embed = new MessageEmbed()
+    .setAuthor('Added to Queue')
+    .setTitle(song.title)
+    .setDescription(song.formattedDuration)
+    .addField('Requested by', song.user)
+    .setImage(`${data.data.countryInfo.flag.toLocaleString()}`)
+
+    queue.textChannel.send({
+        embeds: [embed]
+    })
+  })
 
   .on('searchNoResult', (message, query) =>
     message.channel.send(`No result found for \`${query}\`.`)
