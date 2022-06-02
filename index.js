@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '$'
+client.prefix = '%'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
@@ -49,9 +49,11 @@ client.on("guildCreate", guild => {
 client.distube
   .on('playSong', (queue, song) => {
     let embed = new MessageEmbed()
-    .setAuthor('Now Playing')
+    .setAuthor({ name: 'Now Playing' })
     .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
-    .addField('Requested by', `${song.user.username}#${song.user.discriminator}`)
+    .setURL(song.url)
+    .setTimestamp()
+    .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
 
     queue.textChannel.send({
         embeds: [embed]
@@ -61,9 +63,11 @@ client.distube
   .on('addSong' , (queue, song) => {
     if (!queue.songs) return
     let embed = new MessageEmbed()
-    .setAuthor('Added to Queue')
+    .setAuthor({ name: 'Added To Queue' })
     .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
-    .addField('Requested by', `${song.user.username}#${song.user.discriminator}`)
+    .setURL(song.url)
+    .setTimestamp()
+    .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
 
     queue.textChannel.send({
         embeds: [embed]
