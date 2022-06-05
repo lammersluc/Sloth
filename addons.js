@@ -1,4 +1,7 @@
-Object.defineProperty(String.prototype, 'capitalize', {
-    value: function() { return this.charAt(0).toUpperCase() + this.slice(1); },
-    enumerable: false
-});
+function sleep(s) {
+    return new Promise(resolve => setTimeout(resolve, s * 1000));
+}
+
+module.exports = {
+    sleep
+}
