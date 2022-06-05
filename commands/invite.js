@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js')
+
 module.exports = {
     name: 'invite',
     helpname: 'Invite',
@@ -10,12 +12,12 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        
+        let embed = new MessageEmbed().setColor(client.embedColor)
         const invites = await message.guild.invites.fetch()
 
         invites.forEach(invite => {
-            if (invite.inviter === '900108739372265512') {
-                return message.channel.send(`Invite: ${invite.url}`)
+            if (invite.inviter === client.user.id) {
+                return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
             }
         })
         
@@ -23,7 +25,7 @@ module.exports = {
             maxAge: 0,
             maxUses: 0
         }).then(invite => {
-            message.channel.send(`Invite: ${invite.url}`)
+            message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
         })
     }
 }

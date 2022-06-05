@@ -12,6 +12,7 @@ client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
 client.devs = ['431882442035691550']
+client.embedColor = '#00a8f3'
 
 client.distube = new DisTube(client, {
   leaveOnEmpty: true,
@@ -48,30 +49,31 @@ client.on("guildCreate", guild => {
 
 client.distube
   .on('playSong', (queue, song) => {
-    let embed = new MessageEmbed()
-    .setAuthor({ name: 'Now Playing' })
-    .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
-    .setURL(song.url)
-    .setTimestamp()
-    .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
-
     queue.textChannel.send({
-        embeds: [embed]
+        embeds: [new MessageEmbed()
+          .setAuthor({ name: 'Now Playing' })
+          .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+          .setURL(song.url)
+          .setDescription(`\`⚪────────────────────────────────────────────────────────\`\n\`${song.views} views | ${song.likes} likes | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
+          .setThumbnail(song.thumbnail)
+          .setTimestamp()
+          .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
+          .setColor('#00a8f3')]
     })
   })
 
   .on('addSong' , (queue, song) => {
     if (!queue.songs) return
-    let embed = new MessageEmbed()
-    .setAuthor({ name: 'Added To Queue' })
-    .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
-    .setURL(song.url)
-    .setTimestamp()
-    .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
-
     queue.textChannel.send({
-        embeds: [embed]
-    })
+      embeds: [new MessageEmbed()
+        .setAuthor({ name: 'Added Song' })
+        .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+        .setURL(song.url)
+        .setThumbnail(song.thumbnail)
+        .setTimestamp()
+        .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
+        .setColor('#00a8f3')]
+  })
   })
 
   .on('searchNoResult', (message, query) =>

@@ -12,9 +12,10 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-
-        message.channel.send({embeds: [
-            new MessageEmbed().setDescription(`${message.author} pp size:\n\nO\n${new Array(Math.floor(Math.random() * 49 + 1)).fill('=').join('')}|)\nO`)
+        message.channel.send({ embeds: [
+            new MessageEmbed()
+                .setColor(client.embedColor)
+                .setDescription(`${message.author} pp size:\n\nO\n${new Array(Math.floor(Math.random() * 49 + 1)).fill('=').join('')}|)\nO`)
         ]})
     }
 }

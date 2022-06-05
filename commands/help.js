@@ -19,8 +19,12 @@ module.exports = {
             }
         })
 
-        message.channel.send({embeds: [
-            new MessageEmbed().setDescription(commands)
+        message.channel.send({ embeds: [
+            new MessageEmbed()
+            .setColor('#00a8f3')
+            .setTitle('Help Menu')
+            .setDescription(commands)
+            .setColor(client.embedColor)
         ]})
     }
 }

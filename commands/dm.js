@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js')
+
 module.exports = {
     name: 'dm',
     helpname: 'DM',
@@ -10,6 +12,6 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        message.author.send('Hi!')
+        message.author.send({ embeds: [new MessageEmbed().setColor(client.embedColor).setDescription('Hi!')] })
     }
 }

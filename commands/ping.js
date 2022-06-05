@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js")
+
 module.exports = {
     name: 'ping',
     helpname: 'Ping',
@@ -10,8 +12,9 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        message.channel.send('Pinging...').then(msg => {
-            msg.edit(`Pong. The response time is ${msg.createdTimestamp - message.createdTimestamp}ms. The API latency is ${Math.round(client.ws.ping)}ms.`)
+        let embed = new MessageEmbed().setColor(client.embedColor)
+        message.channel.send({embeds: [embed.setDescription('Pinging...')]}).then(msg => {
+            msg.edit({ embeds: [embed.setDescription(`Pong. The response time is ${msg.createdTimestamp - message.createdTimestamp}ms. The API latency is ${Math.round(client.ws.ping)}ms.`)] })
         })
     }
 }

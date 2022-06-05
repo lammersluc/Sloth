@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js')
+
 module.exports = {
     name: 'administrator',
     helpname: 'Administrator',
@@ -10,7 +12,12 @@ module.exports = {
     devOnly: true,
     servAdmin: false,
     run: async (client, message, args) => {
-        if (!message.guild.me.permissions.has('ADMINISTRATOR') && !message.author.bot) return message.author.send('The bot doesn\'t have administrator permissions.')
+        let embed = new MessageEmbed().setColor('#00a8f3')
+        if (!message.guild.me.permissions.has('ADMINISTRATOR') && !message.author.bot) {
+
+            embed.setTitle('The bot doesn\'t have administrator permissions.')
+            return message.author.send({ embeds: [embed] })
+        }
 
         try {
             if (!args[0]) {

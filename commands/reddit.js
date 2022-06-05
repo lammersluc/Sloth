@@ -8,14 +8,14 @@ module.exports = {
     aliases: ['r/'],
     aliasesText: 'R/',
     description: 'Searches a random post from subreddit.',
-    usage: 'Reddit (Subreddit)',
+    usage: 'Reddit [Subreddit]',
     enabled: true,
     visible: true,
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
         if(!args[0]) {
-            return message.channel.send(`Supply a Subreddit`)
+            return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`Supply a Subreddit`)] })
         }
 
         try {
@@ -27,6 +27,7 @@ module.exports = {
                 .setDescription(`${data.data[0].data.children[0].data.selftext}`)
                 .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)`})
                 .setURL(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`)
+                .setColor(client.embedColor)
 
                 if(data.data[0].data.children[0].data.is_video === false) embed.setImage(`${data.data[0].data.children[0].data.url}`)
 
@@ -39,7 +40,7 @@ module.exports = {
             }
 
         } catch(e) {
-            message.channel.send('Subreddit doesn\'t exist')
+            message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription('Subreddit doesn\'t exist')] })
         }
     }
 }
