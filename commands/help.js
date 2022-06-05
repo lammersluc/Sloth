@@ -15,7 +15,7 @@ module.exports = {
         let commands = ''
         client.commands.map(cmd => {
             if (cmd.visible) {
-                commands += `**${cmd.helpname}**\n${cmd.description}\n*Usage\: ${client.prefix + cmd.usage}\nAliases: ${cmd.aliasesText}*\n\n`
+                commands += `**${cmd.helpname}**\n${cmd.description}\nUsage\: \`${client.prefix + cmd.usage}\`\nAliases: \`${cmd.aliasesText}\`\n\n`
             }
         })
 

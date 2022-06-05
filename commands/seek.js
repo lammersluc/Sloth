@@ -4,7 +4,7 @@ module.exports = {
     name: 'seek',
     helpname: 'Seek',
     aliases: [],
-    aliasesText: '',
+    aliasesText: ' ',
     description: 'Seek to a specific time in the current song.',
     usage: 'Seek [time in seconds]',
     enabled: true,

@@ -4,7 +4,7 @@ module.exports = {
     name: 'invite',
     helpname: 'Invite',
     aliases: [],
-    aliasesText: '',
+    aliasesText: ' ',
     description: 'Creates or shows invite for the server.',
     usage: 'Invite',
     enabled: true,

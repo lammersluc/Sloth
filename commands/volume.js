@@ -4,7 +4,7 @@ module.exports = {
     name: 'volume',
     helpname: 'Volume',
     aliases: [],
-    aliasesText: '',
+    aliasesText: ' ',
     description: 'Set the volume of the music bot.',
     usage: 'Volume [0-1000]',
     enabled: true,

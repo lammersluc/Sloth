@@ -5,7 +5,7 @@ module.exports = {
   helpname: 'Play',
   aliases: ['add', 'music' ,'p'],
   aliasesText: 'Add, Music, P',
-  description: 'Plays music in your voice channel',
+  description: 'Plays music in your voice channel.',
   usage: 'Play [Search/URL]',
   enabled: true,
   visible: true,

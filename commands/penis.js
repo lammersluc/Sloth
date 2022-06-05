@@ -5,7 +5,7 @@ module.exports = {
     helpname: 'Penis',
     aliases: ['pp'],
     aliasesText: 'PP',
-    description: 'Gives a random pp size',
+    description: 'Gives a random pp size.',
     usage: 'Penis',
     enabled: true,
     visible: true,
