@@ -1,16 +1,20 @@
+const { MessageEmbed } = require("discord.js")
+
 module.exports = async (client, message) => {
     if (!message.content.startsWith(client.prefix)) return
+
+    let embed = new MessageEmbed().setColor(client.embedColor)
 
     const args = message.content.slice(client.prefix.length).trim().split(/ +/g)
     const command = args.shift().toLowerCase()
     const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command))
-    if (!cmd) return
+    if (!cmd) return message.channel.send({ Embed: [embed.setDescription(`Command not found, try \`${prefix}Help\`.`)] })
 
     if (cmd.devOnly && !client.devs.includes(message.author.id)) {
         if (cmd.visible) {
-            return message.channel.send(`This command is only for developers.`)
+            return message.channel.send({ Embed: [embed.setDescription('This command is only for developers.')] })
         } else {
-            return message.channel.send(`Command doesn't exist. Try ${client.prefix}Help`)
+            return message.channel.send({ Embed: [embed.setDescription(`Command not found, try \`${prefix}Help\`.`)] })
         }
     }
 
