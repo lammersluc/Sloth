@@ -24,7 +24,7 @@ module.exports = {
 
         message.channel.send({ embeds: [embed
             .setAuthor({ name: 'Now Playing' })
-            .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+            .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
             .setURL(song.url)
             .setDescription(`\`${changedwatchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${queue.formattedCurrentTime} / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
             .setThumbnail(song.thumbnail)

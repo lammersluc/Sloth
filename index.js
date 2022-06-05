@@ -52,7 +52,7 @@ client.distube
     queue.textChannel.send({
         embeds: [new MessageEmbed()
           .setAuthor({ name: 'Now Playing' })
-          .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+          .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
           .setURL(song.url)
           .setDescription(`\`⚪──────────────────────────────────────────────────\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
           .setThumbnail(song.thumbnail)
@@ -67,7 +67,7 @@ client.distube
     queue.textChannel.send({
       embeds: [new MessageEmbed()
         .setAuthor({ name: 'Added Song' })
-        .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
+        .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
         .setURL(song.url)
         .setThumbnail(song.thumbnail)
         .setTimestamp()
