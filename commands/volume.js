@@ -17,6 +17,6 @@ module.exports = {
         if (!client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setDescription(`There is nothing playing right now.`)] })
         if (!args[0] || isNaN(parseInt(args[0])) || parseInt(args[0]) <= 0 || parseInt(args[0]) >= 1000) return message.channel.send({ embeds: [embed.setDescription(`Please provide a volume between 0 and 1000.`)] })
         client.distube.setVolume(message, parseInt(args[0]))
-        message.channel.send({ embeds: [embed.setDescription(`The volume has been set to ${args[0]}%.`)] })
+        message.channel.send({ embeds: [embed.setDescription(`The volume has been set to ${client.distube.getQueue(message).volume}%.`)] })
     }
 }

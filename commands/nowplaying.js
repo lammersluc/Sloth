@@ -16,8 +16,8 @@ module.exports = {
         const queue = client.distube.getQueue(message)
         if (!queue) return message.channel.send({ embeds: [embed.setDescription`There is nothing playing.`] })
         const song = queue.songs[0]
-        let songWatched = Math.floor((queue.currentTime / song.duration) * 56)
-        const watchBar = '─────────────────────────────────────────────────────────'
+        let songWatched = Math.floor((queue.currentTime / song.duration) * 50)
+        const watchBar = '───────────────────────────────────────────────────'
         let watchBar2 = watchBar.split('')
         watchBar2[songWatched] = '⚪'
         let changedwatchBar = watchBar2.join('')
