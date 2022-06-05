@@ -54,7 +54,7 @@ client.distube
           .setAuthor({ name: 'Now Playing' })
           .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
           .setURL(song.url)
-          .setDescription(`\`⚪──────────────────────────────────────────────────\`\n\`${song.views} 👀 | ${song.likes} 👍 | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
+          .setDescription(`\`⚪──────────────────────────────────────────────────\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
           .setThumbnail(song.thumbnail)
           .setTimestamp()
           .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
