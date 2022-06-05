@@ -39,7 +39,7 @@ client.on('ready', () => {
 })
 
 client.on('messageCreate', message => {
-  require('./event/messageCreate') (client, message)
+  require('./events/messageCreate') (client, message)
 })
 
 client.on("guildCreate", guild => {
