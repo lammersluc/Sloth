@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '%'
+client.prefix = '.'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
@@ -54,7 +54,7 @@ client.distube
           .setAuthor({ name: 'Now Playing' })
           .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
           .setURL(song.url)
-          .setDescription(`\`⚪──────────────────────────────────────────────────\`\n\`${song.views} views | ${song.likes} likes | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
+          .setDescription(`\`⚪──────────────────────────────────────────────────\`\n\`${song.views} 👀 | ${song.likes} 👍 | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
           .setThumbnail(song.thumbnail)
           .setTimestamp()
           .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })

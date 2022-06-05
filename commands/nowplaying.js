@@ -26,7 +26,7 @@ module.exports = {
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.name}\` - \`${song.formattedDuration}\``)
             .setURL(song.url)
-            .setDescription(`\`${changedwatchBar}\`\n\`${song.views} views | ${song.likes} likes | ${queue.formattedCurrentTime} / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
+            .setDescription(`\`${changedwatchBar}\`\n\`${song.views} 👀 | ${song.likes} 👍 | ${queue.formattedCurrentTime} / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
             .setThumbnail(song.thumbnail)
             .setTimestamp()
             .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
