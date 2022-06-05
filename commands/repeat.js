@@ -15,10 +15,10 @@ module.exports = {
   run: async (client, message, args) => {
     let embed = new MessageEmbed().setColor(client.embedColor)
     if (!client.distube.getQueue(message)) {
-      return message.channel.send({ embeds: [embed.setTitle('There is nothing playing in the queue.')] })
+      return message.channel.send({ embeds: [embed.setDescription('There is nothing playing in the queue.')] })
     }
     if (parseInt(args[0]) !== 0 && parseInt(args[0]) !== 1 && parseInt(args[0]) !== 2) {
-      return message.channel.send({ embeds: [embed.setTitle('Please specify a valid mode (0, 1 or 2).')] })
+      return message.channel.send({ embeds: [embed.setDescription('Please specify a valid mode (0, 1 or 2).')] })
     }
     let mode
     switch(client.distube.setRepeatMode(message, parseInt(args[0]))) {
@@ -32,6 +32,6 @@ module.exports = {
             mode = 'Repeat all queue'
             break
     }
-    message.channel.send({ embeds: [embed.setTitle(`Set repeat mode to \`${mode}\`.`)] })
+    message.channel.send({ embeds: [embed.setDescription(`Set repeat mode to \`${mode}\`.`)] })
   }
 }
