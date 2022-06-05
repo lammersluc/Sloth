@@ -10,9 +10,10 @@ module.exports = {
     enabled: true,
     visible: true,
     devOnly: false,
-    servAdmin: true,
+    servAdmin: false,
     run: async (client, message, args) => {
         let embed = new MessageEmbed().setColor(client.config)
+        if (!message.member.permissions.has('ADMINISTRATOR')) return message.channel.send({ embeds: [embed.setDescription(`You do not have the permission to use this command.`)] })
         if (!client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setDescription(`There is nothing playing right now.`)] })
         if (!args[0] || isNaN(parseInt(args[0])) || parseInt(args[0]) <= 0 || parseInt(args[0]) >= 1000) return message.channel.send({ embeds: [embed.setDescription(`Please provide a volume between 0 and 1000.`)] })
         client.distube.setVolume(message, parseInt(args[0]))
