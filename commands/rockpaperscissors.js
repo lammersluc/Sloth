@@ -35,11 +35,11 @@ module.exports = {
                     }
 
                     if (playerChoise === botChoice) {
-                        msg.edit({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. It's a draw!`)] })
+                        msg.edit({ embeds: [embed.setDescription(`You chose \`${playerChoise}\` and the bot chose \`${botChoice}\`. It's a draw!`)] })
                     } else if (playerChoise === 'rock' && botChoice === 'scissors' || playerChoise === 'paper' && botChoice === 'rock' || playerChoise === 'scissors' && botChoice === 'paper') {
-                        msg.edit({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. You win!`)] })
+                        msg.edit({ embeds: [embed.setDescription(`You chose \`${playerChoise}\` and the bot chose \`${botChoice}\`. You win!`)] })
                     } else {
-                        msg.edit({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. You lose!`)] })
+                        msg.edit({ embeds: [embed.setDescription(`You chose \`${playerChoise}\` and the bot chose \`${botChoice}\`. You lose!`)] })
                     }
                 }).catch(collected => {
                     msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.') ]})
