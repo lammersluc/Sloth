@@ -23,6 +23,7 @@ module.exports = {
             await msg.awaitReactions({ max: 1, time: 30000, errors: ['time'] })
                 .then(collected => {
                     const reaction = collected.first();
+                    if (reaction.emoji.name === '🪨') {} else if (reaction.emoji.name === '📰') {} else if (reaction.emoji.name === '✂') {} else return msg.edit({ embeds: [embed.setDescription('That emoji is not one of the options.') ]})
                     let playerChoise
                     let botChoice = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)]
                     if (reaction.emoji.name === '🪨') {
