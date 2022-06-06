@@ -18,8 +18,7 @@ module.exports = {
         message.channel.send({ embeds: [embed.setDescription('Rock, Paper or Scissors?')] }).then(async msg => {
             await msg.react('🪨')
             await msg.react('📰')
-            await msg.react('✂')
-            await sleep(100)
+            await msg.react('✂').then(() => {
             await msg.awaitReactions({ max: 1, time: 30000, errors: ['time'] })
                 .then(collected => {
                     const reaction = collected.first();
@@ -44,6 +43,7 @@ module.exports = {
                 }).catch(collected => {
                     msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.') ]})
                 })
+            })
         })
     }
 }
