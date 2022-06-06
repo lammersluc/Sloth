@@ -18,7 +18,8 @@ module.exports = {
         message.channel.send({ embeds: [embed.setDescription('Rock, Paper or Scissors?')] }).then(async msg => {
             await msg.react('🪨')
             await msg.react('📰')
-            await msg.react('✂').then(() => {
+            await msg.react('✂').then(async () => {
+                await sleep(100)
             await msg.awaitReactions({ max: 1, time: 30000, errors: ['time'] })
                 .then(collected => {
                     const reaction = collected.first();
