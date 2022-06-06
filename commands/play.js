@@ -25,12 +25,12 @@ module.exports = {
       const list = results
         .map((song, i) => `${i+1}. \`${song.name}\` - \`${song.formattedDuration}\``)
         .join('\n\n')
-      message.channel.send({ embeds: [embed.setTitle('**Which song do you want to play?**').setDescription(list)] }).then(async (m) => {
+      message.channel.send({ embeds: [embed.setTitle('**Which song do you want to play?**').setDescription(list)] }).then(async (msg) => {
         await message.channel.awaitMessages({ max: 1, time: 30000, errors: ['time'] }).then(collected => {
           let songNumber = parseInt(collected.first().content)
-          if (isNaN(songNumber)) return message.channel.send({ embeds: [embed2.setDescription('Please specify a valid song number.')] })
-          if (songNumber > results.length) return message.channel.send({ embeds: [embed2.setDescription('The song number you provided is longer than the results.')] })
-          if (songNumber < 1) return message.channel.send({ embeds: [embed2.setDescription('Please provide a song number of at least 1.')] })
+          if (isNaN(songNumber)) return msg.edit({ embeds: [embed2.setDescription('Please specify a valid song number.')] })
+          if (songNumber > results.length) return msg.edit({ embeds: [embed2.setDescription('The song number you provided is longer than the amount of results.')] })
+          if (songNumber < 1) return msg.edit({ embeds: [embed2.setDescription('Please provide a song number of at least 1.')] })
           const song = results[songNumber - 1]
 
           client.distube.play(message.member.voice.channel, song, {
@@ -39,7 +39,7 @@ module.exports = {
             message
           })
         }).catch(collected => {
-          message.channel.send({ embeds: [embed2.setDescription('You didn\'t choose anything after 30 seconds.')] })
+          msg.edit({ embeds: [embed2.setDescription('You didn\'t choose anything after 30 seconds.')] })
         })
       })
     })
