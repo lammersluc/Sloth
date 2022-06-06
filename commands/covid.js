@@ -7,7 +7,7 @@ module.exports = {
     aliases: ['corona', 'covid-19', 'covid19'],
     aliasesText: 'Corona, Covid-19, Covid19',
     description: 'Shows current COVID-19 data for a country.',
-    usage: 'Covid (Country)',
+    usage: 'Covid [Country]',
     enabled: true,
     visible: true,
     devOnly: false,

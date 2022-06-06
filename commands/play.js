@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js")
+const { sleep } = require("../addons.js")
 
 module.exports = {
   name: 'play',
@@ -13,14 +14,35 @@ module.exports = {
   servAdmin: false,
   run: async (client, message, args) => {
     let embed = new MessageEmbed().setColor(client.embedColor)
+    let embed2 = new MessageEmbed().setColor(client.embedColor)
     const string = args.join(' ')
     const voiceChannel = message.member.voice.channel
     if (!voiceChannel) return message.channel.send({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] })
     if (!string) return message.channel.send({ embeds: [embed.setDescription('Please provide a song url or query to search.')] })
-    client.distube.play(message.member.voice.channel, string, {
-      member: message.member,
-      textChannel: message.channel,
-      message
+
+    await client.distube.search(string, {limit: 5}).then(async (results) => {
+      if (!results.length) return message.channel.send({ embeds: [embed.setDescription('No results found.')] })
+      const list = results
+        .map((song, i) => `${i+1}. \`${song.name}\` - \`${song.formattedDuration}\``)
+        .join('\n\n')
+      message.channel.send({ embeds: [embed.setTitle('**Which song do you want to play?**').setDescription(list)] })
+
+      await sleep(500)
+      await message.channel.awaitMessages({ max: 1, time: 30000, errors: ['time'] }).then(collected => {
+        let songNumber = parseInt(collected.first().content)
+        if (isNaN(songNumber)) return message.channel.send({ embeds: [embed2.setDescription('Please specify a valid song number.')] })
+        if (songNumber > results.length) return message.channel.send({ embeds: [embed2.setDescription('The song number you provided is longer than the results.')] })
+        if (songNumber < 1) return message.channel.send({ embeds: [embed2.setDescription('Please provide a song number of at least 1.')] })
+        const song = results[songNumber - 1]
+
+        client.distube.play(message.member.voice.channel, song, {
+          member: message.member,
+          textChannel: message.channel,
+          message
+        })
+      }).catch(collected => {
+        message.channel.send({ embeds: [embed2.setDescription('You didn\'t choose anything after 30 seconds.')] })
+      })
     })
   }
 }

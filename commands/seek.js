@@ -6,7 +6,7 @@ module.exports = {
     aliases: [],
     aliasesText: ' ',
     description: 'Seek to a specific time in the current song.',
-    usage: 'Seek [time in seconds]',
+    usage: 'Seek [Time in seconds]',
     enabled: true,
     visible: true,
     devOnly: false,
