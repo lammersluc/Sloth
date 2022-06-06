@@ -6,7 +6,7 @@ module.exports = {
   aliases: ['loop' ,'rp'],
   aliasesText: 'Loop, RP',
   description: 'Switches the repeat mode',
-  usage: 'Repeat [0 / 1 / 2]',
+  usage: 'Repeat',
   enabled: true,
   visible: true,
   devOnly: false,

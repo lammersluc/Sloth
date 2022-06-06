@@ -7,7 +7,7 @@ module.exports = {
     aliases: ['rps'],
     aliasesText: 'RPS',
     description: 'Play rock paper scissors with the bot.',
-    usage: 'RockPaperScissors [Rock/Paper/Scissors]',
+    usage: 'RockPaperScissors',
     enabled: true,
     visible: true,
     devOnly: false,

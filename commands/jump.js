@@ -7,7 +7,7 @@ module.exports = {
     aliases: ['goto'],
     aliasesText: 'Goto',
     description: 'Jumps to a song in the queue.',
-    usage: 'Jump [Song position]',
+    usage: 'Jump',
     enabled: true,
     visible: true,
     devOnly: false,
