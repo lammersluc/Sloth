@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js")
+const { MessageEmbed } = require('discord.js')
 const { sleep } = require('../addons.js')
 
 module.exports = {

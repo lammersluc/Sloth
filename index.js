@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '.'
+client.prefix = '!'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
