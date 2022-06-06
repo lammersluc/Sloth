@@ -1,4 +1,3 @@
-const { RepeatMode } = require("distube")
 const { MessageEmbed } = require('discord.js')
 
 module.exports = {
@@ -7,30 +6,26 @@ module.exports = {
   aliases: ['loop' ,'rp'],
   aliasesText: 'Loop, RP',
   description: 'Switches the repeat mode',
-  usage: 'Repeat [1 / 2 / 3]',
+  usage: 'Repeat [0 / 1 / 2]',
   enabled: true,
   visible: true,
   devOnly: false,
   servAdmin: false,
   run: async (client, message, args) => {
     let embed = new MessageEmbed().setColor(client.embedColor)
-    if (!client.distube.getQueue(message)) {
-      return message.channel.send({ embeds: [embed.setDescription('There is nothing playing in the queue.')] })
-    }
-    if (parseInt(args[0]) !== 0 && parseInt(args[0]) !== 1 && parseInt(args[0]) !== 2) {
-      return message.channel.send({ embeds: [embed.setDescription('Please specify a valid mode (0, 1 or 2).')] })
-    }
+    const queue = client.distube.getQueue(message)
+
+    if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing in the queue.')] })
     let mode
-    switch(client.distube.setRepeatMode(message, parseInt(args[0]))) {
-        case RepeatMode.DISABLED:
-            mode = 'Off'
-            break
-        case RepeatMode.SONG:
-            mode = 'Repeat a song'
-            break
-        case RepeatMode.QUEUE:
-            mode = 'Repeat all queue'
-            break
+    if (queue.repeatMode === 2) {
+      queue.setRepeatMode()
+      mode = 'Off'
+    } else if (queue.repeatMode === 0) {
+      queue.setRepeatMode()
+      mode = 'Repeat a song'
+    } else if (queue.repeatMode === 1) {
+      queue.setRepeatMode()
+      mode = 'Repeat the queue'
     }
     message.channel.send({ embeds: [embed.setDescription(`Set repeat mode to \`${mode}\`.`)] })
   }

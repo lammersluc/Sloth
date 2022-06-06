@@ -17,7 +17,6 @@ module.exports = {
         if(!args[0]) {
             return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`Supply a Subreddit`)] })
         }
-
         try {
             let data = await axios.get(`https://www.reddit.com/r/${args[0]}/random/.json`)
             let embed = new MessageEmbed()

@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js")
+const { sleep } = require('../addons.js')
 
 module.exports = {
     name: 'rockpaperscissors',
@@ -14,26 +15,34 @@ module.exports = {
     run: async (client, message, args) => {
         let embed = new MessageEmbed().setColor(client.embedColor)
 
-        if (!args[0] || !['rock', 'r',  'paper', 'p', 'scissors', 's'].includes(args[0].toLowerCase())) {
-            return message.channel.send({ embeds: [embed.setDescription('Please choose Rock, Paper or Scissors.')] })
-        }
+        message.channel.send({ embeds: [embed.setDescription('Rock, Paper or Scissors?')] }).then(async msg => {
+            await msg.react('🪨')
+            await msg.react('📰')
+            await msg.react('✂')
+            await sleep(100)
+            await msg.awaitReactions({ max: 1, time: 30000, errors: ['time'] })
+                .then(collected => {
+                    const reaction = collected.first();
+                    let playerChoise
+                    let botChoice = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)]
+                    if (reaction.emoji.name === '🪨') {
+                        playerChoise = 'rock'
+                    } else if (reaction.emoji.name === '📰') {
+                        playerChoise = 'paper'
+                    } else if (reaction.emoji.name === '✂') {
+                        playerChoise = 'scissors'
+                    }
 
-        if (args[0].toLowerCase() === 'r') {
-            playerChoise = 'rock'
-        } else if (args[0].toLowerCase() === 'p') {
-            playerChoise = 'paper'
-        } else if (args[0].toLowerCase() === 's') {
-            playerChoise = 'scissors'
-        }
-
-        let botChoice = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)]
-
-        if (playerChoise === botChoice) {
-            return message.channel.send({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. It's a draw!`)] })
-        } else if (playerChoise === 'rock' && botChoice === 'scissors' || playerChoise === 'paper' && botChoice === 'rock' || playerChoise === 'scissors' && botChoice === 'paper') {
-            return message.channel.send({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. You win!`)] })
-        } else {
-            message.channel.send({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. You lose!`)] })
-        }
+                    if (playerChoise === botChoice) {
+                        msg.edit({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. It's a draw!`)] })
+                    } else if (playerChoise === 'rock' && botChoice === 'scissors' || playerChoise === 'paper' && botChoice === 'rock' || playerChoise === 'scissors' && botChoice === 'paper') {
+                        msg.edit({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. You win!`)] })
+                    } else {
+                        msg.edit({ embeds: [embed.setDescription(`You chose ${playerChoise} and the bot chose ${botChoice}. You lose!`)] })
+                    }
+                }).catch(collected => {
+                    msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.') ]})
+                })
+        })
     }
 }

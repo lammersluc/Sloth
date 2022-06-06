@@ -2,12 +2,12 @@ require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]})
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]})
 const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '.'
+client.prefix = '!'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
