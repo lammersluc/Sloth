@@ -21,6 +21,7 @@ client.distube = new DisTube(client, {
   leaveOnStop: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
+  savePreviousSongs: false,
   plugins: [
   ],
   youtubeDL: false
