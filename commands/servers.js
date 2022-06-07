@@ -13,19 +13,16 @@ module.exports = {
     servAdmin: false,
     run: async (client, message, args) => {
         message.delete()
-        let embed = new MessageEmbed().setColor(client.embedColor)
-        let serverList = ''
-        
+        let invite = ''
+
         client.guilds.cache.map(async g => {
-
             const invites = await g.invites.fetch()
-            if (invites) {
-                let invite = invites.first().url
-            }
 
-            embed.addField(g.name, `${g.memberCount} Members\n${invite}`)
+            if(invites.first()) invite = invites.first().url
+            else invite = 'No Invite'
+
+            message.author.send({ embeds: [new MessageEmbed().setColor(client.embedColor).addField(g.name, `${g.memberCount} Members\n${invite}`)] })
         })
 
-        message.author.send({ embeds: [embed.setTitle('Servers').setDescription(serverList)] })
     }
 }
