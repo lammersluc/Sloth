@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '!'
+client.prefix = '.'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
@@ -35,7 +35,7 @@ client.on('ready', () => {
       client.aliases.set(command.aliases[alias], command.name)
     }
   })
-  client.user.setActivity(`${client.prefix}Help for commands`)
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
   console.log(`Logged in as ${client.user.tag}!`)
 })
 
@@ -43,10 +43,15 @@ client.on('messageCreate', message => {
   require('./events/messageCreate') (client, message)
 })
 
-client.on("guildCreate", guild => {
+client.on('guildCreate', guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
   channel.send("Thanks for adding me to the server.")
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
 })
+
+client.on('guildDelete', guild => {
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
+  })
 
 client.distube
   .on('playSong', (queue, song) => {
