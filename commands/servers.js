@@ -18,7 +18,7 @@ module.exports = {
             .setColor(client.embedColor)
             .setTitle(`${client.user.username}'s Servers`)
             .setDescription(`${client.guilds.cache.size} Servers\n${client.users.cache.size} Users`)
-            .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
+            .setFooter({ text: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
 
 
         client.guilds.cache.map(async g => {
