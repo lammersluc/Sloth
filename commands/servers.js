@@ -21,7 +21,7 @@ module.exports = {
             .setFooter({ text: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
 
 
-        client.guilds.map(async g => {
+        client.guilds.cache.map(async g => {
             const invites = await g.invites.fetch()
 
             if(invites.first()) invite = invites.first().url
