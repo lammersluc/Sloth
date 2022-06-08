@@ -13,19 +13,21 @@ module.exports = {
     servAdmin: false,
     run: async (client, message, args) => {
         let embed = new MessageEmbed().setColor(client.embedColor)
-        const invites = await message.guild.invites.fetch()
+        try {
+            const invites = await message.guild.invites.fetch()
 
-        invites.forEach(invite => {
-            if (invite.inviter === client.user.id) {
-                return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
-            }
-        })
-        
-        message.guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT').createInvite({
-            maxAge: 0,
-            maxUses: 0
-        }).then(invite => {
-            message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
-        })
+            invites.forEach(invite => {
+                if (invite.inviter === client.user.id) {
+                    return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
+                }
+            })
+            
+            message.guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT').createInvite({
+                maxAge: 0,
+                maxUses: 0
+            }).then(invite => {
+                message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
+            })
+        } catch (e) {message.channel.send({ embeds: [embed.setDescription(`I do not have the permission to manage server invites.`)] })}
     }
 }
