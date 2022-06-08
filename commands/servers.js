@@ -14,6 +14,12 @@ module.exports = {
     run: async (client, message, args) => {
         message.delete()
         let invite = ''
+        let embed = new MessageEmbed()
+            .setColor(client.embedColor)
+            .setTitle(`${client.user.username}'s Servers`)
+            .setDescription(`${client.guilds.cache.size} Servers\n${client.users.cache.size} Users`)
+            .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
+
 
         client.guilds.cache.map(async g => {
             const invites = await g.invites.fetch()
@@ -21,8 +27,10 @@ module.exports = {
             if(invites.first()) invite = invites.first().url
             else invite = 'No Invite'
 
-            message.author.send({ embeds: [new MessageEmbed().setColor(client.embedColor).addField(g.name, `${g.memberCount} Members\n${invite}`)] })
+            embed.addField(g.name, `${g.memberCount} Members\n${invite}`)
         })
+        
+        message.author.send({ embeds: [embed] })
 
     }
 }
