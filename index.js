@@ -7,7 +7,7 @@ const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '.'
+client.prefix = '!'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
@@ -43,6 +43,10 @@ client.on('messageCreate', message => {
   if (message.channel.type === 'DM') return require('./events/dmMessageCreate.js') (client, message)
   if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message)
   require('./events/messageCreate.js') (client, message)
+})
+
+client.on('channelDelete', channel => {
+  if (channel.parentId === '984118604805050398') require('./events/ticketClose.js') (client, channel)
 })
 
 client.on('guildCreate', guild => {
