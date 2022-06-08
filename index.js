@@ -2,12 +2,12 @@ require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js')
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]})
+const client = new Client({ partials: ["CHANNEL"], intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]})
 const { MessageEmbed } = require('discord.js')
 const fs = require('fs')
 const { DisTube } = require('distube')
 
-client.prefix = '.'
+client.prefix = '!'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.alias = new Discord.Collection()
@@ -40,12 +40,14 @@ client.on('ready', () => {
 })
 
 client.on('messageCreate', message => {
-  require('./events/messageCreate') (client, message)
+  if (message.channel.type === 'DM') return require('./events/dmMessageCreate.js') (client, message)
+  if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message)
+  require('./events/messageCreate.js') (client, message)
 })
 
 client.on('guildCreate', guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
-  channel.send({ embeds: [new MessageEmbed().setColor(client.embedColor).setDescription('Thanks for adding me to the server.')] })
+  channel.send({ embeds: [new MessageEmbed().setColor(client.embedColor).setDescription('Thanks for adding me to the server. For support send a dm to the bot.')] })
   client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
 })
 
