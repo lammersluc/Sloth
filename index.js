@@ -27,6 +27,10 @@ client.distube = new DisTube(client, {
   youtubeDL: false
 })
 
+process.on('uncaughtException', (err) => {
+  client.users.cache.get(client.devs[0]).send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
+})
+
 client.on('ready', () => {
   fs.readdirSync('./commands').map(file => {
     const command = require(`./commands/${file}`)
