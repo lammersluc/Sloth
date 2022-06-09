@@ -11,11 +11,13 @@ module.exports = async (client, message) => {
     const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command))
     if (!cmd) return message.channel.send({ embeds: [embed.setDescription(`Command not found, try \`${client.prefix}Help\`.`)] })
 
+    if (!cmd.enabled) return message.channel.send({ embeds: [embed.setDescription(`Command not found, try \`${client.prefix}Help\`.`)] })
+
     if (cmd.devOnly && !client.devs.includes(message.author.id)) {
         if (cmd.visible) {
             return message.channel.send({ embeds: [embed.setDescription('This command is only for developers.')] })
         } else {
-            return message.channel.send({ embeds: [embed.setDescription(`Command not found, try \`${prefix}Help\`.`)] })
+            return message.channel.send({ embeds: [embed.setDescription(`Command not found, try \`${client.prefix}Help\`.`)] })
         }
     }
 

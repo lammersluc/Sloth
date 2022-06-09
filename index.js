@@ -28,8 +28,9 @@ client.distube = new DisTube(client, {
 })
 
 process.on('uncaughtException', (err) => {
-  client.users.cache.get(client.devs[0]).forEach(dev => {
-    dev.send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
+  return console.log(err)
+  client.devs.forEach(dev => {
+    client.users.cache.get(dev).send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
   })
 })
 
@@ -41,7 +42,7 @@ client.on('ready', () => {
       client.aliases.set(command.aliases[alias], command.name)
     }
   })
-  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
+  client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds` )
   console.log(`Logged in as ${client.user.tag}.`)
 })
 
@@ -58,11 +59,11 @@ client.on('channelDelete', channel => {
 client.on('guildCreate', guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
   channel.send({ embeds: [new MessageEmbed().setColor(client.embedColor).setDescription('Thanks for adding me to the server. For support send a dm to the bot.')] })
-  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
+  client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds` )
 })
 
 client.on('guildDelete', guild => {
-  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
+  client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds` )
   })
 
 client.distube
