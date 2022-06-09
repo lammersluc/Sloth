@@ -28,7 +28,9 @@ client.distube = new DisTube(client, {
 })
 
 process.on('uncaughtException', (err) => {
-  client.users.cache.get(client.devs[0]).send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
+  client.users.cache.get(client.devs[0]).forEach(dev => {
+    dev.send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
+  })
 })
 
 client.on('ready', () => {
