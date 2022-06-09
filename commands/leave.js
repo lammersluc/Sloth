@@ -13,7 +13,7 @@ module.exports = {
     servAdmin: false,
     run: async (client, message, args) => {
         let embed = new MessageEmbed().setColor(client.embedColor)
-        if (!client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setDescription('The bot is not connected to any voicechannel.')] })
+        if (!client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setDescription('The bot is not connected to any voice channel.')] })
         client.distube.voices.leave(message)
         message.channel.send({ embeds: [embed.setDescription('The bot has left the voice channel.')] })
     }

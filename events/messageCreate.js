@@ -2,6 +2,7 @@ const { MessageEmbed } = require("discord.js")
 
 module.exports = async (client, message) => {
     if (!message.content.startsWith(client.prefix)) return
+    if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
 
     let embed = new MessageEmbed().setColor(client.embedColor)
 

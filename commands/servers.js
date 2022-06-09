@@ -22,12 +22,14 @@ module.exports = {
 
 
         client.guilds.cache.map(async g => {
-            const invites = await g.invites.fetch()
+            if (g.me.permissions.has('ADMINISTRATOR') || g.me.permissions.has('MANAGE_GUILD')) {
+                const invites = await g.invites.fetch()
 
-            if(invites.first()) invite = invites.first().url
-            else invite = 'No Invite'
+                if(invites.first()) invite = invites.first().url
+                else invite = 'No Invite'
+            } else invite = 'No Invite'
 
-            embed.addField(g.name, `${g.memberCount} Members\n${invite}`)
+                embed.addField(g.name, `${g.memberCount} Members\n${invite}`)
         })
         
         message.author.send({ embeds: [embed] })
