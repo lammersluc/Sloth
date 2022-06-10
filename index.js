@@ -28,11 +28,14 @@ client.distube = new DisTube(client, {
 })
 
 process.on('uncaughtException', (err) => {
-  return console.log(err)
   client.devs.forEach(dev => {
     client.users.cache.get(dev).send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
   })
 })
+
+setInterval(() => {
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
+}, 3 * 60000)
 
 client.on('ready', () => {
   fs.readdirSync('./commands').map(file => {
@@ -59,11 +62,11 @@ client.on('channelDelete', channel => {
 client.on('guildCreate', guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
   channel.send({ embeds: [new MessageEmbed().setColor(client.embedColor).setDescription('Thanks for adding me to the server. For support send a dm to the bot.')] })
-  client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds` )
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
 })
 
 client.on('guildDelete', guild => {
-  client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds` )
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
   })
 
 client.distube
