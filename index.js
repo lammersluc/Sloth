@@ -10,7 +10,6 @@ const { DisTube } = require('distube')
 client.prefix = '!'
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
-client.alias = new Discord.Collection()
 client.devs = ['431882442035691550']
 client.embedColor = '#00a8f3'
 

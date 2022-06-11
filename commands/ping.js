@@ -14,7 +14,7 @@ module.exports = {
     run: async (client, message, args) => {
         let embed = new MessageEmbed().setColor(client.embedColor)
         message.channel.send({embeds: [embed.setDescription('Pinging...')]}).then(msg => {
-            msg.edit({ embeds: [embed.setDescription(`Pong. The response time is ${msg.createdTimestamp - message.createdTimestamp}ms. The API latency is ${Math.round(client.ws.ping)}ms.`)] })
+            msg.edit({ embeds: [embed.setDescription(`Pong. The response time is ${msg.createdTimestamp - message.createdTimestamp}ms. The API latency is ${client.ws.ping}ms.`)] })
         })
     }
 }
