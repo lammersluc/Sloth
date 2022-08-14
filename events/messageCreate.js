@@ -1,8 +1,8 @@
-const { EmbedBuilder } = require("discord.js")
+const { PermissionsBitField, EmbedBuilder } = require("discord.js")
 
 module.exports = async (client, message) => {
     if (!message.content.startsWith(client.prefix)) return
-    if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
+    if (!message.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return
 
     let embed = new EmbedBuilder().setColor(client.embedColor)
 

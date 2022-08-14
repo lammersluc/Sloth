@@ -2,7 +2,7 @@ require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js')
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] })
+const client = new Client({ intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] })
 const fs = require('fs')
 const { DisTube } = require('distube')
 
