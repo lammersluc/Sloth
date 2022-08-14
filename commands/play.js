@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 const { sleep } = require("../addons.js")
 
 module.exports = {
@@ -13,8 +13,8 @@ module.exports = {
   devOnly: false,
   servAdmin: false,
   run: async (client, message, args) => {
-    let embed = new MessageEmbed().setColor(client.embedColor)
-    let embed2 = new MessageEmbed().setColor(client.embedColor)
+    let embed = new EmbedBuilder().setColor(client.embedColor)
+    let embed2 = new EmbedBuilder().setColor(client.embedColor)
     const string = args.join(' ')
     const voiceChannel = message.member.voice.channel
     if (!voiceChannel) return message.channel.send({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] })

@@ -1,8 +1,8 @@
-const { MessageEmbed } = require("discord.js")
+const { EmbedBuilder } = require("discord.js")
 
 module.exports = async (client, message) => {
     if (message.author.id === client.user.id) return
-    let embed = new MessageEmbed().setColor(client.embedColor)
+    let embed = new EmbedBuilder().setColor(client.embedColor)
     const guild = client.guilds.cache.get('971056840123252736')
     const tickets = guild.channels.cache.get('984118604805050398')
     const channel = guild.channels.cache.find(c => c.name == `${message.author.username.toLowerCase().replace(/\W/g, '')}-${message.author.id}`)

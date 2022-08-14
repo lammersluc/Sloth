@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 const { sleep } = require('../addons.js')
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new MessageEmbed().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor)
 
         message.channel.send({ embeds: [embed.setDescription('Rock, Paper or Scissors?')] }).then(async msg => {
             await msg.react('🪨')

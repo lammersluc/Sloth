@@ -1,9 +1,8 @@
 require('dotenv').config()
 require('./addons')
 const Discord = require('discord.js')
-const { Client, Intents } = require('discord.js')
-const client = new Client({ partials: ["CHANNEL"], intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]})
-const { MessageEmbed } = require('discord.js')
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js')
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] })
 const fs = require('fs')
 const { DisTube } = require('distube')
 
@@ -22,14 +21,14 @@ client.distube = new DisTube(client, {
   emitAddListWhenCreatingQueue: false,
   savePreviousSongs: false,
   plugins: [
-  ],
-  youtubeDL: false
+  ]
 })
 
 process.on('uncaughtException', (err) => {
-  client.devs.forEach(dev => {
-    client.users.cache.get(dev).send({ embeds: [new MessageEmbed().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
-  })
+  console.log(err)
+  // client.devs.forEach(dev => {
+  //   client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] })
+  // })
 })
 
 setInterval(() => {
@@ -60,7 +59,7 @@ client.on('channelDelete', channel => {
 
 client.on('guildCreate', guild => {
   const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'))
-  channel.send({ embeds: [new MessageEmbed().setColor(client.embedColor).setDescription('Thanks for adding me to the server. For support send a dm to the bot.')] })
+  channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Thanks for adding me to the server. For support send a dm to the bot.')] })
   client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })
 })
 
@@ -71,7 +70,7 @@ client.on('guildDelete', guild => {
 client.distube
   .on('playSong', (queue, song) => {
     queue.textChannel.send({
-        embeds: [new MessageEmbed()
+        embeds: [new EmbedBuilder()
           .setAuthor({ name: 'Now Playing' })
           .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
           .setURL(song.url)
@@ -86,7 +85,7 @@ client.distube
   .on('addSong' , (queue, song) => {
     if (!queue.songs) return
     queue.textChannel.send({
-      embeds: [new MessageEmbed()
+      embeds: [new EmbedBuilder()
         .setAuthor({ name: 'Added Song' })
         .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
         .setURL(song.url)

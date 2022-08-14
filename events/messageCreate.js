@@ -1,10 +1,10 @@
-const { MessageEmbed } = require("discord.js")
+const { EmbedBuilder } = require("discord.js")
 
 module.exports = async (client, message) => {
     if (!message.content.startsWith(client.prefix)) return
     if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
 
-    let embed = new MessageEmbed().setColor(client.embedColor)
+    let embed = new EmbedBuilder().setColor(client.embedColor)
 
     const args = message.content.slice(client.prefix.length).trim().split(/ +/g)
     const command = args.shift().toLowerCase()

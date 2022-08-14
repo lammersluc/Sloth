@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
     name: 'nowplaying',
@@ -12,7 +12,7 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new MessageEmbed().setColor('#00a8f3')
+        let embed = new EmbedBuilder().setColor('#00a8f3')
         const queue = client.distube.getQueue(message)
         if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing.')] })
         const song = queue.songs[0]

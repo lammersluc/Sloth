@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
     name: 'random',
@@ -12,7 +12,7 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new MessageEmbed().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor)
         let random = Math.round(Math.random() * args[0] + 1)
 
         if(!args[0]) return message.channel.send({ embeds: [embed.setDescription('Provide a number.')] })

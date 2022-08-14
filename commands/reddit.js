@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 const moment = require('moment')
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
         }
         try {
             let data = await axios.get(`https://www.reddit.com/r/${args[0]}/random/.json`)
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
 
                 .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}`})
                 .setTitle(`${data.data[0].data.children[0].data.title}`)

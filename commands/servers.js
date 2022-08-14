@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js")
+const { EmbedBuilder } = require("discord.js")
 
 module.exports = {
     name: 'servers',
@@ -14,7 +14,7 @@ module.exports = {
     run: async (client, message, args) => {
         message.delete()
         let invite = ''
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setColor(client.embedColor)
             .setTitle(`${client.user.username}'s Servers`)
             .setDescription(`${client.guilds.cache.size} Servers\n${client.users.cache.size} Users`)

@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
     name: 'covid',
@@ -13,7 +13,7 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new MessageEmbed().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor)
         if(!args[0]) {
             return message.channel.send({ embeds: [embed.setDescription(`Please supply a country.`)] })
         }

@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
     name: 'help',
@@ -20,7 +20,7 @@ module.exports = {
         })
 
         message.channel.send({ embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
             .setColor('#00a8f3')
             .setTitle('Help Menu')
             .setDescription(commands)

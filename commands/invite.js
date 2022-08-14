@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
     name: 'invite',
@@ -12,7 +12,7 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new MessageEmbed().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor)
         try {
             const invites = await message.guild.invites.fetch()
 

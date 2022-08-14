@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { EmbedBuilder } = require('discord.js')
 
 module.exports = {
   name: 'skip',
@@ -12,7 +12,7 @@ module.exports = {
   devOnly: false,
   servAdmin: false,
   run: async (client, message, args) => {
-    let embed = new MessageEmbed().setColor(client.embedColor)
+    let embed = new EmbedBuilder().setColor(client.embedColor)
     const queue = client.distube.getQueue(message)
     if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now')] })
     if (!queue.songs[1]) return message.channel.send({ embeds: [embed.setDescription('There is nothing in the queue to skip to.')] })
