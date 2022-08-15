@@ -28,7 +28,13 @@ process.on('uncaughtException', (err) => {
   client.devs.forEach(dev => {
     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] });
   });
-})
+});
+
+process.on('TypeError', (err) => {
+  client.devs.forEach(dev => {
+    client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] });
+  });
+});
 
 setInterval(() => {
   client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
