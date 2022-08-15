@@ -47,9 +47,9 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', message => {
-  if (message.channel.type === 0) return require('./events/messageCreate.js') (client, message);
-  if (message.channel.type === 1) return require('./events/dmMessageCreate.js') (client, message);
   if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
+  if (message.channel.type === 1) return require('./events/dmMessageCreate.js') (client, message);
+  if (message.channel.type === 0) return require('./events/messageCreate.js') (client, message);
 });
 
 client.on('channelDelete', channel => {
