@@ -43,7 +43,7 @@ client.on('ready', async () => {
     }
   });
 
-  client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds`);
+  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
   console.log(`Logged in as ${client.user.tag}.`);
 });
 
