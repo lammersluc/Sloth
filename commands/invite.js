@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'invite',
@@ -12,13 +12,13 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor);
         try {
-            const invites = await message.guild.invites.fetch()
+            const invites = await message.guild.invites.fetch();
 
             invites.forEach(invite => {
                 if (invite.inviter === client.user.id) {
-                    return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
+                    return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] });
                 }
             })
             
@@ -26,8 +26,8 @@ module.exports = {
                 maxAge: 0,
                 maxUses: 0
             }).then(invite => {
-                message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] })
-            })
-        } catch (e) {message.channel.send({ embeds: [embed.setDescription(`I do not have the permission to manage server invites.`)] })}
+                message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] });
+            });
+        } catch (e) { message.channel.send({ embeds: [embed.setDescription(`I do not have the permission to manage server invites.`)] }); }
     }
 }

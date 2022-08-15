@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'seek',
@@ -12,15 +12,15 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor(client.embedColor)
-        const queue = client.distube.getQueue(message)
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now')] })
+        let embed = new EmbedBuilder().setColor(client.embedColor);
+        const queue = client.distube.getQueue(message);
+        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now')] });
 
-        if (!args[0] || isNaN(parseInt(args[0]))) return message.channel.send({ embeds: [embed.setDescription('Please specify a time in seconds.')] })
-        if (parseInt(args[0]) < 0) return message.channel.send({ embeds: [embed.setDescription('Please specify a time in seconds greater than 0.')] })
-        if (parseInt(args[0]) > queue.songs[0].duration) return message.channel.send({ embeds: [embed.setDescription('The time specified is longer than the song\'s duration.')] })
+        if (!args[0] || isNaN(parseInt(args[0]))) return message.channel.send({ embeds: [embed.setDescription('Please specify a time in seconds.')] });
+        if (parseInt(args[0]) < 0) return message.channel.send({ embeds: [embed.setDescription('Please specify a time in seconds greater than 0.')] });
+        if (parseInt(args[0]) > queue.songs[0].duration) return message.channel.send({ embeds: [embed.setDescription('The time specified is longer than the song\'s duration.')] });
 
-        queue.seek(parseInt(args[0]))
-        message.channel.send({ embeds: [embed.setDescription(`Seeked to ${args[0]} seconds.`)] }) 
+        queue.seek(parseInt(args[0]));
+        message.channel.send({ embeds: [embed.setDescription(`Seeked to ${args[0]} seconds.`)] });
     }
 }

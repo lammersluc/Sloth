@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'nowplaying',
@@ -12,15 +12,15 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor('#00a8f3')
-        const queue = client.distube.getQueue(message)
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing.')] })
-        const song = queue.songs[0]
-        let songWatched = Math.floor((queue.currentTime / song.duration) * 50)
-        const watchBar = '───────────────────────────────────────────────────'
-        let watchBar2 = watchBar.split('')
-        watchBar2[songWatched] = '⚪'
-        let changedwatchBar = watchBar2.join('')
+        let embed = new EmbedBuilder().setColor('#00a8f3');
+        const queue = client.distube.getQueue(message);
+        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing.')] });
+        const song = queue.songs[0];
+        let songWatched = Math.floor((queue.currentTime / song.duration) * 50);
+        const watchBar = '───────────────────────────────────────────────────';
+        let watchBar2 = watchBar.split('');
+        watchBar2[songWatched] = '⚪';
+        let changedwatchBar = watchBar2.join('');
 
         message.channel.send({ embeds: [embed
             .setAuthor({ name: 'Now Playing' })
@@ -31,6 +31,6 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
             .setColor(client.embedColor)
-        ]})
+        ]});
     }
 }

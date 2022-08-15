@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js")
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: 'servers',
@@ -18,21 +18,20 @@ module.exports = {
             .setColor(client.embedColor)
             .setTitle(`${client.user.username}'s Servers`)
             .setDescription(`${client.guilds.cache.size} Servers\n${client.users.cache.size} Users`)
-            .setFooter({ text: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
+            .setFooter({ text: `${client.user.username}`, iconURL: client.user.displayAvatarURL() });
 
 
         client.guilds.cache.map(async g => {
             if (g.me.permissions.has('ADMINISTRATOR') || g.me.permissions.has('MANAGE_GUILD')) {
-                const invites = await g.invites.fetch()
+                const invites = await g.invites.fetch();
 
-                if(invites.first()) invite = invites.first().url
-                else invite = 'No Invite'
-            } else invite = 'No Invite'
+                if(invites.first()) invite = invites.first().url;
+                else invite = 'No Invite';
+            } else invite = 'No Invite';
 
-                embed.addField(g.name, `${g.memberCount} Members\n${invite}`)
+            embed.addField(g.name, `${g.memberCount} Members\n${invite}`);
         })
         
-        message.author.send({ embeds: [embed] })
-
+        message.author.send({ embeds: [embed] });
     }
 }

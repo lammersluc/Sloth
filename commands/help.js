@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'help',
@@ -17,7 +17,7 @@ module.exports = {
             if (cmd.visible) {
                 commands += `**${cmd.helpname}**\n${cmd.description}\nUsage\: \`${client.prefix + cmd.usage}\`\nAliases: \`${cmd.aliasesText}\`\n\n`
             }
-        })
+        });
 
         message.channel.send({ embeds: [
             new EmbedBuilder()
@@ -25,6 +25,6 @@ module.exports = {
             .setTitle('Help Menu')
             .setDescription(commands)
             .setColor(client.embedColor)
-        ]})
+        ]});
     }
 }

@@ -1,5 +1,5 @@
-const axios = require('axios')
-const { EmbedBuilder } = require('discord.js')
+const axios = require('axios');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'covid',
@@ -13,13 +13,13 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor);
         if(!args[0]) {
-            return message.channel.send({ embeds: [embed.setDescription(`Please supply a country.`)] })
+            return message.channel.send({ embeds: [embed.setDescription(`Please supply a country.`)] });
         }
 
         try {
-            let data = await axios.get(`https://disease.sh/v3/covid-19/countries/${args[0]}`)
+            let data = await axios.get(`https://disease.sh/v3/covid-19/countries/${args[0]}`);
 
             message.channel.send({
                 embeds: [embed
@@ -29,9 +29,9 @@ module.exports = {
                     .addField('Recovered', `**Total Recovered**: ${data.data.recovered.toLocaleString()}\n**Today Recovered**: ${data.data.todayRecovered.toLocaleString()}\n**Total Recovered Per One Million**: ${data.data.recoveredPerOneMillion.toLocaleString()}`)
                     .addField(`Information about ${data.data.country}`, `**Population**: ${data.data.population.toLocaleString()}\n**Lat**: ${data.data.countryInfo.lat.toLocaleString()}\n**Long**: ${data.data.countryInfo.long.toLocaleString()}\n**ISO2**: ${data.data.countryInfo.iso2.toLocaleString()}\n**ISO3**: ${data.data.countryInfo.iso3.toLocaleString()}`)
                     .setImage(`${data.data.countryInfo.flag.toLocaleString()}`)
-                ]})
+                ]});
         } catch(e) {
-            message.channel.send({ embeds: [embed.setDescription('Country doesn\'t exist.')] })
+            message.channel.send({ embeds: [embed.setDescription('Country doesn\'t exist.')] });
         }
     }
 }

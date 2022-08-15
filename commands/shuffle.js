@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'shuffle',
@@ -12,10 +12,10 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor(client.embedColor)
-        const queue = client.distube.getQueue(message)
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription(`There is nothing in the queue right now.`)] })
-        queue.shuffle()
-        message.channel.send({ embeds: [embed.setDescription('Shuffled songs in the queue.')] })
+        let embed = new EmbedBuilder().setColor(client.embedColor);
+        const queue = client.distube.getQueue(message);
+        if (!queue) return message.channel.send({ embeds: [embed.setDescription(`There is nothing in the queue right now.`)] });
+        queue.shuffle();
+        message.channel.send({ embeds: [embed.setDescription('Shuffled songs in the queue.')] });
     }
 }

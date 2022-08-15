@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'ping',
@@ -12,9 +12,9 @@ module.exports = {
     devOnly: false,
     servAdmin: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor(client.embedColor)
+        let embed = new EmbedBuilder().setColor(client.embedColor);
         message.channel.send({embeds: [embed.setDescription('Pinging...')]}).then(msg => {
-            msg.edit({ embeds: [embed.setDescription(`Pong. The response time is ${msg.createdTimestamp - message.createdTimestamp}ms. The API latency is ${client.ws.ping}ms.`)] })
-        })
+            msg.edit({ embeds: [embed.setDescription(`Pong. The response time is ${msg.createdTimestamp - message.createdTimestamp}ms. The API latency is ${client.ws.ping}ms.`)] });
+        });
     }
 }
