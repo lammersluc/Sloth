@@ -30,17 +30,11 @@ process.on('uncaughtException', (err) => {
   });
 });
 
-process.on('TypeError', (err) => {
-  client.devs.forEach(dev => {
-    client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] });
-  });
-});
-
 setInterval(() => {
   client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
 }, 3 * 60000);
 
-client.on('ready', () => {
+client.on('ready', async () => {
   fs.readdirSync('./commands').map(file => {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
@@ -48,6 +42,7 @@ client.on('ready', () => {
       client.aliases.set(command.aliases[alias], command.name);
     }
   });
+
   client.user.setActivity(`${client.prefix}Help | ${client.guilds.cache.size} Guilds`);
   console.log(`Logged in as ${client.user.tag}.`);
 });
