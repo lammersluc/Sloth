@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder } = require('discord.js');
 
 module.exports = {
   name: 'play',
@@ -32,7 +32,7 @@ module.exports = {
           if (songNumber < 1) return msg.edit({ embeds: [embed2.setDescription('Please provide a song number of at least 1.')] });
           const song = results[songNumber - 1]
 
-          if (!message.member.voice.channel.permissionsFor(message.guild.me).has('CONNECT') || !message.member.voice.channel.permissionsFor(message.guild.me).has('SPEAK')) return msg.edit({ embeds: [embed2.setDescription('I do not have permission to join or speak in this voice channel.')] });
+          if (!message.member.voice.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.Connect) || !message.member.voice.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.Speak)) return msg.edit({ embeds: [embed2.setDescription('I do not have permission to join or speak in this voice channel.')] });
 
           client.distube.play(message.member.voice.channel, song, {
             member: message.member,
