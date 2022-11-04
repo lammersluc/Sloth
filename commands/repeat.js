@@ -3,8 +3,8 @@ const { EmbedBuilder } = require('discord.js');
 module.exports = {
   name: 'repeat',
   helpname: 'Repeat',
-  aliases: ['loop' ,'rp'],
-  aliasesText: 'Loop, RP',
+  aliases: ['loop'],
+  aliasesText: 'Loop',
   description: 'Switches the repeat mode',
   usage: 'Repeat',
   enabled: true,
