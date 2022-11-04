@@ -1,12 +1,12 @@
 {
-  "name": "bottrackz",
+  "name": "sloth",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ."
   },
-  "author": "Not Trackz DEV",
+  "author": "Luc DEV",
   "license": "ISC",
   "keywords": [],
   "description": "",
