@@ -98,6 +98,10 @@ client.distube
 
   .on('searchNoResult', (message, query) =>
     message.channel.send(`No result found for \`${query}\`.`)
-  );
+  )
+
+  .on('error', (textChannel, e) => {
+    if (e.toLocaleString().includes('PlayingError: Sign in to confirm your age')) return textChannel.send({embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription(`The video you are trying to play is age restricted. Skipping to next song...`)] })
+  });
 
 client.login(process.env.TOKEN);
