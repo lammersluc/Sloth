@@ -19,6 +19,14 @@ module.exports = {
     if (!voiceChannel) return message.channel.send({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
     if (!string) return message.channel.send({ embeds: [embed.setDescription('Please provide a song url or query to search.')] });
 
+    if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+      return client.distube.play(message.member.voice.channel, string, {
+        member: message.member,
+        textChannel: message.channel,
+        message
+      });
+    }
+    
     await client.distube.search(string, {limit: 5}).then(async (results) => {
       if (!results.length) return message.channel.send({ embeds: [embed.setDescription('No results found.')] });
       const list = results
