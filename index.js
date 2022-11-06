@@ -74,11 +74,11 @@ client.distube
           .setAuthor({ name: 'Now Playing' })
           .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
           .setURL(song.url)
-          .setDescription(`\`⚪──────────────────────────────────────────────────\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
+          .setDescription(`\`⚪─────────────────────────────────────────────────\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | 0:00 / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
           .setThumbnail(song.thumbnail)
           .setTimestamp()
           .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
-          .setColor('#00a8f3')]
+          .setColor(client.embedColor)]
     });
   })
 
@@ -92,7 +92,7 @@ client.distube
         .setThumbnail(song.thumbnail)
         .setTimestamp()
         .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
-        .setColor('#00a8f3')]
+        .setColor(client.embedColor)]
     });
   })
 
