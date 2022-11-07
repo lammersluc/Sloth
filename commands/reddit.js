@@ -12,12 +12,11 @@ module.exports = {
     enabled: true,
     visible: true,
     devOnly: false,
-    servAdmin: false,
+    adminOnly: false,
     run: async (client, message, args) => {
         let embed = new EmbedBuilder();
-        if(!args[0]) {
-            return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`Supply a Subreddit.`)] });
-        }
+        if (!message.channel.nsfw) return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`This command can only be used in NSFW channels.`)] });
+        if (!args[0]) return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`Supply a Subreddit.`)] });
         try {
             let data = await axios.get(`https://www.reddit.com/r/${args[0]}/random/.json`);
             embed

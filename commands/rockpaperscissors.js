@@ -11,7 +11,7 @@ module.exports = {
     enabled: true,
     visible: true,
     devOnly: false,
-    servAdmin: false,
+    adminOnly: false,
     run: async (client, message, args) => {
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const emojis = ['🪨', '📰', '✂'];

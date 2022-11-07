@@ -10,7 +10,7 @@ module.exports = {
     enabled: true,
     visible: true,
     devOnly: false,
-    servAdmin: false,
+    adminOnly: false,
     run: async (client, message, args) => {
         let commands = ''
         client.commands.map(cmd => {

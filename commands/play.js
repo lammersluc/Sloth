@@ -10,7 +10,7 @@ module.exports = {
   enabled: true,
   visible: true,
   devOnly: false,
-  servAdmin: false,
+  adminOnly: false,
   run: async (client, message, args) => {
     let embed = new EmbedBuilder().setColor(client.embedColor);
     const string = args.join(' ');
@@ -59,6 +59,7 @@ module.exports = {
                 .setAuthor({ name: 'Added Song' })
                 .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
                 .setURL(song.url)
+                .setDescription(null)
                 .setThumbnail(song.thumbnail)
                 .setTimestamp()
                 .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })] });

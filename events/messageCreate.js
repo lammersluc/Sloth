@@ -21,6 +21,8 @@ module.exports = async (client, message) => {
         }
     }
 
+    if (cmd.adminOnly && !message.member.permissionsFor(message.member).has(PermissionsBitField.Flags.Administrator)) return message.channel.send({ embeds: [embed.setDescription(`Only server admins can use this command.`)] });
+
     try {
         cmd.run(client, message, args);
     } catch(e) {

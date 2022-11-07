@@ -10,7 +10,7 @@ module.exports = {
     enabled: true,
     visible: true,
     devOnly: false,
-    servAdmin: false,
+    adminOnly: false,
     run: async (client, message, args) => {
         let embed = new EmbedBuilder().setColor(client.embedColor);
         if (!client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setDescription('The bot is not connected to any voice channel.')] });
