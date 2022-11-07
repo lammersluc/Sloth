@@ -102,6 +102,10 @@ client.distube
 
   .on('error', (textChannel, e) => {
     if (e.toLocaleString().includes('PlayingError: Sign in to confirm your age')) return textChannel.send({embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription(`The video you are trying to play is age restricted. Skipping to next song...`)] })
+    
+    client.devs.forEach(dev => {
+      client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+    });
   });
 
 client.login(process.env.TOKEN);
