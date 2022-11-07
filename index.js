@@ -82,20 +82,6 @@ client.distube
     });
   })
 
-  .on('addSong' , (queue, song) => {
-    if (!queue.songs) return;
-    queue.textChannel.send({
-      embeds: [new EmbedBuilder()
-        .setAuthor({ name: 'Added Song' })
-        .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
-        .setURL(song.url)
-        .setThumbnail(song.thumbnail)
-        .setTimestamp()
-        .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
-        .setColor(client.embedColor)]
-    });
-  })
-
   .on('searchNoResult', (message, query) =>
     message.channel.send(`No result found for \`${query}\`.`)
   )

@@ -14,37 +14,26 @@ module.exports = {
     servAdmin: false,
     run: async (client, message, args) => {
         let embed = new EmbedBuilder().setColor(client.embedColor);
+        const emojis = ['🪨', '📰', '✂'];
 
         message.channel.send({ embeds: [embed.setDescription('Rock, Paper or Scissors?')] }).then(async msg => {
-            await msg.react('🪨');
-            await msg.react('📰');
-            await msg.react('✂').then(async () => {
-                await sleep(100);
-            await msg.awaitReactions({ max: 1, time: 30000, errors: ['time'] })
+            emojis.map(emoji => {msg.react(emoji);});
+            const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id === message.author.id;
+            await msg.awaitReactions({ filter, max: 1, time: 30000, errors: ['time'] })
                 .then(collected => {
                     const reaction = collected.first();
-                    const emojis = ['🪨', '📰', '✂'];
-                    if (!['🪨', '📰', '✂'].includes(reaction.emoji.name)) return msg.edit({ embeds: [embed.setDescription('That emoji is not one of the options.') ]})
-                    let playerChoise;
-                    let botChoice = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)];
-                    if (reaction.emoji.name === '🪨') {
-                        playerChoise = 'rock';
-                    } else if (reaction.emoji.name === '📰') {
-                        playerChoise = 'paper';
-                    } else if (reaction.emoji.name === '✂') {
-                        playerChoise = 'scissors';
-                    }
+                    let playerChoice = emojis.indexOf(reaction.emoji.name);
+                    let botChoice = Math.floor(Math.random() * 3);
 
-                    if (playerChoise === botChoice) {
-                        msg.edit({ embeds: [embed.setDescription(`You chose \`${playerChoise}\` and the bot chose \`${botChoice}\`. It's a draw!`)] });
-                    } else if (playerChoise === 'rock' && botChoice === 'scissors' || playerChoise === 'paper' && botChoice === 'rock' || playerChoise === 'scissors' && botChoice === 'paper') {
-                        msg.edit({ embeds: [embed.setDescription(`You chose \`${playerChoise}\` and the bot chose \`${botChoice}\`. You win!`)] });
+                    if (playerChoice === botChoice) {
+                        msg.edit({ embeds: [embed.setDescription(`You chose \`${emojis[playerChoice].toString()}\` and the bot chose \`${emojis[botChoice].toString()}\`. It's a draw!`)] });
+                    } else if (playerChoice === 0 && botChoice === 2 || playerChoice === 1 && botChoice === 0 || playerChoice === 2 && botChoice === 1) {
+                        msg.edit({ embeds: [embed.setDescription(`You chose \`${emojis[playerChoice].toString()}\` and the bot chose \`${emojis[botChoice].toString()}\`. You win!`)] });
                     } else {
-                        msg.edit({ embeds: [embed.setDescription(`You chose \`${playerChoise}\` and the bot chose \`${botChoice}\`. You lose!`)] });
+                        msg.edit({ embeds: [embed.setDescription(`You chose \`${emojis[playerChoice].toString()}\` and the bot chose \`${emojis[botChoice].toString()}\`. You lose!`)] });
                     }
                 }).catch(collected => {
                     msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.') ]});
-                })
             })
         })
     }
