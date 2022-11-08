@@ -6,6 +6,7 @@ module.exports = {
   aliases: ['next'],
   aliasesText: 'Next',
   description: 'Skips to the next song.',
+  category: 'music',
   usage: 'Skip',
   enabled: true,
   visible: true,

@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['l' ,'stop'],
     aliasesText: 'L, Stop',
     description: 'Makes the bot leave voice channel.',
+    category: 'music',
     usage: 'Leave',
     enabled: true,
     visible: true,

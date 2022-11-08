@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['p'],
     aliasesText: 'P',
     description: 'Pauses/Resumes the current song.',
+    category: 'music',
     usage: 'Pause',
     enabled: true,
     visible: true,

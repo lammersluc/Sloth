@@ -6,6 +6,7 @@ module.exports = {
     aliases: [],
     aliasesText: ' ',
     description: 'Shuffles the queue.',
+    category: 'music',
     usage: 'Shuffle',
     enabled: true,
     visible: true,

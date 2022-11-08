@@ -1,5 +1,5 @@
-const axios = require('axios');
 const { EmbedBuilder } = require('discord.js');
+const axios = require('axios');
 
 module.exports = {
     name: 'covid',
@@ -7,6 +7,7 @@ module.exports = {
     aliases: ['corona', 'covid-19', 'covid19'],
     aliasesText: 'Corona, Covid-19, Covid19',
     description: 'Shows current COVID-19 data for a country.',
+    category: 'info',
     usage: 'Covid [Country]',
     enabled: true,
     visible: true,

@@ -1,5 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
 const axios = require('axios');
-const { EmbedBuilder, Embed } = require('discord.js');
 const moment = require('moment');
 
 module.exports = {
@@ -8,6 +8,7 @@ module.exports = {
     aliases: ['r/'],
     aliasesText: 'R/',
     description: 'Searches a random post from subreddit.',
+    category: 'fun',
     usage: 'Reddit [Subreddit]',
     enabled: true,
     visible: true,

@@ -6,6 +6,7 @@ module.exports = {
     aliases: [],
     aliasesText: ' ',
     description: 'Creates or shows invite for the server.',
+    category: 'tools',
     usage: 'Invite',
     enabled: true,
     visible: true,

@@ -6,6 +6,7 @@ module.exports = {
   aliases: ['loop'],
   aliasesText: 'Loop',
   description: 'Switches the repeat mode',
+  category: 'music',
   usage: 'Repeat',
   enabled: true,
   visible: true,

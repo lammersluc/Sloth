@@ -6,6 +6,7 @@ module.exports = {
     aliases: [],
     aliasesText: ' ',
     description: 'Set the volume of the music bot.',
+    category: 'music',
     usage: 'Volume [0-1000]',
     enabled: true,
     visible: true,

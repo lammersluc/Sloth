@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('./addons');
 const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
@@ -10,7 +9,7 @@ client.prefix = '.';
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.devs = ['431882442035691550'];
-client.embedColor = '#00a8f3';
+client.embedColor = '#fbd55a';
 
 client.distube = new DisTube(client, {
   leaveOnEmpty: true,
@@ -25,6 +24,7 @@ client.distube = new DisTube(client, {
 });
 
 process.on('uncaughtException', (err) => {
+  console.log(err);
   client.devs.forEach(dev => {
     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] });
   });

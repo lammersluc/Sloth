@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['q'],
     aliasesText: 'Q',
     description: 'Shows the queue.',
+    category: 'music',
     usage: 'Queue',
     enabled: true,
     visible: true,

@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['np'],
     aliasesText: 'NP',
     description: 'Shows info about the current song that is playing.',
+    category: 'music',
     usage: 'NowPlaying',
     enabled: true,
     visible: true,

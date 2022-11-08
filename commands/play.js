@@ -1,4 +1,4 @@
-const { PermissionsBitField, EmbedBuilder } = require('discord.js');
+const { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
   name: 'play',
@@ -6,6 +6,7 @@ module.exports = {
   aliases: ['add', 'music' ,'p'],
   aliasesText: 'Add, Music, P',
   description: 'Plays music in your voice channel.',
+  category: 'music',
   usage: 'Play [Search/URL]',
   enabled: true,
   visible: true,
@@ -44,16 +45,20 @@ module.exports = {
       const list = results
         .map((song, i) => `${i+1}. \`${song.name}\` - \`${song.formattedDuration}\``)
         .join('\n\n')
-      
-        message.channel.send({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)] }).then(async (msg) => {
-          const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '❌'];
-          emojis.map(emoji => {msg.react(emoji);});
-          const filter = (reaction, user) => emojis.includes(reaction.emoji.name) && user.id === message.author.id;
-          await msg.awaitReactions({ filter, max: 1, time: 30000, errors: ['time'] }).then(async (collected) => {
-            const reaction = collected.first();
-            if (reaction.emoji.name === emojis[5]) return msg.edit({ embeds: [embed.setDescription('Cancelled.')] });
-            song = results[emojis.indexOf(reaction.emoji.name)];
 
+        let row = new ActionRowBuilder();
+        let row2 = new ActionRowBuilder();
+        results.map(result => {
+          row.addComponents(new ButtonBuilder().setLabel((results.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(results.indexOf(result).toString()));
+        });
+        row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
+
+        message.channel.send({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
+          const filter = (button) => button.user.id === message.author.id;
+          msg.awaitMessageComponent({ filter, time: 30000, errors: ['time'] }).then(button => {
+            if (button.customId === 'cancel') return msg.edit({ embeds: [embed.setDescription('Cancelled.')], components: [] });
+            song = results[parseInt(button.customId)];
+        
             msg.edit({
               embeds: [embed
                 .setAuthor({ name: 'Added Song' })
@@ -62,15 +67,15 @@ module.exports = {
                 .setDescription(null)
                 .setThumbnail(song.thumbnail)
                 .setTimestamp()
-                .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })] });
+                .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })], components: [] });
           
           client.distube.play(message.member.voice.channel, song, {
             member: message.member,
             textChannel: message.channel,
             message
           });
-        }).catch(collected => {
-          msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')] });
+        }).catch(() => {
+          msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] });
         });
       });
     });

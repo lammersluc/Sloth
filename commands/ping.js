@@ -6,6 +6,7 @@ module.exports = {
     aliases: ['delay'],
     aliasesText: 'Delay',
     description: 'Ping to test delay.',
+    category: 'tools',
     usage: 'Ping',
     enabled: true,
     visible: true,
