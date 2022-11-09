@@ -45,26 +45,27 @@ client.on('ready', async () => {
 
   client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
   console.log(`Logged in as ${client.user.tag}.`);
-});
+})
 
-client.on('messageCreate', message => {
-  if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
-  if (message.channel.type === 1) return require('./events/dmMessageCreate.js') (client, message);
-  if (message.channel.type === 0) return require('./events/messageCreate.js') (client, message);
-});
+client
+  .on('messageCreate', message => {
+    if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
+    if (message.channel.type === 1) return require('./events/dmMessageCreate.js') (client, message);
+    if (message.channel.type === 0) return require('./events/messageCreate.js') (client, message);
+  })
 
-client.on('channelDelete', channel => {
-  if (channel.parentId === '984118604805050398') require('./events/ticketClose.js') (client, channel);
-});
+  .on('channelDelete', channel => {
+    if (channel.parentId === '984118604805050398') require('./events/ticketClose.js') (client, channel);
+  })
 
-client.on('guildCreate', guild => {
-  const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'));
-  channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Thanks for adding me to the server. Feel free to dm the bot for support.')] });
-  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
-});
+  .on('guildCreate', guild => {
+    const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'));
+    channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Thanks for adding me to the server. Feel free to dm the bot for support.')] });
+    client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
+  })
 
-client.on('guildDelete', guild => {
-  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
+  .on('guildDelete', () => {
+    client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
   });
 
 client.distube
@@ -82,9 +83,9 @@ client.distube
     });
   })
 
-  .on('searchNoResult', (message, query) =>
-    message.channel.send(`No result found for \`${query}\`.`)
-  )
+  .on('finishSong', (queue) => {
+    if (queue.songs.length <= 1) queue.textChannel.send({ embeds: [new EmbedBuilder().setDescription('The bot has left the voice channel.').setColor(client.embedColor)] });
+  })
 
   .on('error', (textChannel, e) => {
     if (e.toLocaleString().includes('PlayingError: Sign in to confirm your age')) return textChannel.send({embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription(`The video you are trying to play is age restricted. Skipping to next song...`)] })

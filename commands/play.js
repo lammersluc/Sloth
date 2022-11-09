@@ -21,27 +21,27 @@ module.exports = {
     if (!message.member.voice.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.Connect) || !message.member.voice.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.Speak)) return message.channel.send({ embeds: [embed.setDescription('I do not have permission to join or speak in this voice channel.')] });
     if (!string) return message.channel.send({ embeds: [embed.setDescription('Please provide a song url or query to search.')] });
 
-    if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
-      result = await client.distube.search(string, {limit: 1});
-      song = result[0]
-      message.channel.send({
-        embeds: [embed
-          .setAuthor({ name: 'Added Song' })
-          .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
-          .setURL(song.url)
-          .setThumbnail(song.thumbnail)
-          .setTimestamp()
-          .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })] });
+    try { 
+      if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+        result = await client.distube.search(string, {limit: 1});
+        song = result[0]
+        message.channel.send({
+          embeds: [embed
+            .setAuthor({ name: 'Added Song' })
+            .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
+            .setURL(song.url)
+            .setThumbnail(song.thumbnail)
+            .setTimestamp()
+            .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })] });
 
-      return client.distube.play(message.member.voice.channel, string, {
-        member: message.member,
-        textChannel: message.channel,
-        message
-      });
-    }
+        return client.distube.play(message.member.voice.channel, string, {
+          member: message.member,
+          textChannel: message.channel,
+          message
+        });
+      }
     
-    await client.distube.search(string, {limit: 5}).then(async (results) => {
-      if (!results.length) return message.channel.send({ embeds: [embed.setDescription('No results found.')] });
+      await client.distube.search(string, {limit: 5}).then(async (results) => {
       const list = results
         .map((song, i) => `${i+1}. \`${song.name}\` - \`${song.formattedDuration}\``)
         .join('\n\n')
@@ -69,15 +69,18 @@ module.exports = {
                 .setTimestamp()
                 .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })], components: [] });
           
-          client.distube.play(message.member.voice.channel, song, {
-            member: message.member,
-            textChannel: message.channel,
-            message
+            client.distube.play(message.member.voice.channel, song, {
+              member: message.member,
+              textChannel: message.channel,
+              message
+            });
+          }).catch(() => {
+            msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] });
           });
-        }).catch(() => {
-          msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] });
         });
       });
-    });
+    } catch (e) {
+      if (e.toLocaleString().includes('DisTubeError [NO_RESULT]: No result found')) return message.channel.send({ embeds: [embed.setDescription(`No results found for \`${string}\`.`)] });
+    }
   }
 }
