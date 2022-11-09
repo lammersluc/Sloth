@@ -29,7 +29,7 @@ module.exports = {
                     embed.addFields({ name: `**${cmd.helpname}**`, value: `${cmd.description}\nUsage\: \`${client.prefix + cmd.usage}\`\nAliases: \`${cmd.aliasesText}\`\n\n`, inline: true });
                 });
 
-                msg.edit({ embeds: [embed.setTitle(category.capitalize())], components: [] });
+                msg.edit({ embeds: [embed.setTitle(category.capitalize()).setDescription(null)], components: [] });
 
             }).catch(e => { msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
 
