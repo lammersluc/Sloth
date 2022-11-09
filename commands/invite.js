@@ -14,14 +14,13 @@ module.exports = {
     adminOnly: false,
     run: async (client, message, args) => {
         let embed = new EmbedBuilder().setColor(client.embedColor);
+
         try {
             const invites = await message.guild.invites.fetch();
 
             invites.forEach(invite => {
-                if (invite.inviter === client.user.id) {
-                    return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] });
-                }
-            })
+                if (invite.inviter === client.user.id) return message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] });
+            });
             
             message.guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT').createInvite({
                 maxAge: 0,
@@ -29,6 +28,8 @@ module.exports = {
             }).then(invite => {
                 message.channel.send({ embeds: [embed.setDescription(`Invite: ${invite.url}`)] });
             });
+            
         } catch (e) { message.channel.send({ embeds: [embed.setDescription(`I do not have the permission to manage server invites.`)] }); }
+        
     }
 }

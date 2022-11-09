@@ -15,8 +15,11 @@ module.exports = {
     run: async (client, message, args) => {
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.distube.getQueue(message);
+
         if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing.')] });
+        
         const song = queue.songs[0];
+        
         let watchBar = '──────────────────────────────────────────────────'.split('');
         watchBar[Math.floor((queue.currentTime / song.duration) * 50)] = '⚪';
         watchBar = watchBar.join('');
@@ -30,5 +33,6 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
         ]});
+        
     }
 }

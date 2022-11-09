@@ -20,5 +20,6 @@ module.exports = {
         if (isNaN(random)) return message.channel.send({ embeds: [embed.setDescription('Provide a valid number.')] });
 
         message.channel.send({ embeds: [embed.setDescription(`A random number between 1 and ${args[0]} is ${random}`)] });
+        
     }
 }

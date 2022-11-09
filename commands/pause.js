@@ -13,14 +13,13 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
-        let embed = new EmbedBuilder().setColor(client.config);
+        let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.distube.getQueue(message);
+
         if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now.')] });
-        if (queue.paused) {
-            queue.resume();
-            return message.channel.send({ embeds: [embed.setDescription('The song has been resumed.')] });
-        }
-        queue.pause();
-        message.channel.send({ embeds: [embed.setDescription('The song has been paused.')] });
+        
+        if (queue.paused) { queue.resume(); return message.channel.send({ embeds: [embed.setDescription('The song has been resumed.')] }); }
+        else { queue.pause(); message.channel.send({ embeds: [embed.setDescription('The song has been paused.')] }); }
+        
     }
 }

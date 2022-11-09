@@ -10,6 +10,7 @@ module.exports = async (client, message) => {
     if (channel) return channel.send(message.content);
 
     message.channel.send({ embeds: [embed.setDescription(`Thanks for opening a support ticket ${message.author}. We will try to respond to this message as soon as possible.`)] });
+
     guild.channels.create({
         name: `${message.author.username.toLowerCase().replace(/\W/g, '')}-${message.author.id}`,
         type: ChannelType.GuildText
@@ -18,4 +19,5 @@ module.exports = async (client, message) => {
         channel.send({ embeds: [embed.setDescription(`This ticket was created by ${message.author}.`)] })
         channel.send(message.content);
     });
+    
 }
