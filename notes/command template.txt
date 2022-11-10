@@ -1,0 +1,15 @@
+module.exports = {
+    name: '',
+    helpname: '',
+    aliases: [],
+    aliasesText: '',
+    description: '',
+    usage: '',
+    enabled: true,
+    visible: true,
+    devOnly: false,
+    adminOnly: false,
+    run: async (client, message, args) => {
+
+    }
+}
