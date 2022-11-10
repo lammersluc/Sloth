@@ -15,26 +15,27 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
-        if (!message.channel.nsfw) return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`This command can only be used in NSFW channels.`)] });
+        let embed = new EmbedBuilder();
         if (!args[0]) return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`Supply a Subreddit.`)] });
 
         try {
             let data = await axios.get(`https://www.reddit.com/r/${args[0]}/random/.json`);
+            let url;
             
-            new EmbedBuilder()
+            embed
                 .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}`})
                 .setTitle(`${data.data[0].data.children[0].data.title}`)
                 .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)`})
                 .setURL(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`)
                 .setColor(client.embedColor);
 
-                if(data.data[0].data.children[0].data.is_video === false) embed.setImage(`${data.data[0].data.children[0].data.url}`);
+            if (data.data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data.data[0].data.children[0].data.url}`);
+            else url = data.data[0].data.children[0].data.url;
 
             message.channel.send({ embeds: [embed] });
-
-            if (data.data[0].data.children[0].data.is_video === true) message.channel.send(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`);
-
-        } catch(e) { message.channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Subreddit doesn\'t exist.')] }); }
+            message.channel.send(`url`);
+            
+        } catch(e) { message.channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Subreddit doesn\'t exist.')] }); console.log(e) }
 
     }
 }
