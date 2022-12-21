@@ -33,7 +33,7 @@ module.exports = {
 
         message.channel.send({ embeds: [embed
             .setTitle('Music Quiz')
-            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} songs**.`)
+            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} rounds**.`)
             .addFields(
                 { name: 'Points', value: '\`\`\`diff\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 3 points for both\`\`\`' },
                 { name: 'Players', value: scoreboard.map(player => `<@${player.player}>`).toString().replace(/,/g, '\n') }
