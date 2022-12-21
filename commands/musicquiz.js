@@ -59,7 +59,7 @@ module.exports = {
             let sguessed = '';
             let aguessed = '';
             let skipVotes = [];
-            const title = song.track.name.split('(')[0].toLowerCase();
+            const title = song.track.name.split(/[(-]/)[0].toLowerCase();
             const artists = song.track.artists.map(artist => artist.name.toLowerCase());
 
             await client.distube.play(message.member.voice.channel, song.track.external_urls.spotify)
