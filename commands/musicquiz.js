@@ -33,7 +33,7 @@ module.exports = {
 
         message.channel.send({ embeds: [embed
             .setTitle('Music Quiz')
-            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} rounds**.`)
+            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} rounds**. If you want to skip a round more than half of the people need to type \`skip\`.`)
             .addFields(
                 { name: 'Points', value: '\`\`\`diff\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 3 points for both\`\`\`' },
                 { name: 'Players', value: scoreboard.map(player => `<@${player.player}>`).toString().replace(/,/g, '\n') }
@@ -58,6 +58,7 @@ module.exports = {
             let song = tracks[randomIndex];
             let sguessed = '';
             let aguessed = '';
+            let skipVotes = [];
             const title = song.track.name.split('(')[0].toLowerCase();
             const artists = song.track.artists.map(artist => artist.name.toLowerCase());
 
@@ -74,11 +75,21 @@ module.exports = {
                 
                 if (m.content.startsWith(client.prefix + 'leave')) return collector.stop();
                 if (m.content.startsWith(client.prefix)) return;
+                if (m.content.toLowerCase() === 'skip' && !skipVotes.includes(m.author.id)) {
+
+                    skipVotes.push(m.author.id);
+                    m.react('⏭️')
+
+                    if (skipVotes.length > players.length / 2) collector.stop();
+
+                    return;
+
+                }
 
                 if (!sguessed && stringSimilarity.compareTwoStrings(m.content.toLowerCase(), title) > 0.57) {
                     m.react('✅'); 
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
-                    return sguessed = m.author.id; 
+                    sguessed = m.author.id; 
                 } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), artists).bestMatch.rating > 0.57) {
                     m.react('✅');
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
