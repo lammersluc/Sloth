@@ -58,7 +58,7 @@ module.exports = {
             let song = tracks[randomIndex];
             let sguessed = '';
             let aguessed = '';
-            let skipVotes = [];
+            let passVotes = [];
             const title = song.track.name.split(/[(-]/)[0].toLowerCase();
             const artists = song.track.artists.map(artist => artist.name.toLowerCase());
 
@@ -75,12 +75,12 @@ module.exports = {
                 
                 if (m.content.startsWith(client.prefix + 'leave')) return collector.stop();
                 if (m.content.startsWith(client.prefix)) return;
-                if (m.content.toLowerCase() === 'pass' && !skipVotes.includes(m.author.id)) {
+                if (m.content.toLowerCase() === 'pass' && !passVotes.includes(m.author.id)) {
 
-                    skipVotes.push(m.author.id);
+                    passVotes.push(m.author.id);
                     m.react('⏭️')
 
-                    if (skipVotes.length > players.length / 2) collector.stop();
+                    if (passVotes.length > players.length / 2) collector.stop();
 
                     return;
 
