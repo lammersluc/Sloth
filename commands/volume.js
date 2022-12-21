@@ -13,6 +13,7 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
+        
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.distube.getQueue(message);
 

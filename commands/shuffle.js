@@ -13,10 +13,12 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
+        
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.distube.getQueue(message);
 
         if (!queue) return message.channel.send({ embeds: [embed.setDescription(`There is nothing in the queue right now.`)] });
+        if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         queue.shuffle();
 

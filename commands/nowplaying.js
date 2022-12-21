@@ -13,10 +13,12 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
+
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.distube.getQueue(message);
 
         if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing.')] });
+        if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         
         const song = queue.songs[0];
         
@@ -31,8 +33,8 @@ module.exports = {
             .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${queue.formattedCurrentTime} / ${song.formattedDuration} | 🔊 ${queue.volume}%\``)
             .setThumbnail(song.thumbnail)
             .setTimestamp()
-            .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })
-        ]});
+            .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
+        });
         
     }
 }

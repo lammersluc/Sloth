@@ -13,6 +13,7 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
+
         let embed = new EmbedBuilder().setColor(client.embedColor);
         let row = new ActionRowBuilder();
         let categories = [];
@@ -21,12 +22,17 @@ module.exports = {
         categories.map(category => { row.addComponents(new ButtonBuilder().setStyle('Primary').setLabel(category.capitalize()).setCustomId(category)); });
 
         message.channel.send({ embeds: [embed.setDescription('Choose a category to show help from.')], components: [row] }).then(msg => {
+
             const filter = (button) => button.user.id === message.author.id;
+
             msg.awaitMessageComponent({ filter, time: 30000, errors: ['time'] }).then(button => {
+
                 let category = button.customId;
 
                 client.commands.filter(cmd => cmd.category === category).map(cmd => {
+
                     embed.addFields({ name: `**${cmd.helpname}**`, value: `${cmd.description}\nUsage\: \`${client.prefix + cmd.usage}\`\nAliases: \`${cmd.aliasesText}\`\n\n`, inline: true });
+                
                 });
 
                 msg.edit({ embeds: [embed.setTitle(category.capitalize()).setDescription(null)], components: [] });

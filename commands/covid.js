@@ -14,15 +14,16 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
+
         let embed = new EmbedBuilder().setColor(client.embedColor);
 
         if(!args[0]) return message.channel.send({ embeds: [embed.setDescription(`Please supply a country.`)] });
 
         try {
+
             let data = await axios.get(`https://disease.sh/v3/covid-19/countries/${args[0]}`);
 
-            message.channel.send({
-                embeds: [embed
+            message.channel.send({ embeds: [embed
                     .addFields(
                         {
                             name: 'Country',
@@ -58,8 +59,7 @@ module.exports = {
                         }
                     )
                     .setThumbnail(data.data.countryInfo.flag)
-                ]
-            });
+                ]});
             
         } catch(e) { message.channel.send({ embeds: [embed.setDescription('Country doesn\'t exist.')] }); }
         

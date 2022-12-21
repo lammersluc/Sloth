@@ -13,6 +13,7 @@ module.exports = {
     devOnly: false,
     adminOnly: false,
     run: async (client, message, args) => {
+
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const emojis = ['🪨', '📰', '✂'];
         let row = new ActionRowBuilder();
@@ -21,9 +22,11 @@ module.exports = {
 
 
         message.channel.send({ embeds: [embed.setDescription('Rock, Paper or Scissors?')], components: [row] }).then(async msg => {
+            
             const filter = (button) => button.user.id === message.author.id;
 
             msg.awaitMessageComponent({ filter, max: 1, time: 30000, errors: ['time'] }).then(button => {
+
                 const emoji = button.customId;
                 let playerChoice = emojis.indexOf(emoji);
                 let botChoice = Math.floor(Math.random() * 3);
