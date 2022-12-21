@@ -75,11 +75,11 @@ module.exports = {
                 if (m.content.startsWith(client.prefix + 'leave')) return collector.stop();
                 if (m.content.startsWith(client.prefix)) return;
 
-                if (!sguessed && stringSimilarity.compareTwoStrings(m.content.toLowerCase(), title) > 0.7) {
+                if (!sguessed && stringSimilarity.compareTwoStrings(m.content.toLowerCase(), title) > 0.57) {
                     m.react('✅'); 
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
                     return sguessed = m.author.id; 
-                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), artists).bestMatch.rating > 0.7) {
+                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), artists).bestMatch.rating > 0.57) {
                     m.react('✅');
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
                     aguessed = m.author.id;
