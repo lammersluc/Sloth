@@ -33,7 +33,7 @@ module.exports = {
 
         message.channel.send({ embeds: [embed
             .setTitle('Music Quiz')
-            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} rounds**. If you want to skip a round more than half of the people need to type \`skip\`.`)
+            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} rounds**. If you don\'t know a song you can type \`pass\`.`)
             .addFields(
                 { name: 'Points', value: '\`\`\`diff\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 3 points for both\`\`\`' },
                 { name: 'Players', value: scoreboard.map(player => `<@${player.player}>`).toString().replace(/,/g, '\n') }
@@ -75,7 +75,7 @@ module.exports = {
                 
                 if (m.content.startsWith(client.prefix + 'leave')) return collector.stop();
                 if (m.content.startsWith(client.prefix)) return;
-                if (m.content.toLowerCase() === 'skip' && !skipVotes.includes(m.author.id)) {
+                if (m.content.toLowerCase() === 'pass' && !skipVotes.includes(m.author.id)) {
 
                     skipVotes.push(m.author.id);
                     m.react('⏭️')
