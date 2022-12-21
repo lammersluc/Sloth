@@ -48,7 +48,7 @@ module.exports = {
         accessToken = await spotifyApi.clientCredentialsGrant();
         spotifyApi.setAccessToken(accessToken.body['access_token']);
 
-        const tracksResponse = await spotifyApi.getPlaylistTracks('5P2ocMJt7kAgyfIdeosiRF');
+        const tracksResponse = await spotifyApi.getPlaylistTracks(process.env.SPOTIFY_PLAYLIST_ID);
         const tracks = tracksResponse.body.items;
 
         while (round < songs) {
