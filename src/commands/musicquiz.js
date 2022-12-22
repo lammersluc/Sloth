@@ -114,13 +114,16 @@ module.exports = {
                 textScoreboard = scoreboard.map(p => { 
 
                     let i = scoreboard.indexOf(p);
+                    let medals = ['🥇', '🥈', '🥉']
 
-                    if (i === 0) return ({ player: `🥇 <@${p.player}>`, score: p.score });
-                    else if (i === 1) return ({ player: `🥈 <@${p.player}>`, score: p.score });
-                    else if (i === 2) return ({ player: `🥉 <@${p.player}>`, score: p.score });
-                    else return ({ player: `<@${p.player}>`, score: p.score });
+                    if(medals[i]) {
+                        return ({ player: `${medals[i]} <@${p.player}>`, score: p.score })
+                    } else {
+                        return ({ player: `<@${p.player}>`, score: p.score });
+                    }
 
                 });
+
 
                 message.channel.send({ embeds: [new EmbedBuilder()
                     .setColor(client.embedColor)
