@@ -1,7 +1,7 @@
-const { EmbedBuilder, Embed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const SpotifyWebApi = require('spotify-web-api-node');
 const stringSimilarity = require('string-similarity');
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+const { sleep } = require('../utils.js');
 
 module.exports = {
     name: 'musicquiz',

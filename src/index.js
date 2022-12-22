@@ -53,7 +53,7 @@ setInterval(() => { client.user.setPresence({ activities: [{ name: `${client.pre
 client
   .on('ready', async () => {
 
-    fs.readdirSync('./commands').map(file => {
+    fs.readdirSync('./src/commands').map(file => {
       const command = require(`./commands/${file}`);
 
       client.commands.set(command.name, command);
