@@ -30,6 +30,7 @@ module.exports = {
         players.map(member => scoreboard.push({ player: member, score: 0 }));
         const songs = parseInt(args[0]);
         let round = 0;
+        let played = [];
 
         message.channel.send({ embeds: [embed
             .setTitle('Music Quiz')
@@ -56,6 +57,8 @@ module.exports = {
             let roundfinished = false;
             let randomIndex = Math.floor(Math.random() * tracks.length);
             let song = tracks[randomIndex];
+            while (played.includes(song.track.id)) song = tracks[randomIndex];
+            played.push(song.track.id);
             let sguessed = '';
             let aguessed = '';
             let passVotes = [];
