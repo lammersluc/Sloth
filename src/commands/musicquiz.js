@@ -86,7 +86,7 @@ module.exports = {
                     passVotes.push(m.author.id);
                     m.react('⏭️')
 
-                    if (passVotes.length > players.length / 2) collector.stop();
+                    if (passVotes.length >= players.length * 0.75) collector.stop();
 
                     return;
 
