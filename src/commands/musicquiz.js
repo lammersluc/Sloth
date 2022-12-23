@@ -20,7 +20,7 @@ module.exports = {
 
         if (!message.member.voice.channel) return message.channel.send({ embeds: [embed.setTitle('You are not in a voice channel.')] });
         if (!args) return message.channel.send({ embeds: [embed.setTitle('Please specify the amount of rounds.')] });
-        if (isNaN(args[0]) || args[0] < 3 || args[0] > 30) return message.channel.send({ embeds: [embed.setTitle('Please specify a number between 3 and 30.')] });
+        if (isNaN(args[0]) || args[0] < 3 || args[0] > 100) return message.channel.send({ embeds: [embed.setTitle('Please specify a number between 3 and 100.')] });
         if (client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setTitle('I am already playing music.')] });
 
         client.musicquiz = true;
@@ -49,15 +49,18 @@ module.exports = {
         accessToken = await spotifyApi.clientCredentialsGrant();
         spotifyApi.setAccessToken(accessToken.body['access_token']);
 
-        const tracksResponse = await spotifyApi.getPlaylistTracks(process.env.SPOTIFY_PLAYLIST_ID);
+        let data = await spotifyApi.getPlaylist(process.env.SPOTIFY_PLAYLIST_ID);
+        let playlistTotal = data.body.tracks.total;
+
+        const tracksResponse = await spotifyApi.getPlaylistTracks(process.env.SPOTIFY_PLAYLIST_ID, { offset: Math.floor(Math.random() * playlistTotal / songs) });
         const tracks = tracksResponse.body.items;
 
         while (round < songs) {
 
             let roundfinished = false;
-            let randomIndex = Math.floor(Math.random() * tracks.length);
+            let randomIndex = Math.floor(Math.random() * 100);
             let song = tracks[randomIndex];
-            while (played.includes(song.track.id)) song = tracks[randomIndex];
+            while (played.includes(song.track.id)) { song = tracks[randomIndex]; console.log('again') }
             played.push(song.track.id);
             let sguessed = '';
             let aguessed = '';
