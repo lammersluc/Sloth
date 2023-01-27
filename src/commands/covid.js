@@ -3,27 +3,23 @@ const axios = require('axios');
 
 module.exports = {
     name: 'covid',
-    helpname: 'COVID',
     aliases: ['corona', 'covid-19', 'covid19'],
-    aliasesText: 'Corona, Covid-19, Covid19',
     description: 'Shows current COVID-19 data for a country.',
     category: 'info',
-    usage: 'Covid [Country]',
+    options: [{ name: 'country', forced: true }],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
 
-        if(!args[0]) return message.channel.send({ embeds: [embed.setDescription(`Please supply a country.`)] });
-
         try {
 
-            let data = await axios.get(`https://disease.sh/v3/covid-19/countries/${args[0]}`);
+            let data = await axios.get(`https://disease.sh/v3/covid-19/countries/${interaction.options.getString('country')}`);
 
-            message.channel.send({ embeds: [embed
+            interaction.editReply({ embeds: [embed
                     .addFields(
                         {
                             name: 'Country',
@@ -31,37 +27,37 @@ module.exports = {
                         },
                         {
                             name: 'Cases',
-                            value: data.data.cases.toString()
+                            value: data.data.cases.toLocaleString()
                         },
                         {
                             name: 'Deaths',
-                            value: data.data.deaths.toString()
+                            value: data.data.deaths.toLocaleString()
                         },
                         {
                             name: 'Recovered',
-                            value: data.data.recovered.toString()
+                            value: data.data.recovered.toLocaleString()
                         },
                         {
                             name: 'Active',
-                            value: data.data.active.toString()
+                            value: data.data.active.toLocaleString()
                         },
                         {
                             name: 'Critical',
-                            value: data.data.critical.toString()
+                            value: data.data.critical.toLocaleString()
                         },
                         {
                             name: 'Cases Today',
-                            value: data.data.todayCases.toString()
+                            value: data.data.todayCases.toLocaleString()
                         },
                         {
                             name: 'Deaths Today',
-                            value: data.data.todayDeaths.toString()
+                            value: data.data.todayDeaths.toLocaleString()
                         }
                     )
                     .setThumbnail(data.data.countryInfo.flag)
                 ]});
             
-        } catch(e) { message.channel.send({ embeds: [embed.setDescription('Country doesn\'t exist.')] }); }
+        } catch(e) { interaction.editReply({ embeds: [embed.setDescription('Country doesn\'t exist.')] }); }
         
     }
 }

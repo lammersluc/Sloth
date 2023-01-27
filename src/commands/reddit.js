@@ -4,40 +4,38 @@ const moment = require('moment');
 
 module.exports = {
     name: 'reddit',
-    helpname: 'Reddit',
     aliases: ['r/'],
-    aliasesText: 'R/',
     description: 'Searches a random post from subreddit.',
     category: 'fun',
-    usage: 'Reddit [Subreddit]',
+    options: [{ name: 'subreddit', forced: true }],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
 
         let embed = new EmbedBuilder();
-        if (!args[0]) return message.channel.send({ embeds: [embed.setColor(client.embedColor).setDescription(`Supply a Subreddit.`)] });
 
         try {
             
-            let data = await axios.get(`https://www.reddit.com/r/${args[0]}/random/.json`);
-            let url;
+            let data = await axios.get(`https://www.reddit.com/r/${interaction.options.getString('subreddit')}/random/.json`);
+            let url = '';
+
+            if (data.data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data.data[0].data.children[0].data.url}`);
+            else url = data.data[0].data.children[0].data.url;
             
             embed
                 .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}`})
                 .setTitle(`${data.data[0].data.children[0].data.title}`)
+                .setDescription(`${data.data[0].data.children[0].data.selftext}\n${url}`)
                 .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)`})
                 .setURL(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`)
                 .setColor(client.embedColor);
 
-            if (data.data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data.data[0].data.children[0].data.url}`);
-            else url = data.data[0].data.children[0].data.url;
 
-            message.channel.send({ embeds: [embed] });
-            message.channel.send(`url`);
+            interaction.editReply({ embeds: [embed] });
             
-        } catch(e) { message.channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Subreddit doesn\'t exist.')] }); console.log(e) }
+        } catch(e) { interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Subreddit doesn\'t exist.')] }); console.log(e) }
 
     }
 }

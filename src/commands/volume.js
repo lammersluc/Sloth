@@ -2,27 +2,26 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'volume',
-    helpname: 'Volume',
     aliases: [],
-    aliasesText: ' ',
     description: 'Set the volume of the music bot.',
     category: 'music',
-    usage: 'Volume [0-1000]',
+    options: [{ name: 'volume', forced: true }],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        const queue = client.distube.getQueue(message);
+        const queue = client.distube.getQueue(interaction);
+        const volume = parseInt(interaction.options.getString('volume'));
 
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription(`There is nothing playing right now.`)] });
-        if (!args[0] || isNaN(parseInt(args[0])) || parseInt(args[0]) < 0 || parseInt(args[0]) > 1000) return message.channel.send({ embeds: [embed.setDescription(`Please provide a volume between 0 and 1000.`)] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription(`There is nothing playing right now.`)] });
+        if (volume < 0 || volume > 1000) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a volume between 0 and 1000.`)] });
         
-        client.distube.setVolume(message, parseInt(args[0]));
+        client.distube.setVolume(interaction, volume);
         
-        message.channel.send({ embeds: [embed.setDescription(`The volume has been set to ${queue.volume}%.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`The volume has been set to ${queue.volume}%.`)] });
         
     }
 }

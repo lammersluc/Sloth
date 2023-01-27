@@ -2,26 +2,24 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'pause',
-    helpname: 'Pause',
     aliases: ['p'],
-    aliasesText: 'P',
     description: 'Pauses/Resumes the current song.',
     category: 'music',
-    usage: 'Pause',
+    options: [],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        const queue = client.distube.getQueue(message);
+        const queue = client.distube.getQueue(interaction);
 
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now.')] });
-        if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
+        if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         
-        if (queue.paused) { queue.resume(); return message.channel.send({ embeds: [embed.setDescription('The song has been resumed.')] }); }
-        else { queue.pause(); message.channel.send({ embeds: [embed.setDescription('The song has been paused.')] }); }
+        if (queue.paused) { queue.resume(); return interaction.editReply({ embeds: [embed.setDescription('The song has been resumed.')] }); }
+        else { queue.pause(); interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
         
     }
 }

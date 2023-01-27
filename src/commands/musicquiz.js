@@ -1,40 +1,42 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const SpotifyWebApi = require('spotify-web-api-node');
 const stringSimilarity = require('string-similarity');
 const { sleep } = require('../utils.js');
 
 module.exports = {
     name: 'musicquiz',
-    helpname: 'Music Quiz',
     aliases: ['mq'],
-    aliasesText: 'MQ',
     description: 'Starts a music quiz.',
-    usage: 'MusicQuiz [Rounds]',
+    category: 'music',
+    options: [{ name: 'rounds', forced: true}],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
+        let rounds = parseInt(interaction.options.getString('rounds'));
 
-        if (!message.member.voice.channel) return message.channel.send({ embeds: [embed.setTitle('You are not in a voice channel.')] });
-        if (!args) return message.channel.send({ embeds: [embed.setTitle('Please specify the amount of rounds.')] });
-        if (isNaN(args[0]) || args[0] < 3 || args[0] > 100) return message.channel.send({ embeds: [embed.setTitle('Please specify a number between 3 and 100.')] });
-        if (client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setTitle('I am already playing music.')] });
+        if (!interaction.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setTitle('I need permissions to send messages in this channel in order to play a music quiz.')] });
+        if (!interaction.member.voice.channel) return interaction.editReply({ embeds: [embed.setTitle('You are not in a voice channel.')] });
+        if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Connect) || !interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Speak)) return interaction.editReply({ embeds: [embed.setTitle('I do not have permission to join or speak in this voice channel.')] });
+        if (rounds < 3 || rounds > 100) return interaction.editReply({ embeds: [embed.setTitle('Please specify a number between 3 and 100.')] });
+        if (client.distube.getQueue(interaction.guild)) return interaction.editReply({ embeds: [embed.setTitle('I am already playing music.')] });
 
-        client.musicquiz = true;
+        client.musicquiz.push(interaction.guildId);
         let scoreboard = [];
         let textScoreboard = [];
-        let players = message.member.voice.channel.members.filter(member => !member.user.bot).map(member => member.user.id);
-        players.map(member => scoreboard.push({ player: member, score: 0 }));
-        const songs = parseInt(args[0]);
+        let players = interaction.member.voice.channel.members.filter(member => !member.user.bot).map(member => member.id);
         let round = 0;
         let played = [];
 
-        message.channel.send({ embeds: [embed
+        players.map(member => scoreboard.push({ player: member, score: 0 }));
+
+        interaction.editReply({ embeds: [embed
             .setTitle('Music Quiz')
-            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${args[0]} rounds**. If you don\'t know a song you can type \`pass\`.`)
+            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${rounds} rounds**. If you don\'t know a song you can type \`pass\`.
+            You can stop the quiz at any time by typing \`stopquiz\`.`)
             .addFields(
                 { name: 'Points', value: '\`\`\`diff\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 3 points for both\`\`\`' },
                 { name: 'Players', value: scoreboard.map(player => `<@${player.player}>`).toString().replace(/,/g, '\n') }
@@ -52,15 +54,15 @@ module.exports = {
         let data = await spotifyApi.getPlaylist(process.env.SPOTIFY_PLAYLIST_ID);
         let playlistTotal = data.body.tracks.total;
 
-        const tracksResponse = await spotifyApi.getPlaylistTracks(process.env.SPOTIFY_PLAYLIST_ID, { offset: Math.floor(Math.random() * playlistTotal / songs) });
+        const tracksResponse = await spotifyApi.getPlaylistTracks(process.env.SPOTIFY_PLAYLIST_ID, { offset: 101 });
         const tracks = tracksResponse.body.items;
 
-        while (round < songs) {
+        while (round < rounds) {
 
             let roundfinished = false;
             let randomIndex = Math.floor(Math.random() * 100);
             let song = tracks[randomIndex];
-            while (played.includes(song.track.id)) { song = tracks[randomIndex]; console.log('again') }
+            while (played.includes(song.track.id)) { song = tracks[randomIndex]; }
             played.push(song.track.id);
             let sguessed = '';
             let aguessed = '';
@@ -68,19 +70,22 @@ module.exports = {
             const title = song.track.name.split(/[(-]/)[0].toLowerCase();
             const artists = song.track.artists.map(artist => artist.name.toLowerCase());
 
-            await client.distube.play(message.member.voice.channel, song.track.external_urls.spotify)
-            let queue = client.distube.getQueue(message);
+            await client.distube.play(interaction.member.voice.channel, song.track.external_urls.spotify)
+            let queue = client.distube.getQueue(interaction);
             if (queue.songs.length > 1) queue.skip();
             await sleep(300)
             queue.seek(queue.songs[0].duration / 3);
 
             const filter = m => players.includes(m.author.id);
-            const collector = message.channel.createMessageCollector({ filter, time: 30000 });
+            const collector = interaction.channel.createMessageCollector({ filter, time: 30000 });
 
             collector.on('collect', async m => {
-                
-                if (m.content.startsWith(client.prefix + 'leave')) return collector.stop();
-                if (m.content.startsWith(client.prefix)) return;
+
+                if (m.content.toLowerCase() === 'stopquiz') {
+                    rounds = round + 1;
+                    return collector.stop();
+                }
+
                 if (m.content.toLowerCase() === 'pass' && !passVotes.includes(m.author.id)) {
 
                     passVotes.push(m.author.id);
@@ -113,7 +118,7 @@ module.exports = {
 
             collector.on('end', async () => {
 
-                let queue = client.distube.getQueue(message);
+                let queue = client.distube.getQueue(interaction);
                 if (!queue) return;
                 let psong = queue.songs[0];
                 scoreboard.sort((a, b) => (a.score < b.score) ? 1 : -1);
@@ -131,7 +136,7 @@ module.exports = {
                 });
 
 
-                message.channel.send({ embeds: [new EmbedBuilder()
+                interaction.channel.send({ embeds: [new EmbedBuilder()
                     .setColor(client.embedColor)
                     .setTitle(`\`${song.track.name}\` - \`${song.track.artists.map(artist => artist.name).toString().replace(/,/g, ', ')}\``)
                     .setURL(psong.url)
@@ -139,7 +144,7 @@ module.exports = {
                     .setThumbnail(psong.thumbnail)
                     .setTimestamp()
                     .addFields({ name: 'Scoreboard', value: textScoreboard.map(player => `${player.player} - ${player.score} pts`).toString().replace(/,/g, '\n') })
-                    .setFooter({ text: `Round ${round + 1} / ${songs}` })
+                    .setFooter({ text: `Round ${round + 1} / ${rounds}` })
                 ]});
 
                 round ++;
@@ -151,9 +156,9 @@ module.exports = {
 
         }
 
-        client.distube.voices.leave(message);
-        client.musicquiz = false;
-        message.channel.send({ embeds: [new EmbedBuilder()
+        client.distube.voices.leave(interaction);
+        client.musicquiz.splice(client.musicquiz.indexOf(interaction.guildId), 1);
+        interaction.channel.send({ embeds: [new EmbedBuilder()
             .setColor(client.embedColor)
             .setTitle('Music Quiz').setDescription(`The music quiz has ended.\n
             <@${scoreboard[0].player}> has won with **${scoreboard[0].score} points**!`)

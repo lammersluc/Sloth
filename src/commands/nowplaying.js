@@ -2,23 +2,21 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'nowplaying',
-    helpname: 'Now Playing',
     aliases: ['np'],
-    aliasesText: 'NP',
     description: 'Shows info about the current song that is playing.',
     category: 'music',
-    usage: 'NowPlaying',
+    options: [],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        const queue = client.distube.getQueue(message);
+        const queue = client.distube.getQueue(interaction);
 
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing.')] });
-        if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing.')] });
+        if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         
         const song = queue.songs[0];
         
@@ -26,7 +24,7 @@ module.exports = {
         watchBar[Math.floor((queue.currentTime / song.duration) * 50)] = '⚪';
         watchBar = watchBar.join('');
 
-        message.channel.send({ embeds: [embed
+        interaction.editReply({ embeds: [embed
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
             .setURL(song.url)

@@ -2,27 +2,24 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'leave',
-    helpname: 'Leave',
     aliases: ['l' ,'stop'],
-    aliasesText: 'L, Stop',
     description: 'Makes the bot leave voice channel.',
     category: 'music',
-    usage: 'Leave',
+    options: [],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
 
-        if (!client.distube.getQueue(message)) return message.channel.send({ embeds: [embed.setDescription('The bot is not connected to any voice channel.')] });
+        if (client.musicquiz.includes(interaction.guild.id)) return interaction.editReply({ embeds: [embed.setDescription('You can\'t use this command while a music quiz is running.')] });
+        if (!client.distube.getQueue(interaction)) return interaction.editReply({ embeds: [embed.setDescription('The bot is not connected to any voice channel.')] });
 
-        client.distube.voices.leave(message);
+        client.distube.voices.leave(interaction);
         
-        message.channel.send({ embeds: [embed.setDescription('The bot has left the voice channel.')] });
+        interaction.editReply({ embeds: [embed.setDescription('The bot has left the voice channel.')] });
 
-        client.musicquiz = false;
-        
     }
 }

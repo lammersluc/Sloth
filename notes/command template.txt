@@ -1,10 +1,8 @@
 module.exports = {
     name: '',
-    helpname: '',
     aliases: [],
-    aliasesText: '',
     description: '',
-    usage: '',
+    options: [],
     enabled: true,
     visible: true,
     devOnly: false,

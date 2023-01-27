@@ -2,27 +2,24 @@ const { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = r
 
 module.exports = {
   name: 'play',
-  helpname: 'Play',
   aliases: ['add', 'music' ,'p'],
-  aliasesText: 'Add, Music, P',
   description: 'Plays music in your voice channel.',
   category: 'music',
-  usage: 'Play [Search/URL]',
+  options: [{ name: 'search', forced: true }],
   enabled: true,
   visible: true,
   devOnly: false,
   adminOnly: false,
-  run: async (client, message, args) => {
+  run: async (client, interaction) => {
 
     let embed = new EmbedBuilder().setColor(client.embedColor);
-    const string = args.join(' ');
-    const voiceChannel = message.member.voice.channel;
+    const string = interaction.options.getString('search');
+    const voiceChannel = interaction.member.voice.channel;
     let song;
 
-    if (!voiceChannel) return message.channel.send({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
-    if (!message.member.voice.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.Connect) || !message.member.voice.channel.permissionsFor(message.guild.members.me).has(PermissionsBitField.Flags.Speak)) return message.channel.send({ embeds: [embed.setDescription('I do not have permission to join or speak in this voice channel.')] });
-    if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
-    if (!string) return message.channel.send({ embeds: [embed.setDescription('Please provide a song url or query to search.')] });
+    if (!voiceChannel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
+    if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Connect) || !interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Speak)) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to join or speak in this voice channel.')] });
+    if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
     try {
 
@@ -31,19 +28,19 @@ module.exports = {
         result = await client.distube.search(string, {limit: 1});
         song = result[0]
 
-        message.channel.send({ embeds: [embed
+        interaction.editReply({ embeds: [embed
             .setAuthor({ name: 'Added Song' })
             .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
             .setURL(song.url)
             .setThumbnail(song.thumbnail)
             .setTimestamp()
-            .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })] 
+            .setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
           });
 
-        return client.distube.play(message.member.voice.channel, string, {
-          member: message.member,
-          textChannel: message.channel,
-          message
+        return client.distube.play(voiceChannel, string, {
+          member: interaction.member,
+          textChannel: interaction.channel,
+          interaction
         });
 
       }
@@ -59,37 +56,41 @@ module.exports = {
         results.map(result => { row.addComponents(new ButtonBuilder().setLabel((results.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(results.indexOf(result).toString())); });
         row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
 
-        message.channel.send({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
-          const filter = (button) => button.user.id === message.author.id;
+        interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
+          const filter = (button) => button.user.id === interaction.user.id;
 
-          msg.awaitMessageComponent({ filter, time: 30000, errors: ['time'] }).then(button => {
-            if (button.customId === 'cancel') return msg.edit({ embeds: [embed.setDescription('Cancelled.')], components: [] });
+          collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+          collector.on('collect', (button) => {
+
+            if (button.component.customId === 'cancel') return interaction.editReply({ embeds: [embed.setDescription('Cancelled.')], components: [] });
 
             const song = results[parseInt(button.customId)];
         
-            msg.edit({ embeds: [embed
+            interaction.editReply({ embeds: [embed
                 .setAuthor({ name: 'Added Song' })
                 .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
                 .setURL(song.url)
                 .setDescription(null)
                 .setThumbnail(song.thumbnail)
                 .setTimestamp()
-                .setFooter({ text: `${message.author.username}#${message.author.discriminator}`, iconURL: message.author.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
+                .setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
               });
           
-            client.distube.play(message.member.voice.channel, song, {
-              member: message.member,
-              textChannel: message.channel,
-              message
+            client.distube.play(interaction.member.voice.channel, song, {
+              member: interaction.member,
+              textChannel: interaction.channel,
+              interaction
             });
 
-          }).catch(() => { msg.edit({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
+          })
+          
+          collector.on('end', () => { interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
 
         });
 
       });
 
-    } catch (e) { if (e.toLocaleString().includes('DisTubeError [NO_RESULT]: No result found')) return message.channel.send({ embeds: [embed.setDescription(`No results found for \`${string}\`.`)] }); }
+    } catch (e) { if (e.toLocaleString().includes('DisTubeError [NO_RESULT]: No result found')) return interaction.editReply({ embeds: [embed.setDescription(`No results found for \`${string}\`.`)] }); }
 
   }
 }

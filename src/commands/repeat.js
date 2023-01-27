@@ -2,22 +2,21 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
   name: 'repeat',
-  helpname: 'Repeat',
   aliases: ['loop'],
-  aliasesText: 'Loop',
   description: 'Switches the repeat mode',
   category: 'music',
-  usage: 'Repeat',
+  options: [],
   enabled: true,
   visible: true,
   devOnly: false,
   adminOnly: false,
-  run: async (client, message, args) => {
+  run: async (client, interaction) => {
     
     let embed = new EmbedBuilder().setColor(client.embedColor);
-    const queue = client.distube.getQueue(message);
+    if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+    const queue = client.distube.getQueue(interaction);
 
-    if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing in the queue.')] });
+    if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing in the queue.')] });
 
     let mode;
     
@@ -25,7 +24,7 @@ module.exports = {
     else if (queue.repeatMode === 0) { queue.setRepeatMode(); mode = 'Repeat a song'; }
     else { queue.setRepeatMode(); mode = 'Repeat the queue'; }
 
-    message.channel.send({ embeds: [embed.setDescription(`Set repeat mode to \`${mode}\`.`)] });
+    interaction.editReply({ embeds: [embed.setDescription(`Set repeat mode to \`${mode}\`.`)] });
 
   }
 }

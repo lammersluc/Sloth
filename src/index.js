@@ -1,18 +1,17 @@
 require('dotenv').config();
-require('./addons.js');
-const fs = require('fs');
+require('./utils.js');
+const { commandLoader } = require('./handlers/commandLoader.js');
 const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
 const { DisTube } = require('distube');
 const { SpotifyPlugin } = require('@distube/spotify');
 
-client.prefix = '.';
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.devs = ['431882442035691550'];
 client.embedColor = '#fbd55a';
-client.musicquiz = false;
+client.musicquiz = [];
 
 client.distube = new DisTube(client, {
 
@@ -36,43 +35,36 @@ client.distube = new DisTube(client, {
 
 });
 
-process.on('uncaughtException', (err) => {
+// process.on('uncaughtException', (err) => {
 
-  console.log(err);
+//   console.log(err);
 
-  client.devs.forEach(dev => {
+//   client.devs.forEach(dev => {
 
-    client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] });
+//     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${err.stack}\`\`\``).setColor(client.embedColor)] });
 
-  });
+//   });
 
-});
+// });
 
-setInterval(() => { client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }); }, 3 * 60000);
+setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }); }, 3 * 60000);
 
 client
   .on('ready', async () => {
 
-    fs.readdirSync('./src/commands').map(file => {
-      const command = require(`./commands/${file}`);
+    commandLoader(client);
 
-      client.commands.set(command.name, command);
+    client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
+    console.log(`Logged in as ${client.user.tag}.`);
 
-      for(let alias in command.aliases) { client.aliases.set(command.aliases[alias], command.name); }
+  })
 
-    });
-
-  client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
-
-  console.log(`Logged in as ${client.user.tag}.`);
-
-})
+  .on('interactionCreate', interaction => { return require('./events/interactionCreate.js') (client, interaction); })
 
   .on('messageCreate', message => {
 
     if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
     if (message.channel.type === 1) return require('./events/dmMessageCreate.js') (client, message);
-    if (message.channel.type === 0) return require('./events/messageCreate.js') (client, message);
 
   })
 
@@ -86,7 +78,7 @@ client
 
     const channel = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES'));
 
-    channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Thanks for adding me to the server. Feel free to dm the bot for support.')] });
+    if (channel) channel.send({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Thanks for adding me to the server. Feel free to dm the bot for support.')] });
 
     client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
 

@@ -7,26 +7,26 @@ module.exports = {
     aliasesText: ' ',
     description: 'Seek to a specific time in the current song.',
     category: 'music',
-    usage: 'Seek [Seconds]',
+    options: [{ name: 'time', forced: true }],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        const queue = client.distube.getQueue(message);
+        const queue = client.distube.getQueue(interaction);
+        const time = parseInt(interaction.options.getString('time'));
         
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now')] });
-        if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now')] });
+        if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
-        if (!args[0] || isNaN(parseInt(args[0]))) return message.channel.send({ embeds: [embed.setDescription('Please specify a time in seconds.')] });
-        if (parseInt(args[0]) < 0) return message.channel.send({ embeds: [embed.setDescription('Please specify a time in seconds greater than 0.')] });
-        if (parseInt(args[0]) > queue.songs[0].duration) return message.channel.send({ embeds: [embed.setDescription('The time specified is longer than the song\'s duration.')] });
+        if (time < 0) return interaction.editReply({ embeds: [embed.setDescription('Please specify a time in seconds greater than 0.')] });
+        if (time > queue.songs[0].duration) return interaction.editReply({ embeds: [embed.setDescription('The time specified is longer than the song\'s duration.')] });
 
-        queue.seek(parseInt(args[0]));
+        queue.seek(time);
 
-        message.channel.send({ embeds: [embed.setDescription(`Seeked to ${args[0]} seconds.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`Seeked to ${time} seconds.`)] });
 
     }
 }

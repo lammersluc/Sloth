@@ -2,29 +2,27 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'queue',
-    helpname: 'Queue',
     aliases: ['q'],
-    aliasesText: 'Q',
     description: 'Shows the queue.',
     category: 'music',
-    usage: 'Queue',
+    options: [],
     enabled: true,
     visible: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        const queue = client.distube.getQueue(message);
+        const queue = client.distube.getQueue(interaction);
 
-        if (!queue) return message.channel.send({ embeds: [embed.setDescription('There is nothing playing right now.')] });
-        if (client.musicquiz) return message.channel.send({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
+        if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         const q = queue.songs
             .map((song, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} \`${song.name}\` - \`${song.formattedDuration}\``)
             .join('\n');
 
-        message.channel.send({ embeds: [embed.setTitle('**Server Queue**').setDescription(q)] });
+        interaction.editReply({ embeds: [embed.setTitle('**Server Queue**').setDescription(q)] });
         
     }
 }
