@@ -26,14 +26,17 @@ module.exports = {
 
         result = await client.distube.search(string, {limit: 1});
         song = result[0]
+        if (song.age_restricted) return interaction.editReply({ embeds: [embed.setDescription(`The video you are trying to play is age restricted.`)] });
 
         interaction.editReply({ embeds: [embed
+
             .setAuthor({ name: 'Added Song' })
             .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
             .setURL(song.url)
             .setThumbnail(song.thumbnail)
             .setTimestamp()
             .setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
+
           });
 
         return client.distube.play(voiceChannel, string, {
@@ -61,11 +64,15 @@ module.exports = {
           collector = msg.createMessageComponentCollector({ filter, time: 30000 })
           collector.on('collect', (button) => {
 
+            collector.stop();
+
             if (button.component.customId === 'cancel') return interaction.editReply({ embeds: [embed.setDescription('Cancelled.')], components: [] });
 
             const song = results[parseInt(button.customId)];
+            if (song.age_restricted) return interaction.editReply({ embeds: [embed.setDescription(`The video you are trying to play is age restricted.`)] });
         
             interaction.editReply({ embeds: [embed
+
                 .setAuthor({ name: 'Added Song' })
                 .setTitle(`\`${song.name}\` - \`${song.uploader.name}\``)
                 .setURL(song.url)
@@ -73,6 +80,7 @@ module.exports = {
                 .setThumbnail(song.thumbnail)
                 .setTimestamp()
                 .setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
+
               });
           
             client.distube.play(interaction.member.voice.channel, song, {
@@ -83,7 +91,7 @@ module.exports = {
 
           })
           
-          collector.on('end', () => { interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
+          collector.on('end', c => { if (c.size === 0) interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
 
         });
 
