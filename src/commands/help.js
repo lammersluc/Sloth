@@ -2,7 +2,6 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
     name: 'help',
-    aliases: ['commands', 'cmd', 'cmds'],
     description: 'Help command.',
     category: 'info',
     options: [],

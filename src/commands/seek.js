@@ -3,7 +3,6 @@ const { EmbedBuilder } = require('discord.js');
 module.exports = {
     name: 'seek',
     helpname: 'Seek',
-    aliases: [],
     aliasesText: ' ',
     description: 'Seek to a specific time in the current song.',
     category: 'music',

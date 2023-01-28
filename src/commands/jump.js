@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'jump',
-    aliases: ['goto'],
     description: 'Jumps to a song in the queue.',
     category: 'music',
     options: [],

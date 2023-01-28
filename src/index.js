@@ -8,7 +8,6 @@ const { DisTube } = require('distube');
 const { SpotifyPlugin } = require('@distube/spotify');
 
 client.commands = new Discord.Collection();
-client.aliases = new Discord.Collection();
 client.devs = ['431882442035691550'];
 client.embedColor = '#fbd55a';
 client.musicquiz = [];

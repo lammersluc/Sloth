@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'shuffle',
-    aliases: [],
     description: 'Shuffles the queue.',
     category: 'music',
     options: [],

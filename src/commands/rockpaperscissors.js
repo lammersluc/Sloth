@@ -2,7 +2,6 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
     name: 'rockpaperscissors',
-    aliases: ['rps'],
     description: 'Play rock paper scissors with the bot.',
     category: 'fun',
     options: [],

@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'leave',
-    aliases: ['l' ,'stop'],
     description: 'Makes the bot leave voice channel.',
     category: 'music',
     options: [],

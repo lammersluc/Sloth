@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'ping',
-    aliases: ['delay'],
     description: 'Ping to test delay.',
     category: 'tools',
     options: [],

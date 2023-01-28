@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'pause',
-    aliases: ['p'],
     description: 'Pauses/Resumes the current song.',
     category: 'music',
     options: [],

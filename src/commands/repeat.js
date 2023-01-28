@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
   name: 'repeat',
-  aliases: ['loop'],
   description: 'Switches the repeat mode',
   category: 'music',
   options: [],

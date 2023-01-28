@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'nowplaying',
-    aliases: ['np'],
     description: 'Shows info about the current song that is playing.',
     category: 'music',
     options: [],

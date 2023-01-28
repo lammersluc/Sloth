@@ -2,7 +2,6 @@ const { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = r
 
 module.exports = {
   name: 'play',
-  aliases: ['add', 'music' ,'p'],
   description: 'Plays music in your voice channel.',
   category: 'music',
   options: [{ name: 'search', forced: true }],

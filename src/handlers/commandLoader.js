@@ -12,20 +12,19 @@ async function commandLoader(client) {
     
         for(let alias in command.aliases) { client.aliases.set(command.aliases[alias], command.name); }
     
-      });
+    });
 
-      const data = client.commands.map(command => {
+    const data = client.commands.map(cmd => {
             
-            cmd = new SlashCommandBuilder()
-                .setName(command.name)
-                .setDescription(command.description)
+        let commands = new SlashCommandBuilder()
+            .setName(cmd.name)
+            .setDescription(cmd.description)
 
-            command.options.map(o => { cmd.addStringOption(option => option.setName(o.name).setDescription('Sloth').setRequired(o.forced)); })
+        cmd.options.map(o => { commands.addStringOption(option => option.setName(o.name).setDescription('Sloth').setRequired(o.forced)); })
 
-            return cmd;
+        return commands;
     
-        }
-    );
+    });
 
     commandRegister(data);
     

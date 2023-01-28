@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'random',
-    aliases: ['rng'],
     description: 'Chooses a randum number between 1 and the argument.',
     category: 'tools',
     options: [{ name: 'max', forced: true }],

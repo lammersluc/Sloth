@@ -1,11 +1,10 @@
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
-const SpotifyWebApi = require('spotify-web-api-node');
+const fs = require('fs');
 const stringSimilarity = require('string-similarity');
 const { sleep } = require('../utils.js');
 
 module.exports = {
     name: 'musicquiz',
-    aliases: ['mq'],
     description: 'Starts a music quiz.',
     category: 'music',
     options: [{ name: 'rounds', forced: true}],
@@ -43,34 +42,28 @@ module.exports = {
                 )
         ]});
 
-        const spotifyApi = new SpotifyWebApi({
-            clientId: process.env.SPOTIFY_CLIENT_ID,
-            clientSecret: process.env.SPOTIFY_CLIENT_SECRET
-          });
-
-        accessToken = await spotifyApi.clientCredentialsGrant();
-        spotifyApi.setAccessToken(accessToken.body['access_token']);
-
-        let data = await spotifyApi.getPlaylist(process.env.SPOTIFY_PLAYLIST_ID);
-        let playlistTotal = data.body.tracks.total;
-
-        const tracksResponse = await spotifyApi.getPlaylistTracks(process.env.SPOTIFY_PLAYLIST_ID, { offset: 101 });
-        const tracks = tracksResponse.body.items;
+        let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json'));
+        let tracks = data[0].tracks;
 
         while (round < rounds) {
 
             let roundfinished = false;
-            let randomIndex = Math.floor(Math.random() * 100);
-            let song = tracks[randomIndex];
-            while (played.includes(song.track.id)) { song = tracks[randomIndex]; }
-            played.push(song.track.id);
+            let song;
+            let random = Math.floor(Math.random() * tracks.length);
+            while (played.includes(random)) random = Math.floor(Math.random() * tracks.length);
+            song = tracks[random];
+            played.push(random);
+
             let sguessed = '';
             let aguessed = '';
             let passVotes = [];
-            const title = song.track.name.split(/[(-]/)[0].toLowerCase();
-            const artists = song.track.artists.map(artist => artist.name.toLowerCase());
+            let title = song.name.split(/[(-]/)[0].toLowerCase();
+            let artists = [];
+            if (song.artist.constructor === Array) song.artist.map(a => artists.push(a));
+            else artists.push(song.artist);
+            let gartists = [...artists.map(a => a.toLowerCase())];
 
-            await client.distube.play(interaction.member.voice.channel, song.track.external_urls.spotify)
+            await client.distube.play(interaction.member.voice.channel, song.uri)
             let queue = client.distube.getQueue(interaction);
             if (queue.songs.length > 1) queue.skip();
             await sleep(300)
@@ -101,7 +94,7 @@ module.exports = {
                     m.react('✅'); 
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
                     sguessed = m.author.id; 
-                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), artists).bestMatch.rating > 0.57) {
+                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), gartists).bestMatch.rating > 0.57) {
                     m.react('✅');
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
                     aguessed = m.author.id;
@@ -138,7 +131,7 @@ module.exports = {
 
                 interaction.channel.send({ embeds: [new EmbedBuilder()
                     .setColor(client.embedColor)
-                    .setTitle(`\`${song.track.name}\` - \`${song.track.artists.map(artist => artist.name).toString().replace(/,/g, ', ')}\``)
+                    .setTitle(`\`${song.name}\` - \`${artists.toString().replace(/,/g, ', ')}\``)
                     .setURL(psong.url)
                     .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.formattedDuration} | 🔊 ${queue.volume}%\``)
                     .setThumbnail(psong.thumbnail)

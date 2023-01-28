@@ -2,7 +2,6 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'volume',
-    aliases: [],
     description: 'Set the volume of the music bot.',
     category: 'music',
     options: [{ name: 'volume', forced: true }],

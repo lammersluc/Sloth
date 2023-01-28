@@ -3,7 +3,6 @@ const axios = require('axios');
 
 module.exports = {
     name: 'covid',
-    aliases: ['corona', 'covid-19', 'covid19'],
     description: 'Shows current COVID-19 data for a country.',
     category: 'info',
     options: [{ name: 'country', forced: true }],
