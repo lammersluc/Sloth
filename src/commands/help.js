@@ -26,23 +26,7 @@ module.exports = {
 
                 let category = button.customId;
 
-                client.commands.filter(cmd => cmd.category === category).map(cmd => {
-
-                    let aliases = '';
-                    if (!cmd.aliases) aliases = ' ';
-                    else cmd.aliases.map(a => {
-
-                        if (cmd.aliases[cmd.aliases.length - 1] === a) return aliases += a.capitalize();
-                        else return aliases += a.capitalize() + ', ';
-
-                    });
-
-                    embed.addFields({ name: `**${cmd.name.capitalize()}**`, value:`
-                        
-                    ${cmd.description}
-                    Aliases: \`${aliases}\`\n\n`, inline: true });
-                
-                });
+                client.commands.filter(cmd => cmd.category === category).map(cmd => { embed.addFields({ name: `**${cmd.name.capitalize()}**`, value: cmd.description, inline: true }); });
 
                 interaction.editReply({ embeds: [embed.setTitle(category.capitalize()).setDescription(null)], components: [] });
 
