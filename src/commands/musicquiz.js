@@ -117,11 +117,11 @@ module.exports = {
                 scoreboard.sort((a, b) => (a.score < b.score) ? 1 : -1);
                 textScoreboard = scoreboard.map(p => { 
 
-                    let medals = ['🥇', '🥈', '🥉']
+                    let medals = ['🥇', '🥈', '🥉'];
                     let i = scoreboard.indexOf(p);
 
                     if(medals[i]) {
-                        return ({ player: `${medals[i]} <@${p.player}>`, score: p.score })
+                        return ({ player: `${medals[i]} <@${p.player}>`, score: p.score });
                     } else {
                         return ({ player: `<@${p.player}>`, score: p.score });
                     }
