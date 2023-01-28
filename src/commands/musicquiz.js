@@ -62,12 +62,14 @@ module.exports = {
             if (song.artist.constructor === Array) song.artist.map(a => artists.push(a));
             else artists.push(song.artist);
             let gartists = [...artists.map(a => a.toLowerCase())];
+            let sartists = artists.join(' ');
 
-            await client.distube.play(interaction.member.voice.channel, song.uri)
+            await client.distube.play(interaction.member.voice.channel, `${title} ${sartists} lyrics`)
             let queue = client.distube.getQueue(interaction);
             if (queue.songs.length > 1) queue.skip();
             await sleep(300)
             queue.seek(queue.songs[0].duration / 3);
+            console.log(queue.songs[0].name)
 
             const filter = m => players.includes(m.author.id);
             const collector = interaction.channel.createMessageCollector({ filter, time: 30000 });
@@ -111,8 +113,6 @@ module.exports = {
 
             collector.on('end', async () => {
 
-                let queue = client.distube.getQueue(interaction);
-                if (!queue) return;
                 let psong = queue.songs[0];
                 scoreboard.sort((a, b) => (a.score < b.score) ? 1 : -1);
                 textScoreboard = scoreboard.map(p => { 
