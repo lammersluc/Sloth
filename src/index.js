@@ -5,7 +5,6 @@ const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
 const { DisTube } = require('distube');
-const { SpotifyPlugin } = require('@distube/spotify');
 
 client.commands = new Discord.Collection();
 client.devs = ['431882442035691550'];
@@ -21,16 +20,6 @@ client.distube = new DisTube(client, {
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: false,
   savePreviousSongs: false,
-  plugins: [
-    new SpotifyPlugin({
-      parallel: true,
-      emitEventsAfterFetching: false,
-      api: {
-        clientId: process.env.SPOTIFY_CLIENT_ID,
-        clientSecret: process.env.SPOTIFY_CLIENT_SECRET
-      }
-    })
-  ]
 
 });
 
