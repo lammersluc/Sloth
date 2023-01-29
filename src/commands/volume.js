@@ -6,9 +6,8 @@ module.exports = {
     category: 'music',
     options: [{ name: 'volume', forced: true }],
     enabled: true,
-    visible: true,
     devOnly: false,
-    adminOnly: false,
+    adminOnly: true,
     run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);

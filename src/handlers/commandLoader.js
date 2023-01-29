@@ -15,6 +15,8 @@ async function commandLoader(client) {
     });
 
     const data = client.commands.map(cmd => {
+
+        if (!cmd.enabled) return;
             
         let commands = new SlashCommandBuilder()
             .setName(cmd.name)

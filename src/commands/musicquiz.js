@@ -9,7 +9,6 @@ module.exports = {
     category: 'music',
     options: [{ name: 'rounds', forced: true}],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {

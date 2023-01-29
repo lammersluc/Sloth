@@ -6,7 +6,6 @@ module.exports = {
     category: 'music',
     options: [],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {

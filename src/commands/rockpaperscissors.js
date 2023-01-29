@@ -6,7 +6,6 @@ module.exports = {
     category: 'fun',
     options: [],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {

@@ -6,7 +6,6 @@ module.exports = {
     category: 'info',
     options: [],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {
@@ -15,7 +14,7 @@ module.exports = {
         let row = new ActionRowBuilder();
         let categories = [];
 
-        client.commands.map(cmd => { !categories.includes(cmd.category) && categories.push(cmd.category); });
+        client.commands.map(cmd => { if(!categories.includes(cmd.category) && cmd.category !== 'dev') categories.push(cmd.category); });
         categories.map(category => { row.addComponents(new ButtonBuilder().setStyle('Primary').setLabel(category.capitalize()).setCustomId(category)); });
 
         interaction.editReply({ embeds: [embed.setDescription('Choose a category to show help from.')], components: [row] }).then(msg => {

@@ -8,7 +8,6 @@ module.exports = {
     category: 'fun',
     options: [{ name: 'subreddit', forced: true }],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {

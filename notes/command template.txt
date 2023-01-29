@@ -1,6 +1,7 @@
 module.exports = {
     name: '',
     description: '',
+    category: '',
     options: [{ name: , forced: }],
     enabled: true,
     visible: true,

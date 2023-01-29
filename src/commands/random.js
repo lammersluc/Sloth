@@ -6,7 +6,6 @@ module.exports = {
     category: 'tools',
     options: [{ name: 'max', forced: true }],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {

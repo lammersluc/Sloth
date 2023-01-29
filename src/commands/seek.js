@@ -2,13 +2,10 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'seek',
-    helpname: 'Seek',
-    aliasesText: ' ',
     description: 'Seek to a specific time in the current song.',
     category: 'music',
     options: [{ name: 'time', forced: true }],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {

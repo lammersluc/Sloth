@@ -7,7 +7,6 @@ module.exports = {
     category: 'info',
     options: [{ name: 'country', forced: true }],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {
