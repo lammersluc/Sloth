@@ -6,7 +6,13 @@ module.exports = {
     name: 'reddit',
     description: 'Searches a random post from subreddit.',
     category: 'fun',
-    options: [{ name: 'subreddit', type: 'string', required: true }],
+    options: [
+        {
+            name: 'subreddit',
+            type: 'string',
+            required: true
+        }
+    ],
     enabled: true,
     devOnly: false,
     adminOnly: false,

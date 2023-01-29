@@ -4,7 +4,15 @@ module.exports = {
     name: 'volume',
     description: 'Set the volume of the music bot.',
     category: 'music',
-    options: [{ name: 'volume', type: 'integer', minValue: 1, maxValue: 1000, required: true }],
+    options: [
+        {
+            name: 'volume',
+            type: 'integer',
+            minValue: 1,
+            maxValue: 1000,
+            required: true
+        }
+    ],
     enabled: true,
     devOnly: false,
     adminOnly: true,

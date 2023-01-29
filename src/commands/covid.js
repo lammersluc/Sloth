@@ -5,7 +5,13 @@ module.exports = {
     name: 'covid',
     description: 'Shows current COVID-19 data for a country.',
     category: 'info',
-    options: [{ name: 'country', type: 'string', required: true }],
+    options: [
+        {
+            name: 'country',
+            type: 'string',
+            required: true 
+        }
+    ],
     enabled: true,
     devOnly: false,
     adminOnly: false,

@@ -7,7 +7,15 @@ module.exports = {
     name: 'musicquiz',
     description: 'Starts a music quiz.',
     category: 'music',
-    options: [{ name: 'rounds', type: 'integer', minValue: 3, maxValue: 100, required: true }],
+    options: [
+        {
+            name: 'rounds',
+            type: 'integer',
+            minValue: 3,
+            maxValue: 100,
+            required: true
+        }
+    ],
     enabled: true,
     devOnly: false,
     adminOnly: false,

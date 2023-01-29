@@ -4,7 +4,14 @@ module.exports = {
     name: 'random',
     description: 'Chooses a randum number between 1 and the argument.',
     category: 'tools',
-    options: [{ name: 'max', type: 'integer', minValue: 1, required: true }],
+    options: [
+        {
+            name: 'max',
+            type: 'integer',
+            minValue: 1,
+            required: true
+        }
+    ],
     enabled: true,
     devOnly: false,
     adminOnly: false,

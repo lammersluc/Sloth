@@ -4,7 +4,14 @@ module.exports = {
     name: 'seek',
     description: 'Seek to a specific time in the current song.',
     category: 'music',
-    options: [{ name: 'time', type: 'integer', minValue: 1, required: true }],
+    options: [
+        {
+            name: 'time',
+            type: 'integer',
+            minValue: 1,
+            required: true
+        }
+    ],
     enabled: true,
     devOnly: false,
     adminOnly: false,

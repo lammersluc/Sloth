@@ -14,7 +14,21 @@ module.exports = {
     name: 'dev',
     description: 'Runs dev commands.',
     category: 'dev',
-    options: [{ name: 'action', type: 'string', choices: [{ name: 'Cmd', value: 'cmd' }, { name: 'Code', value: 'code'}, { name: 'Restart', value: 'restart'}], required: true }, { name: 'input', type: 'string' }],
+    options: [
+        {
+            name: 'action',
+            type: 'string',
+            choices: [
+                { name: 'Cmd', value: 'cmd' },
+                { name: 'Code', value: 'code'},
+                { name: 'Restart', value: 'restart'}
+            ],
+            required: true },
+        {
+            name: 'input',
+            type: 'string' 
+        }
+    ],
     enabled: true,
     devOnly: true,
     adminOnly: false,
