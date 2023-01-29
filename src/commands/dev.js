@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 const { sleep } = require('../utils');
 
 module.exports = {
@@ -81,7 +81,7 @@ module.exports = {
             interaction.editReply({ embeds: [embed.setDescription(`Restarting...`)] });
             client.user.setPresence({ activities: [{ name: `Restarting...` }], status: 'dnd' });
     
-            spawn('pm2 restart sloth');
+            spawn('pm2 restart sloth', { shell: true });
 
         }
     }
