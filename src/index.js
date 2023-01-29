@@ -45,7 +45,7 @@ client.distube.on('error', (e) => {
   
 });
 
-setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }); }, 3 * 60000);
+setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }); }, 60 * 60000);
 
 client
   .on('ready', async () => {

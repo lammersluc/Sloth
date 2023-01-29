@@ -7,19 +7,18 @@ module.exports = {
     name: 'musicquiz',
     description: 'Starts a music quiz.',
     category: 'music',
-    options: [{ name: 'rounds', forced: true}],
+    options: [{ name: 'rounds', type: 'integer', minValue: 3, maxValue: 100, required: true }],
     enabled: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        let rounds = parseInt(interaction.options.getString('rounds'));
+        let rounds = interaction.options.getInteger('rounds');
 
         if (!interaction.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setTitle('I need permissions to send messages in this channel in order to play a music quiz.')] });
         if (!interaction.member.voice.channel) return interaction.editReply({ embeds: [embed.setTitle('You are not in a voice channel.')] });
         if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Connect) || !interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Speak)) return interaction.editReply({ embeds: [embed.setTitle('I do not have permission to join or speak in this voice channel.')] });
-        if (rounds < 3 || rounds > 100) return interaction.editReply({ embeds: [embed.setTitle('Please specify a number between 3 and 100.')] });
         if (client.distube.getQueue(interaction.guild)) return interaction.editReply({ embeds: [embed.setTitle('I am already playing music.')] });
 
         client.musicquiz.push(interaction.guildId);

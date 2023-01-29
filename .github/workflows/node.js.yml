@@ -30,5 +30,7 @@ jobs:
       run: cp /home/luc/code/actions-runner/_work/Sloth/Sloth/* . -r
     - name: Install dependencies
       run: npm install
+    - name: Flush logs
+      run: pm2 flush sloth
     - name: Restart application
       run: pm2 restart sloth

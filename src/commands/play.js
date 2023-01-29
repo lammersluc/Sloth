@@ -4,7 +4,7 @@ module.exports = {
   name: 'play',
   description: 'Plays music in your voice channel.',
   category: 'music',
-  options: [{ name: 'search', forced: true }],
+  options: [{ name: 'search', type: 'string', required: true }],
   enabled: true,
   devOnly: false,
   adminOnly: false,

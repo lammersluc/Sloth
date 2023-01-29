@@ -1,4 +1,4 @@
-const { REST, Routes } = require('discord.js')
+const { REST, Routes } = require('discord.js');
 
 async function commandRegister(data) {
 

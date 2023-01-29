@@ -20,9 +20,45 @@ async function commandLoader(client) {
             
         let commands = new SlashCommandBuilder()
             .setName(cmd.name)
-            .setDescription(cmd.description)
+            .setDescription('Sloth')
 
-        cmd.options.map(o => { commands.addStringOption(option => option.setName(o.name).setDescription('Sloth').setRequired(o.forced)); })
+        cmd.options.map(o => { 
+            
+            if (o.type === 'string') {
+                
+                commands.addStringOption(option => { option
+                
+                        .setName(o.name)
+                        .setDescription('Sloth')
+                        
+                    if (o.required) option.setRequired(o.required);
+                    if (o.minLength) option.setMinLength(o.minLength);
+                    if (o.maxLength) option.setMaxLength(o.maxLength);
+                    if (o.choices) option.addChoices(...o.choices);
+
+                    return option;
+
+                }
+
+            )} else if (o.type === 'integer') { 
+
+                commands.addIntegerOption(option => { option
+
+                        .setName(o.name)
+                        .setDescription('Sloth')
+
+                    if (o.required) option.setRequired(o.required);
+                    if (o.minValue) option.setMinValue(o.minValue);
+                    if (o.maxValue) option.setMaxValue(o.maxValue);
+                    if (o.choices) option.addChoices(...o.choices);
+
+                    return option;
+
+                }
+                
+            )}
+
+        });
 
         return commands;
     

@@ -4,7 +4,7 @@ module.exports = {
     name: 'volume',
     description: 'Set the volume of the music bot.',
     category: 'music',
-    options: [{ name: 'volume', forced: true }],
+    options: [{ name: 'volume', type: 'integer', minValue: 1, maxValue: 1000, required: true }],
     enabled: true,
     devOnly: false,
     adminOnly: true,
@@ -12,10 +12,9 @@ module.exports = {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.distube.getQueue(interaction);
-        const volume = parseInt(interaction.options.getString('volume'));
+        const volume = interaction.options.getInteger('volume');
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription(`There is nothing playing right now.`)] });
-        if (volume < 0 || volume > 1000) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a volume between 0 and 1000.`)] });
         
         client.distube.setVolume(interaction, volume);
         

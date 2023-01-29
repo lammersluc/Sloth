@@ -2,9 +2,8 @@ module.exports = {
     name: '',
     description: '',
     category: '',
-    options: [{ name: , forced: }],
+    options: [],
     enabled: true,
-    visible: true,
     devOnly: false,
     adminOnly: false,
     run: async (client, interaction) => {
