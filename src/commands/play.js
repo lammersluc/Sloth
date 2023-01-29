@@ -54,7 +54,7 @@ module.exports = {
         let row = new ActionRowBuilder();
         let row2 = new ActionRowBuilder();
 
-        results.map(result => { row.addComponents(new ButtonBuilder().setLabel((results.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(results.indexOf(result).toString())); });
+        results.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((results.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(results.indexOf(result).toString())); });
         row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
 
         interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {

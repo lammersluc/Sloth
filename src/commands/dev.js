@@ -1,6 +1,14 @@
 const { EmbedBuilder } = require('discord.js');
 const { spawn } = require('child_process');
-const { sleep } = require('../utils');
+
+function clean(string) {
+    if (typeof text === "string") {
+      return string.replace(/`/g, "`" + String.fromCharCode(8203))
+      .replace(/@/g, "@" + String.fromCharCode(8203))
+    } else {
+      return string;
+    }
+}
 
 module.exports = {
     name: 'dev',
@@ -48,41 +56,28 @@ module.exports = {
 
         } else if (action === 'code') {
 
-            if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a command to run.`)] });
+            try {
 
-            embed.setTitle('CMD');
-            let stdout;
-            let stderr;
-            let closed = false;
-            
-            const cmd = spawn(`node -e '${input}'`, { shell: true });
+                if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a command to run.`)] });
 
-            cmd.stdout.on('data', (data) => { stdout = data.toString(); });
-            cmd.stderr.on('data', (data) => { stderr = data.toString(); });
+                embed.setTitle('Code');
 
-            await sleep(3000);
+                let evaled = eval(input);
 
-            if (!closed) cmd.kill('SIGINT');
-
-
-            cmd.on('close', () => {
-
-                closed = true;
-
-                if (!stdout) stdout = 'No output.';
-                if (!stderr) stderr = 'No error.';
+                if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
+                if (evaled === 'undefined') evaled = 'No output.';
+                if (evaled.length > 1024) evaled = evaled.slice(0, 1021) + '...';
 
                 embed.addFields(
-    
-                    { name: 'Input', value: `\`\`\`${input}\`\`\`` },
-                    { name: 'Output', value: `\`\`\`${stdout}\`\`\`` },
-                    { name: 'Error', value: `\`\`\`${stderr}\`\`\`` }
-    
+
+                    { name: 'Input', value: `\`\`\`js\n${input}\`\`\`` },
+                    { name: 'Output', value: `\`\`\`js\n${clean(evaled)}\`\`\`` }
+
                 );
-    
+
                 interaction.editReply({ embeds: [embed] });
 
-            });
+            } catch (e) { interaction.editReply({ embeds: [embed.setDescription(`An error occured: \`\`\`js\n${clean(e)}\`\`\``)] }); }
 
         } else if (action === 'restart') {
 
@@ -92,5 +87,6 @@ module.exports = {
             spawn('pm2 restart sloth', { shell: true });
 
         }
+
     }
 }

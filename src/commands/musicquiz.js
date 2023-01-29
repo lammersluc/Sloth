@@ -28,7 +28,7 @@ module.exports = {
         let round = 0;
         let played = [];
 
-        players.map(member => scoreboard.push({ player: member, score: 0 }));
+        players.forEach(member => scoreboard.push({ player: member, score: 0 }));
 
         interaction.editReply({ embeds: [embed
             .setTitle('Music Quiz')
@@ -57,12 +57,10 @@ module.exports = {
             let passVotes = [];
             let title = song.name.split(/[(-]/)[0].toLowerCase();
             let artists = [];
-            if (song.artist.constructor === Array) song.artist.map(a => artists.push(a));
-            else artists.push(song.artist);
-            let gartists = [...artists.map(a => a.toLowerCase())];
-            let sartists = artists.join(' ');
+            if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
+            else artists.push(song.artist.toLowerCase());
 
-            await client.distube.play(interaction.member.voice.channel, `${title} ${sartists} lyrics`)
+            await client.distube.play(interaction.member.voice.channel, `${title} ${artists.join(' ')} lyrics`)
             let queue = client.distube.getQueue(interaction);
             if (queue.songs.length > 1) queue.skip();
             await sleep(300)
@@ -93,20 +91,20 @@ module.exports = {
                 if (!sguessed && stringSimilarity.compareTwoStrings(m.content.toLowerCase(), title) > 0.57) {
 
                     m.react('✅'); 
-                    scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
+                    scoreboard.forEach(player => player.player == m.author.id ? player.score ++ : null);
                     sguessed = m.author.id; 
 
-                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), gartists).bestMatch.rating > 0.57) {
+                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), artists).bestMatch.rating > 0.57) {
 
                     m.react('✅');
-                    scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
+                    scoreboard.forEach(player => player.player == m.author.id ? player.score ++ : null);
                     aguessed = m.author.id;
 
                 } else m.react('❌');
 
-                if (sguessed !== '' && aguessed !== '') {
+                if (sguessed && aguessed) {
 
-                    if (sguessed === aguessed) scoreboard.map(player => player.player == sguessed ? player.score ++ : null);
+                    if (sguessed === aguessed) scoreboard.forEach(player => player.player == sguessed ? player.score ++ : null);
 
                     collector.stop();
 
@@ -134,7 +132,7 @@ module.exports = {
 
                 interaction.channel.send({ embeds: [new EmbedBuilder()
                     .setColor(client.embedColor)
-                    .setTitle(`\`${song.name}\` - \`${artists.toString().replace(/,/g, ', ')}\``)
+                    .setTitle(`\`${song.name}\` - \`${song.artists.toString().replace(/,/g, ', ')}\``)
                     .setURL(psong.url)
                     .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.formattedDuration} | 🔊 ${queue.volume}%\``)
                     .setThumbnail(psong.thumbnail)

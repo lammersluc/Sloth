@@ -7,7 +7,7 @@ const client = new Client({ partials: [Partials.Channel], intents: [GatewayInten
 const { DisTube } = require('distube');
 
 client.commands = new Discord.Collection();
-client.devs = ['431882442035691550'];
+client.devs = ['431882442035691550', '388755086462943232'];
 client.embedColor = '#fbd55a';
 client.musicquiz = [];
 
@@ -29,20 +29,12 @@ process.on('uncaughtException', (e) => {
 
   client.devs.forEach(dev => {
 
-    client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
-
-  });
-
-});
-
-client.distube.on('error', (e) => {
-
-  client.devs.forEach(dev => {
+    if (dev === '388755086462943232') return;
 
     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
   });
-  
+
 });
 
 setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }); }, 60 * 60000);

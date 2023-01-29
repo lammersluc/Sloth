@@ -14,7 +14,7 @@ module.exports = {
         const emojis = ['🪨', '📰', '✂'];
         let row = new ActionRowBuilder();
 
-        emojis.map(emoji => { row.addComponents(new ButtonBuilder().setLabel(emoji).setStyle('Primary').setCustomId(emoji)); });
+        emojis.forEach(emoji => { row.addComponents(new ButtonBuilder().setLabel(emoji).setStyle('Primary').setCustomId(emoji)); });
 
 
         interaction.editReply({ embeds: [embed.setDescription('Rock, Paper or Scissors?')], components: [row] }).then(async reply => {

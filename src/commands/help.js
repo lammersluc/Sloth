@@ -14,8 +14,8 @@ module.exports = {
         let row = new ActionRowBuilder();
         let categories = [];
 
-        client.commands.map(cmd => { if(!categories.includes(cmd.category) && cmd.category !== 'dev') categories.push(cmd.category); });
-        categories.map(category => { row.addComponents(new ButtonBuilder().setStyle('Primary').setLabel(category.capitalize()).setCustomId(category)); });
+        client.commands.forEach(cmd => { if(!categories.includes(cmd.category) && cmd.category !== 'dev') categories.push(cmd.category); });
+        categories.forEach(category => { row.addComponents(new ButtonBuilder().setStyle('Primary').setLabel(category.capitalize()).setCustomId(category)); });
 
         interaction.editReply({ embeds: [embed.setDescription('Choose a category to show help from.')], components: [row] }).then(msg => {
 
@@ -25,7 +25,7 @@ module.exports = {
 
                 let category = button.customId;
 
-                client.commands.filter(cmd => cmd.category === category).map(cmd => { embed.addFields({ name: `**${cmd.name.capitalize()}**`, value: cmd.description, inline: true }); });
+                client.commands.filter(cmd => cmd.category === category).forEach(cmd => { embed.addFields({ name: `**${cmd.name.capitalize()}**`, value: cmd.description, inline: true }); });
 
                 interaction.editReply({ embeds: [embed.setTitle(category.capitalize()).setDescription(null)], components: [] });
 
