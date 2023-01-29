@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ActivityType } = require('discord.js');
 const { spawn } = require('child_process');
 
 function clean(string) {
@@ -82,7 +82,8 @@ module.exports = {
         } else if (action === 'restart') {
 
             interaction.editReply({ embeds: [embed.setDescription(`Restarting...`)] });
-            client.user.setPresence({ activities: [{ name: `Restarting...` }], status: 'dnd' });
+            client.user.setPresence({ activities: [{ name: `Restarting...`, type: ActivityType.Listening }], status: 'idle' });
+            client.user.setStatus('dnd');
     
             spawn('pm2 restart sloth', { shell: true });
 
