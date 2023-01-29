@@ -91,20 +91,25 @@ module.exports = {
                 }
 
                 if (!sguessed && stringSimilarity.compareTwoStrings(m.content.toLowerCase(), title) > 0.57) {
+
                     m.react('✅'); 
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
                     sguessed = m.author.id; 
+
                 } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), gartists).bestMatch.rating > 0.57) {
+
                     m.react('✅');
                     scoreboard.map(player => player.player == m.author.id ? player.score ++ : null);
                     aguessed = m.author.id;
-                } else {
-                    m.react('❌');
-                }
+
+                } else m.react('❌');
 
                 if (sguessed !== '' && aguessed !== '') {
+
                     if (sguessed === aguessed) scoreboard.map(player => player.player == sguessed ? player.score ++ : null);
+
                     collector.stop();
+
                 }
             
             });
@@ -143,7 +148,7 @@ module.exports = {
 
             });
 
-            while (!roundfinished) { await new Promise(r => setTimeout(r, 1000)); }
+            while (!roundfinished) await sleep(1000);
 
         }
 

@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const { spawn } = require('child_process');
+const { sleep } = require('../utils');
 
 module.exports = {
     name: 'dev',
@@ -52,13 +53,21 @@ module.exports = {
             embed.setTitle('CMD');
             let stdout;
             let stderr;
+            let closed = false;
             
             const cmd = spawn(`node -e '${input}'`, { shell: true });
 
             cmd.stdout.on('data', (data) => { stdout = data.toString(); });
             cmd.stderr.on('data', (data) => { stderr = data.toString(); });
 
+            await sleep(3000);
+
+            if (!closed) cmd.kill('SIGINT');
+
+
             cmd.on('close', () => {
+
+                closed = true;
 
                 if (!stdout) stdout = 'No output.';
                 if (!stderr) stderr = 'No error.';
