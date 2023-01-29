@@ -27,7 +27,7 @@ jobs:
       with:
         node-version: '18.x'
     - name: Removing files
-      run: rm -rf !('node_modules')
+      run: rm -rf !(node_modules)
     - name: Clone files
       run: cp /home/luc/code/actions-runner/_work/Sloth/Sloth/* . -r
     - name: Install dependencies
