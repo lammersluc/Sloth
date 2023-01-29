@@ -14,7 +14,7 @@ module.exports = {
     name: 'dev',
     description: 'Runs dev commands.',
     category: 'dev',
-    options: [{ name: 'action', type: 'string', choices: [{ name: 'CMD', value: 'cmd' }, { name: 'Code', value: 'code'}, { name: 'Restart', value: 'restart'}], required: true }, { name: 'input', type: 'string' }],
+    options: [{ name: 'action', type: 'string', choices: [{ name: 'Cmd', value: 'cmd' }, { name: 'Code', value: 'code'}, { name: 'Restart', value: 'restart'}], required: true }, { name: 'input', type: 'string' }],
     enabled: true,
     devOnly: true,
     adminOnly: false,
@@ -83,7 +83,6 @@ module.exports = {
 
             interaction.editReply({ embeds: [embed.setDescription(`Restarting...`)] });
             client.user.setPresence({ activities: [{ name: `Restarting...`, type: ActivityType.Listening }], status: 'idle' });
-            client.user.setStatus('dnd');
     
             spawn('pm2 restart sloth', { shell: true });
 
