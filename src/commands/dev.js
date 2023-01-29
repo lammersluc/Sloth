@@ -1,6 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const { spawn, exec } = require('child_process');
-const { sleep } = require('../utils');
+const { spawn } = require('child_process');
 
 module.exports = {
     name: 'dev',
