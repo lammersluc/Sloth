@@ -84,9 +84,11 @@ module.exports = {
               });
           
             client.distube.play(interaction.member.voice.channel, song, {
+
               member: interaction.member,
               textChannel: interaction.channel,
               interaction
+
             });
 
           })
@@ -97,7 +99,12 @@ module.exports = {
 
       });
 
-    } catch (e) { if (e.toLocaleString().includes('DisTubeError [NO_RESULT]: No result found')) return interaction.editReply({ embeds: [embed.setDescription(`No results found for \`${string}\`.`)] }); }
+    } catch (e) {
+
+      if (e.toLocaleString().includes('DisTubeError [NO_RESULT]: No result found')) return interaction.editReply({ embeds: [embed.setDescription(`No results found for \`${string}\`.`)] });
+      if (e.toLocaleString().includes('PlayingError: Sign in to confirm your age')) return interaction.editReply({embeds: [embed.setDescription(`The video you are trying to play is age restricted.`)] });
+
+    }
 
   }
 }
