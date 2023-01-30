@@ -27,7 +27,7 @@ jobs:
       with:
         node-version: '18.x'
     - name: Remove files
-      run: find . -type f -not \( -name '.env' -or -name 'node_modules' \) -delete
+      run: find . -not \( -name '.env' -or -name 'node_modules' \) -delete
     # - name: Clone files
     #   run: cp /home/luc/code/actions-runner/_work/Sloth/Sloth/* . -r
     # - name: Install dependencies
