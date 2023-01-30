@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
-    - name: Removing files
+    - name: Remove files
       run: find . -type f -not \( -name '.env' -or -name 'node_modules' \) -delete
     - name: Clone files
       run: cp /home/luc/code/actions-runner/_work/Sloth/Sloth/* . -r
