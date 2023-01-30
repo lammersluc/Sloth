@@ -27,7 +27,9 @@ jobs:
       with:
         node-version: '18.x'
     - name: Remove files
-      run: find . -path ./.env -prune -o -path ./node_modules/ -prune -o -delete
+      run: shopt -s extglob
+      run: rm -rf !('.env'|'node_modules')
+      run: shopt -u extglob
     # - name: Clone files
     #   run: cp /home/luc/code/actions-runner/_work/Sloth/Sloth/* . -r
     # - name: Install dependencies
