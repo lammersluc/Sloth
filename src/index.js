@@ -66,7 +66,7 @@ client
 
     client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
 
-  })
+  });
 
 
 client.login(process.env.DISCORD_TOKEN);
