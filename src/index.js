@@ -25,8 +25,6 @@ client.distube = new DisTube(client, {
 
 process.on('uncaughtException', (e) => {
 
-  console.log(e);
-
   client.devs.forEach(dev => {
 
     if (dev === '388755086462943232') return;
