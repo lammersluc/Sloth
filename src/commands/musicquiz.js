@@ -1,7 +1,6 @@
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const fs = require('fs');
-const stringSimilarity = require('string-similarity');
-const { sleep } = require('../utils.js');
+const { similarity, sleep } = require('../utils.js');
 
 module.exports = {
     name: 'musicquiz',
@@ -68,12 +67,14 @@ module.exports = {
             if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
             else artists.push(song.artist.toLowerCase());
 
-            await client.distube.play(interaction.member.voice.channel, `${title} ${artists.join(' ')} lyrics`)
+            let result = await client.distube.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 })
+            if (result[0].age_restricted) roundfinished = true;
+            await client.distube.play(interaction.member.voice.channel, `${title} ${artists.join(' ')} lyrics`);
+
             let queue = client.distube.getQueue(interaction);
             if (queue.songs.length > 1) queue.skip();
-            await sleep(300)
+            await sleep(1000);
             queue.seek(queue.songs[0].duration / 3);
-            console.log(queue.songs[0].name)
 
             const filter = m => players.includes(m.author.id);
             const collector = interaction.channel.createMessageCollector({ filter, time: 30000 });
@@ -96,13 +97,16 @@ module.exports = {
 
                 }
 
-                if (!sguessed && stringSimilarity.compareTwoStrings(m.content.toLowerCase(), title) > 0.57) {
+                let tscore = similarity(m.content.toLowerCase(), title);
+                let ascore = Math.max(...artists.map(a => similarity(m.content.toLowerCase(), a)));
+
+                if (!sguessed && tscore > 0.75) {
 
                     m.react('✅'); 
                     scoreboard.forEach(player => player.player == m.author.id ? player.score ++ : null);
                     sguessed = m.author.id; 
 
-                } else if (!aguessed && stringSimilarity.findBestMatch(m.content.toLowerCase(), artists).bestMatch.rating > 0.57) {
+                } else if (!aguessed && ascore > 0.75) {
 
                     m.react('✅');
                     scoreboard.forEach(player => player.player == m.author.id ? player.score ++ : null);
@@ -140,7 +144,7 @@ module.exports = {
 
                 interaction.channel.send({ embeds: [new EmbedBuilder()
                     .setColor(client.embedColor)
-                    .setTitle(`\`${song.name}\` - \`${song.artists.toString().replace(/,/g, ', ')}\``)
+                    .setTitle(`\`${song.name}\` - \`${song.artist.toString().replace(/,/g, ', ')}\``)
                     .setURL(psong.url)
                     .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.formattedDuration} | 🔊 ${queue.volume}%\``)
                     .setThumbnail(psong.thumbnail)
