@@ -11,7 +11,7 @@
   "keywords": [],
   "description": "",
   "dependencies": {
-    "@discordjs/voice": "^0.11.0",
+    "@discordjs/voice": "^0.14.0",
     "@distube/ytdl-core": "^4.11.7",
     "axios": "^1.3.4",
     "discord.js": "^14.8.0",
