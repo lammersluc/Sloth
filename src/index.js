@@ -4,36 +4,17 @@ const { commandLoader } = require('./handlers/commandLoader.js');
 const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
-const { DisTube } = require('distube');
-
 client.commands = new Discord.Collection();
 client.devs = ['431882442035691550', '388755086462943232'];
 client.embedColor = '#fbd55a';
+client.queue = new Map();
 client.musicquiz = [];
 
-client.distube = new DisTube(client, {
+// process.on('uncaughtException', (e) => {
 
-  leaveOnEmpty: true,
-  emptyCooldown: 0,
-  leaveOnFinish: true,
-  leaveOnStop: true,
-  emitAddSongWhenCreatingQueue: false,
-  emitAddListWhenCreatingQueue: false,
-  savePreviousSongs: false,
+//     client.users.cache.get('388755086462943232').send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
-});
-
-process.on('uncaughtException', (e) => {
-
-  client.devs.forEach(dev => {
-
-    if (dev === '388755086462943232') return;
-
-    client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
-
-  });
-
-});
+// });
 
 setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' }); }, 60 * 60000);
 

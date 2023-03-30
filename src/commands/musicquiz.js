@@ -1,6 +1,8 @@
 const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const play = require('play-dl');
 const fs = require('fs');
 const { similarity, sleep } = require('../utils.js');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } = require('@discordjs/voice');
 
 module.exports = {
     name: 'musicquiz',
@@ -26,7 +28,7 @@ module.exports = {
         if (!interaction.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setTitle('I need permissions to send messages in this channel in order to play a music quiz.')] });
         if (!interaction.member.voice.channel) return interaction.editReply({ embeds: [embed.setTitle('You are not in a voice channel.')] });
         if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Connect) || !interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Speak)) return interaction.editReply({ embeds: [embed.setTitle('I do not have permission to join or speak in this voice channel.')] });
-        if (client.distube.getQueue(interaction.guild)) return interaction.editReply({ embeds: [embed.setTitle('I am already playing music.')] });
+        if (client.queue.get(interaction.guildId)) return interaction.editReply({ embeds: [embed.setTitle('I am already playing music.')] });
 
         client.musicquiz.push(interaction.guildId);
         let scoreboard = [];
@@ -46,6 +48,18 @@ module.exports = {
                 { name: 'Players', value: scoreboard.map(player => `<@${player.player}>`).toString().replace(/,/g, '\n') }
                 )
         ]});
+
+        let connection = joinVoiceChannel({
+            channelId: interaction.member.voice.channel.id,
+            guildId: interaction.guild.id,
+            adapterCreator: interaction.guild.voiceAdapterCreator
+        });
+
+        let player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Play
+            }
+        });
 
         let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json'));
         let tracks = data[0].tracks;
@@ -67,14 +81,15 @@ module.exports = {
             if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
             else artists.push(song.artist.toLowerCase());
 
-            let result = await client.distube.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 })
-            if (result[0].age_restricted) roundfinished = true;
-            await client.distube.play(interaction.member.voice.channel, `${title} ${artists.join(' ')} lyrics`);
+            let result = await play.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 });
+            let stream = await play.stream(result[0].url);
+            let resource = createAudioResource(stream.stream, {
+                inputType: stream.type,
+            });
+            
+            player.play(resource);
 
-            let queue = client.distube.getQueue(interaction);
-            if (queue.songs.length > 1) queue.skip();
-            await sleep(1000);
-            queue.seek(queue.songs[0].duration / 3);
+            connection.subscribe(player);
 
             const filter = m => players.includes(m.author.id);
             const collector = interaction.channel.createMessageCollector({ filter, time: 30000 });
@@ -126,7 +141,7 @@ module.exports = {
 
             collector.on('end', async () => {
 
-                let psong = queue.songs[0];
+                let psong = result[0];
                 scoreboard.sort((a, b) => (a.score < b.score) ? 1 : -1);
                 textScoreboard = scoreboard.map(p => { 
 
@@ -146,8 +161,8 @@ module.exports = {
                     .setColor(client.embedColor)
                     .setTitle(`\`${song.name}\` - \`${song.artist.toString().replace(/,/g, ', ')}\``)
                     .setURL(psong.url)
-                    .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.formattedDuration} | 🔊 ${queue.volume}%\``)
-                    .setThumbnail(psong.thumbnail)
+                    .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.durationRaw} | 🔊 100%\``)
+                    .setThumbnail(psong.thumbnails.slice(-1).url)
                     .setTimestamp()
                     .addFields({ name: 'Scoreboard', value: textScoreboard.map(player => `${player.player} - ${player.score} pts`).toString().replace(/,/g, '\n') })
                     .setFooter({ text: `Round ${round + 1} / ${rounds}` })
@@ -162,7 +177,8 @@ module.exports = {
 
         }
 
-        client.distube.voices.leave(interaction);
+        player.stop();
+        connection.destroy();
         client.musicquiz.splice(client.musicquiz.indexOf(interaction.guildId), 1);
         interaction.channel.send({ embeds: [new EmbedBuilder()
             .setColor(client.embedColor)

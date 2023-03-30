@@ -14,12 +14,15 @@ module.exports = {
 
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         
-        const queue = client.distube.getQueue(interaction);
+        const queue = client.queue.get(interaction.guildId);
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
+
+        let connection = getVoiceConnection(interaction.guildId);
+        let player = connection.state.subscription.player;
         
-        if (queue.paused) { queue.resume(); return interaction.editReply({ embeds: [embed.setDescription('The song has been resumed.')] }); }
-        else { queue.pause(); interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
+        if (queue.playing) { client.queue.get(interaction.guildId).playing = false; player.pause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
+        if (!queue.playing) { client.queue.get(interaction.guildId).playing = true; player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been resumed.')] }); }
         
     }
 }

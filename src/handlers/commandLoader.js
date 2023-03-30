@@ -69,6 +69,19 @@ async function commandLoader(client) {
 
                 }
                 
+            )} else if (o.type === 'boolean') {
+                
+                commands.addBooleanOption(option => { option
+                
+                        .setName(o.name)
+                        .setDescription('Sloth')
+                        
+                    if (o.required) option.setRequired(o.required);
+
+                    return option;
+
+                }
+
             )}
 
         });
