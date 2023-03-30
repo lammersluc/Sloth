@@ -46,7 +46,19 @@ module.exports = {
 
                 if (newState.status === AudioPlayerStatus.Idle && !player.resource) {
 
-                    if (!client.queue.get(interaction.guildId).songs[1] === undefined) { connection.state.subscription.player.stop(); return connection.destroy(); }
+                    if (client.queue.get(interaction.guildId).loop === true) {
+
+                        let stream = play.stream(client.queue.get(interaction.guildId).songs[0].url);
+
+                        let resource = createAudioResource(stream.stream, {
+                            inputType: stream.type
+                        });
+
+                        player.play(resource);
+
+                    }
+
+                    if (!client.queue.get(interaction.guildId).songs[1]) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
 
                     client.queue.get(interaction.guildId).songs.shift();
 
@@ -77,7 +89,7 @@ module.exports = {
                     .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
                     .setURL(song.url)
                     .setDescription(null)
-                    .setThumbnail(song.thumbnails.slice(-1).url)
+                    .setThumbnail(song.thumbnails.slice[0].url)
                     .setTimestamp(song.user.time)
                     .setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
 
@@ -90,7 +102,7 @@ module.exports = {
                         playing: true,
                         loop: false,
                         volume: 100,
-                        repeat: false,
+                        loop: false,
                     });
             
                 client.queue.get(interaction.guildId).songs.push(song);
@@ -149,7 +161,7 @@ module.exports = {
                             .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
                             .setURL(song.url)
                             .setDescription(null)
-                            .setThumbnail(song.thumbnails.slice(-1).url)
+                            .setThumbnail(song.thumbnails[0].url)
                             .setTimestamp(song.user.time)
                             .setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
 
@@ -162,7 +174,7 @@ module.exports = {
                             playing: true,
                             loop: false,
                             volume: 100,
-                            repeat: false,
+                            loop: false,
                         });
                 
                         client.queue.get(interaction.guildId).songs.push(song);

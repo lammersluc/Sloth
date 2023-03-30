@@ -19,7 +19,7 @@ module.exports = {
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
-        if (!queue.songs[1]) { player.stop(); connection.destroy(); return interaction.editReply({ embeds: [embed.setDescription('There is nothing in the queue to skip to. So the bot has left the voice channel.')] }); }
+        if (!queue.songs[1]) { player.stop(); connection.destroy(); client.queue.delete(interaction.guildId); return interaction.editReply({ embeds: [embed.setDescription('There is nothing in the queue to skip to. So the bot has left the voice channel.')] }); }
 
         client.queue.get(interaction.guildId).songs.shift();
 

@@ -1,3 +1,4 @@
+const { getVoiceConnection } = require('@discordjs/voice');
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
