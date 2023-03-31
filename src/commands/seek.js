@@ -23,7 +23,7 @@ module.exports = {
         let queue = client.queue.get(interaction.guildId);
         let time = interaction.options.getInteger('time');
         
-        if (queue === undefined) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         let song = queue.songs[0];
