@@ -1,4 +1,5 @@
 const { getVoiceConnection, createAudioResource } = require('@discordjs/voice');
+const moment = require('moment');
 const play = require('play-dl');
 const { EmbedBuilder } = require('discord.js');
 
@@ -39,7 +40,7 @@ module.exports = {
 
         song.startedTime = time;
 
-        interaction.editReply({ embeds: [embed.setDescription(`Seeked to \`${time}\` seconds.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`Seeked to \`${moment(time * 1000).format('m:ss')}\`.`)] });
 
     }
 }
