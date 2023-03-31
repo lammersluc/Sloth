@@ -12,7 +12,7 @@ client.musicquiz = [];
 
 process.on('uncaughtException', (e) => {
 
-    client.users.cache.get('388755086462943232').send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+    client.users.cache.get('431882442035691550').send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
 });
 
