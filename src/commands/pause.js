@@ -1,4 +1,4 @@
-const { getVoiceConnection } = require('@discordjs/voice');
+const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
@@ -22,8 +22,8 @@ module.exports = {
         let connection = getVoiceConnection(interaction.guildId);
         let player = connection.state.subscription.player;
         
-        if (queue.playing) { client.queue.get(interaction.guildId).playing = false; player.pause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
-        if (!queue.playing) { client.queue.get(interaction.guildId).playing = true; player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been resumed.')] }); }
+        if (player.state === AudioPlayerStatus.Paused) { player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been unpaused.')] }); }
+        else { player.pause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
         
     }
 }

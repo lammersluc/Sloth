@@ -100,9 +100,6 @@ module.exports = {
 
                     client.queue.set(interaction.guildId, {
                         songs: [],
-                        playing: true,
-                        loop: false,
-                        volume: 100,
                         loop: false,
                     });
             
@@ -178,9 +175,6 @@ module.exports = {
 
                         client.queue.set(interaction.guildId, {
                             songs: [],
-                            playing: true,
-                            loop: false,
-                            volume: 100,
                             loop: false,
                         });
                 
