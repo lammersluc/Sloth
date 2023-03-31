@@ -22,7 +22,7 @@ module.exports = {
         let connection = getVoiceConnection(interaction.guildId);
         let player = connection.state.subscription.player;
         
-        if (player.state === AudioPlayerStatus.Paused) { player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been unpaused.')] }); }
+        if (player.state.status === AudioPlayerStatus.Paused) { player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been unpaused.')] }); }
         else { player.pause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
         
     }
