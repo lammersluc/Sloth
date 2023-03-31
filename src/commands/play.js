@@ -43,27 +43,21 @@ module.exports = {
                 }
             });
 
-            player.addListener('stateChange', (oldState, newState) => {
+            player.addListener('stateChange', async (oldState, newState) => {
 
-                if (newState.status === AudioPlayerStatus.Idle && !player.resource && client.queue.get(interaction.guildId) !== undefined) {
+                let queue = client.queue.get(interaction.guildId);
 
-                    if (client.queue.get(interaction.guildId).loop === true) {
+                if (newState.status === AudioPlayerStatus.Idle && !player.resource && queue) {
 
-                        let stream = play.stream(client.queue.get(interaction.guildId).songs[0].url);
+                    if (!queue.loop) {
 
-                        let resource = createAudioResource(stream.stream, {
-                            inputType: stream.type
-                        });
+                        queue.songs.shift();
 
-                        player.play(resource);
+                        if (queue.songs.length === 0) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
 
                     }
-
-                    if (!client.queue.get(interaction.guildId).songs[1]) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
-
-                    client.queue.get(interaction.guildId).songs.shift();
-
-                    let stream = play.stream(client.queue.get(interaction.guildId).songs[0].url);
+                    
+                    let stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url);
 
                     let resource = createAudioResource(stream.stream, {
                         inputType: stream.type
@@ -114,18 +108,6 @@ module.exports = {
                 player.play(resource);
             
                 connection.subscribe(player);
-
-                player.addListener('stateChange', (oldState, newState) => {
-                    if (newState.status === AudioPlayerStatus.Idle && !player.resource) {
-                        client.queue.get(interaction.guildId).songs.shift();
-                        if (!client.queue.get(interaction.guildId).songs[0]) { client.distube.voices.leave(interaction); return interaction.editReply({ embeds: [embed.setDescription('The queue is empty. So the bot has left the voice channel.')] }); }
-                        let stream = play.stream(client.queue.get(interaction.guildId).songs[0].url);
-                        let resource = createAudioResource(stream.stream, {
-                            inputType: stream.type
-                        });
-                        player.play(resource);
-                    }
-                });
 
             } else {
 

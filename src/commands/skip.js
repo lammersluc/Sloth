@@ -17,7 +17,7 @@ module.exports = {
         let connection = getVoiceConnection(interaction.guildId);
         let player = connection.state.subscription.player;
 
-        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         if (!queue.songs[1]) { player.stop(); connection.destroy(); client.queue.delete(interaction.guildId); return interaction.editReply({ embeds: [embed.setDescription('There is nothing in the queue to skip to. So the bot has left the voice channel.')] }); }
 

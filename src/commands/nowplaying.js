@@ -15,7 +15,7 @@ module.exports = {
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.queue.get(interaction.guildId);
 
-        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing.')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         
         const song = queue.songs[0];
@@ -30,9 +30,9 @@ module.exports = {
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
             .setURL(song.url)
-            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(time).format('m:ss')} / ${song.durationRaw}\``)
+            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(time).format('m:ss')} / ${song.durationRaw} | 🔉 100%\``)
             .setThumbnail(song.thumbnails[0].url)
-            .setTimestamp(song.user.time)
+            .setTimestamp(Date.now() - time)
             .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
         });
         

@@ -23,13 +23,13 @@ module.exports = {
         let queue = client.queue.get(interaction.guildId);
         let time = interaction.options.getInteger('time');
         
-        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now')] });
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         let song = queue.songs[0];
 
         if (time < 0) time = 0;
-        else if (time > song.durationInSec) time = song.durationInSec;
+        else if (time > (song.durationInSec - 5)) time = song.durationInSec - 5;
 
         let stream = await play.stream(song.url, { seek: time });
         let resource = createAudioResource(stream.stream, {

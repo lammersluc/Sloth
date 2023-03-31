@@ -162,9 +162,8 @@ module.exports = {
                     .setColor(client.embedColor)
                     .setTitle(`\`${song.name}\` - \`${song.artist.toString().replace(/,/g, ', ')}\``)
                     .setURL(psong.url)
-                    .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.durationRaw}\``)
+                    .setDescription(`\`${psong.views.toLocaleString()} 👀 | ${psong.likes.toLocaleString()} 👍 | ${psong.durationRaw} | 🔉 100%\``)
                     .setThumbnail(psong.thumbnails[0].url)
-                    .setTimestamp()
                     .addFields({ name: 'Scoreboard', value: textScoreboard.map(player => `${player.player} - ${player.score} pts`).toString().replace(/,/g, '\n') })
                     .setFooter({ text: `Round ${round + 1} / ${rounds}` })
                 ]});
