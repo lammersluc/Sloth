@@ -1,3 +1,4 @@
+const { getVoiceConnection } = require('@discordjs/voice');
 const { EmbedBuilder } = require('discord.js');
 const moment = require('moment');
 
@@ -18,16 +19,18 @@ module.exports = {
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         
         const song = queue.songs[0];
+
+        let time = song.startedTime * 1000 + getVoiceConnection(interaction.guildId).state.subscription.player._state.resource.playbackDuration;
         
         let watchBar = '──────────────────────────────────────────────────'.split('');
-        watchBar[Math.floor(moment(Date.now() - song.user.time).format('s') / song.durationInSec * 50)] = '⚪';
+        watchBar[Math.floor(time / song.durationInSec / 20)] = '⚪';
         watchBar = watchBar.join('');
 
         interaction.editReply({ embeds: [embed
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
             .setURL(song.url)
-            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(Date.now() - song.user.time).format('m:ss')} / ${song.durationRaw}\``)
+            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(time).format('m:ss')} / ${song.durationRaw}\``)
             .setThumbnail(song.thumbnails[0].url)
             .setTimestamp(song.user.time)
             .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]

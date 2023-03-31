@@ -52,7 +52,8 @@ module.exports = {
         let connection = joinVoiceChannel({
             channelId: interaction.member.voice.channel.id,
             guildId: interaction.guild.id,
-            adapterCreator: interaction.guild.voiceAdapterCreator
+            adapterCreator: interaction.guild.voiceAdapterCreator,
+            selfDeaf: true
         });
 
         let player = createAudioPlayer({
@@ -82,7 +83,7 @@ module.exports = {
             else artists.push(song.artist.toLowerCase());
 
             let result = await play.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 });
-            let stream = await play.stream(result[0].url);
+            let stream = await play.stream(result[0].url, { seek: Math.floor(result[0].durationInSec / 3) });
             let resource = createAudioResource(stream.stream, {
                 inputType: stream.type,
             });

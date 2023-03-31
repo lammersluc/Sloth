@@ -33,7 +33,8 @@ module.exports = {
             let connection = joinVoiceChannel({
                 channelId: interaction.member.voice.channel.id,
                 guildId: interaction.guild.id,
-                adapterCreator: interaction.guild.voiceAdapterCreator
+                adapterCreator: interaction.guild.voiceAdapterCreator,
+                selfDeaf: true
             });
 
             let player = createAudioPlayer({
@@ -44,7 +45,7 @@ module.exports = {
 
             player.addListener('stateChange', (oldState, newState) => {
 
-                if (newState.status === AudioPlayerStatus.Idle && !player.resource) {
+                if (newState.status === AudioPlayerStatus.Idle && !player.resource && client.queue.get(interaction.guildId) !== undefined) {
 
                     if (client.queue.get(interaction.guildId).loop === true) {
 
@@ -80,8 +81,8 @@ module.exports = {
             if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
 
                 yt_info[0].user = interaction.user;
-                yt_info[0].user.time = Date.now();
                 song = yt_info[0];
+                song.startedTime = 0;
 
                 interaction.editReply({ embeds: [embed
 
@@ -149,11 +150,17 @@ module.exports = {
 
                         collector.stop();
 
-                        if (button.component.customId === 'cancel') return interaction.editReply({ embeds: [embed.setDescription('Cancelled.')], components: [] });
+                        if (button.component.customId === 'cancel') {
+
+                            if (client.queue.get(interaction.guildId) === undefined) connection.destroy();
+
+                            return interaction.editReply({embeds: [embed.setDescription('Cancelled.')], components: [] });
+
+                        }
 
                         yt_info[parseInt(button.customId)].user = interaction.user;
-                        yt_info[parseInt(button.customId)].user.time = Date.now();
                         song = yt_info[parseInt(button.customId)];
+                        song.startedTime = 0;
 
                         interaction.editReply({ embeds: [embed
 

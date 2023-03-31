@@ -10,11 +10,11 @@ client.embedColor = '#fbd55a';
 client.queue = new Map();
 client.musicquiz = [];
 
-// process.on('uncaughtException', (e) => {
+process.on('uncaughtException', (e) => {
 
-//     client.users.cache.get('388755086462943232').send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+    client.users.cache.get('388755086462943232').send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
-// });
+});
 
 setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' }); }, 60 * 60000);
 
