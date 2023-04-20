@@ -22,15 +22,24 @@ module.exports = {
 
         let time = song.startedTime * 1000 + getVoiceConnection(interaction.guildId).state.subscription.player._state.resource.playbackDuration;
         
-        let watchBar = '──────────────────────────────────────────────────'.split('');
-        watchBar[Math.floor(time / song.durationInSec / 20)] = '⚪';
-        watchBar = watchBar.join('');
+        let watchBar;
+        if (song.durationInSec === 0) {
+
+            watchBar = '──────────────────────────────────────────────────⚪'
+
+        } else {
+
+            watchBar = '──────────────────────────────────────────────────'.split('');
+            watchBar[Math.floor(time / song.durationInSec / 20)] = '⚪';
+            watchBar = watchBar.join('');
+
+        }
 
         interaction.editReply({ embeds: [embed
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
             .setURL(song.url)
-            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(time).format('m:ss')} / ${song.durationRaw} | 🔉 100%\``)
+            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(time).format('m:ss')} / ${song.durationRaw === "0:00" ? "live" : song.durationRaw} | 🔉 100%\``)
             .setThumbnail(song.thumbnails[0].url)
             .setTimestamp(Date.now() - time)
             .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]

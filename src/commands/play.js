@@ -112,7 +112,7 @@ module.exports = {
             } else {
 
                 const list = yt_info
-                    .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw}\``)
+                    .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
                     .join('\n\n')
 
                 let row = new ActionRowBuilder();
