@@ -20,13 +20,14 @@ module.exports = {
             type: 'string',
             choices: [
                 { name: 'Cmd', value: 'cmd' },
-                { name: 'Code', value: 'code'},
-                { name: 'Restart', value: 'restart'}
+                { name: 'Code', value: 'code'}
             ],
-            required: true },
+            required: true
+        },
         {
             name: 'input',
-            type: 'string' 
+            type: 'string',
+            required: true
         }
     ],
     enabled: true,
@@ -40,7 +41,7 @@ module.exports = {
 
         if (action=== 'cmd') {
 
-            if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a command to run.`)] });
+            // if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a command to run.`)] });
 
             embed.setTitle('CMD');
             let stdout;
@@ -72,7 +73,7 @@ module.exports = {
 
             try {
 
-                if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a command to run.`)] });
+                // if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide code to run.`)] });
 
                 embed.setTitle('Code');
 
@@ -93,14 +94,6 @@ module.exports = {
 
             } catch (e) { interaction.editReply({ embeds: [embed.setDescription(`An error occured: \`\`\`js\n${clean(e)}\`\`\``)] }); }
 
-        } else if (action === 'restart') {
-
-            interaction.editReply({ embeds: [embed.setDescription(`Restarting...`)] });
-            client.user.setPresence({ activities: [{ name: `Restarting...`, type: ActivityType.Listening }], status: 'idle' });
-    
-            spawn('pm2 restart sloth', { shell: true });
-
         }
-
     }
 }

@@ -5,14 +5,18 @@ const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
 client.commands = new Discord.Collection();
-client.devs = ['431882442035691550', '388755086462943232'];
+client.devs = ['431882442035691550'];
 client.embedColor = '#fbd55a';
 client.queue = new Map();
 client.musicquiz = [];
 
 process.on('uncaughtException', (e) => {
 
-    client.users.cache.get('431882442035691550').send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+  client.dev.forEach(dev => {
+
+    client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+
+  });
 
 });
 
