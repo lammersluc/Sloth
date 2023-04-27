@@ -26,7 +26,8 @@ module.exports = {
         },
         {
             name: 'input',
-            type: 'string'
+            type: 'string',
+            required: true
         }
     ],
     enabled: true,
