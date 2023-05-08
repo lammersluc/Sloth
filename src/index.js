@@ -12,7 +12,7 @@ client.musicquiz = [];
 
 process.on('uncaughtException', (e) => {
 
-  client.dev.forEach(dev => {
+  client.devs.forEach(dev => {
 
     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
@@ -51,7 +51,6 @@ client
 
     client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
 
-  });
-
+  })
 
 client.login(process.env.DISCORD_TOKEN);
