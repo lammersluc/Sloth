@@ -86,7 +86,7 @@ module.exports = {
                     .setDescription(null)
                     .setThumbnail(song.thumbnails.slice[0].url)
                     .setTimestamp(song.user.time)
-                    .setFooter({ text: `${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
+                    .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
 
                 });
 
@@ -149,7 +149,7 @@ module.exports = {
                             .setDescription(null)
                             .setThumbnail(song.thumbnails[0].url)
                             .setTimestamp(song.user.time)
-                            .setFooter({ text: `${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
+                            .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
 
                         });
                 

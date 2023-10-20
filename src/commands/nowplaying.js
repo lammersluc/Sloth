@@ -42,7 +42,7 @@ module.exports = {
             .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${song.likes.toLocaleString()} 👍 | ${moment(time).format('m:ss')} / ${song.durationRaw === "0:00" ? "live" : song.durationRaw} | 🔉 100%\``)
             .setThumbnail(song.thumbnails[0].url)
             .setTimestamp(Date.now() - time)
-            .setFooter({ text: `${song.user.username}#${song.user.discriminator}`, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
+            .setFooter({ text: song.user.username, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
         });
         
     }
