@@ -1,12 +1,12 @@
 const { EmbedBuilder, ChannelType } = require("discord.js");
 
-module.exports = async (client, message) => {
+module.exports = async (client: any, message: any) => {
     
-    if (message.author.id === client.user.id) return;
+    if (message.author.id == client.user.id) return;
     let embed = new EmbedBuilder().setColor(client.embedColor);
     const guild = client.guilds.cache.get('971056840123252736');
     const tickets = guild.channels.cache.get('984118604805050398');
-    const channel = guild.channels.cache.find(c => c.name == `${message.author.username.toLowerCase().replace(/\W/g, '')}-${message.author.id}`);
+    const channel = guild.channels.cache.find((c: any) => c.name == `${message.author.username.toLowerCase().replace(/\W/g, '')}-${message.author.id}`);
 
     if (channel) return channel.send(message.content);
 
@@ -15,7 +15,7 @@ module.exports = async (client, message) => {
     guild.channels.create({
         name: `${message.author.username.toLowerCase().replace(/\W/g, '')}-${message.author.id}`,
         type: ChannelType.GuildText
-    }).then(channel => {
+    }).then((channel: any) => {
         channel.setParent(tickets)
         channel.send({ embeds: [embed.setDescription(`This ticket was created by ${message.author}.`)] })
         channel.send(message.content);

@@ -1,14 +1,14 @@
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    name: 'queue',
-    description: 'Shows the queue.',
+    name: 'shuffle',
+    description: 'Shuffles the queue.',
     category: 'music',
     options: [],
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.queue.get(interaction.guildId);
@@ -16,11 +16,14 @@ module.exports = {
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
-        const q = queue.songs
-            .map((song, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} [\`${song.title}\`](${song.url}) - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
-            .join('\n');
+        let song = queue.songs[0]
+        queue.songs.shift();
+        queue.songs = queue.songs.sort(() => Math.random() - 0.5);
+        queue.songs.unshift(song);
 
-        interaction.editReply({ embeds: [embed.setTitle('**Server Queue**').setDescription(q)] });
+        client.queue.get(interaction.guildId).songs = queue.songs;
+
+        interaction.editReply({ embeds: [embed.setDescription('Shuffled the songs in queue.')] });
         
     }
 }

@@ -1,6 +1,6 @@
 const { PermissionsBitField, EmbedBuilder } = require("discord.js");
 
-module.exports = async (client, interaction) => {
+module.exports = async (client:any, interaction: any) => {
     
     if (!interaction.isChatInputCommand()) return;
 

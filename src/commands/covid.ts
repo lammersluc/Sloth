@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require('discord.js');
-const axios = require('axios');
 
 module.exports = {
     name: 'covid',
@@ -15,13 +14,14 @@ module.exports = {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
 
         try {
 
-            let data = await axios.get(`https://disease.sh/v3/covid-19/countries/${interaction.options.getString('country')}`);
+            const response = await fetch(`https://disease.sh/v3/covid-19/countries/${interaction.options.getString('country')}`);
+            const data = await response.json();
 
             interaction.editReply({ embeds: [embed
                     .addFields(

@@ -8,7 +8,7 @@ module.exports = {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
 

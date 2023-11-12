@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require('discord.js');
-const axios = require('axios');
 const moment = require('moment');
 
 module.exports = {
@@ -16,13 +15,14 @@ module.exports = {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
 
         let embed = new EmbedBuilder();
 
         try {
             
-            let data = await axios.get(`https://www.reddit.com/r/${interaction.options.getString('subreddit')}/random/.json`);
+            const response = await fetch(`https://www.reddit.com/r/${interaction.options.getString('subreddit')}/random/.json`);
+            const data = await response.json();
             let url = '';
 
             if (data.data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data.data[0].data.children[0].data.url}`);

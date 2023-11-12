@@ -1,4 +1,3 @@
-require('dotenv').config();
 require('./utils.js');
 const { commandLoader } = require('./handlers/commandLoader.js');
 const Discord = require('discord.js');
@@ -14,7 +13,7 @@ process.on('uncaughtException', (e) => {
 
     if (e.stack.includes('Sign in to confirm your age')) return;
 
-    client.devs.forEach(dev => {
+    client.devs.forEach((dev: string[]) => {
 
         client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
@@ -34,18 +33,18 @@ client
 
     })
 
-    .on('interactionCreate', interaction => { return require('./events/interactionCreate.js') (client, interaction); })
+    .on('interactionCreate', (interaction: any) => { return require('./events/interactionCreate.js') (client, interaction); })
 
-    .on('messageCreate', message => {
+    .on('messageCreate', (message: any) => {
 
-        if (message.channel.parentId === '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
-        if (message.channel.type === 1) return require('./events/dmMessageCreate.js') (client, message);
+        if (message.channel.parentId == '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
+        if (message.channel.type == 1) return require('./events/dmMessageCreate.js') (client, message);
 
     })
 
-    .on('channelDelete', channel => {
+    .on('channelDelete', (channel: any) => {
 
-        if (channel.parentId === '984118604805050398') require('./events/ticketClose.js') (client, channel);
+        if (channel.parentId == '984118604805050398') require('./events/ticketClose.js') (client, channel);
 
     })
 
@@ -55,4 +54,4 @@ client
 
     })
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(Bun.env.DISCORD_TOKEN);

@@ -8,11 +8,11 @@ module.exports = {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
 
-        interaction.editReply({embeds: [embed.setDescription('Pinging...')]}).then(msg => {
+        interaction.editReply({embeds: [embed.setDescription('Pinging...')]}).then((msg: any) => {
 
             interaction.editReply({ embeds: [embed.setDescription(`Pong. The response time is ${msg.createdTimestamp - interaction.createdTimestamp}ms. The API latency is ${client.ws.ping}ms.`)] });
         

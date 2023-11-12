@@ -1,13 +1,10 @@
-const { EmbedBuilder, ActivityType } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { spawn } = require('child_process');
 
-function clean(string) {
-    if (typeof text === "string") {
-      return string.replace(/`/g, "`" + String.fromCharCode(8203))
-      .replace(/@/g, "@" + String.fromCharCode(8203))
-    } else {
-      return string;
-    }
+function clean(string: string) {
+    return string
+        .replace(/`/g, "`" + String.fromCharCode(8203))
+        .replace(/@/g, "@" + String.fromCharCode(8203))
 }
 
 module.exports = {
@@ -33,24 +30,22 @@ module.exports = {
     enabled: true,
     devOnly: true,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
         let action = interaction.options.getString('action');
         let input = interaction.options.getString('input');
 
-        if (action=== 'cmd') {
-
-            // if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide a command to run.`)] });
+        if (action== 'cmd') {
 
             embed.setTitle('CMD');
-            let stdout;
-            let stderr;
+            let stdout: string;
+            let stderr: string;
             
             const cmd = spawn(input, { shell: true });
 
-            cmd.stdout.on('data', (data) => { stdout = data.toString(); });
-            cmd.stderr.on('data', (data) => { stderr = data.toString(); });
+            cmd.stdout.on('data', (data: string) => stdout = data.toString() );
+            cmd.stderr.on('data', (data: string) => stderr = data.toString() );
 
             cmd.on('close', () => {
 
@@ -69,18 +64,16 @@ module.exports = {
 
             });
 
-        } else if (action === 'code') {
+        } else if (action == 'code') {
 
             try {
-
-                // if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide code to run.`)] });
 
                 embed.setTitle('Code');
 
                 let evaled = eval(input);
 
                 if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
-                if (evaled === 'undefined') evaled = 'No output.';
+                if (evaled == 'undefined') evaled = 'No output.';
                 if (evaled.length > 1024) evaled = evaled.slice(0, 1021) + '...';
 
                 embed.addFields(
@@ -92,7 +85,7 @@ module.exports = {
 
                 interaction.editReply({ embeds: [embed] });
 
-            } catch (e) { interaction.editReply({ embeds: [embed.setDescription(`An error occured: \`\`\`js\n${clean(e)}\`\`\``)] }); }
+            } catch (e) { interaction.editReply({ embeds: [embed.setDescription(`An error occured: \`\`\`js\n${clean(e as string)}\`\`\``)] }); }
 
         }
     }

@@ -9,7 +9,7 @@ module.exports = {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
 
@@ -22,7 +22,7 @@ module.exports = {
         let connection = getVoiceConnection(interaction.guildId);
         let player = connection.state.subscription.player;
         
-        if (player.state.status === AudioPlayerStatus.Paused) { player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been unpaused.')] }); }
+        if (player.state.status == AudioPlayerStatus.Paused) { player.unpause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been unpaused.')] }); }
         else { player.pause(); return interaction.editReply({ embeds: [embed.setDescription('The song has been paused.')] }); }
         
     }

@@ -16,12 +16,12 @@ module.exports = {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client, interaction) => {
+    run: async (client: any, interaction: any) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const string = interaction.options.getString('search');
         const voiceChannel = interaction.member.voice.channel;
-        let yt_info;
+        let yt_info: any[];
         let song;
 
         if (!voiceChannel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
@@ -43,17 +43,17 @@ module.exports = {
                 }
             });
 
-            player.addListener('stateChange', async (oldState, newState) => {
+            player.addListener('stateChange', async (oldState: any, newState: any) => {
 
                 let queue = client.queue.get(interaction.guildId);
 
-                if (newState.status === AudioPlayerStatus.Idle && !player.resource && queue) {
+                if (newState.status == AudioPlayerStatus.Idle && !player.resource && queue) {
 
                     if (!queue.loop) {
 
                         queue.songs.shift();
 
-                        if (queue.songs.length === 0) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
+                        if (queue.songs.length == 0) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
 
                     }
                     
@@ -112,7 +112,7 @@ module.exports = {
             } else {
 
                 const list = yt_info
-                    .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
+                    .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw == "0:00" ? "live" : song.durationRaw}\``)
                     .join('\n\n')
 
                 let row = new ActionRowBuilder();
@@ -121,17 +121,17 @@ module.exports = {
                 yt_info.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((yt_info.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(yt_info.indexOf(result).toString())); });
                 row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
 
-                interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
-                    const filter = (button) => button.user.id === interaction.user.id;
+                interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then((msg: any) => {
+                    const filter = (button: any) => button.user.id == interaction.user.id;
 
-                    collector = msg.createMessageComponentCollector({ filter, time: 30000 })
-                    collector.on('collect', async (button) => {
+                    const collector: any = msg.createMessageComponentCollector({ filter, time: 30000 })
+                    collector.on('collect', async (button: any) => {
 
                         collector.stop();
 
-                        if (button.component.customId === 'cancel') {
+                        if (button.component.customId == 'cancel') {
 
-                            if (client.queue.get(interaction.guildId) === undefined) connection.destroy();
+                            if (client.queue.get(interaction.guildId) == undefined) connection.destroy();
 
                             return interaction.editReply({embeds: [embed.setDescription('Cancelled.')], components: [] });
 
@@ -174,7 +174,7 @@ module.exports = {
 
                     })
                 
-                    collector.on('end', c => { if (c.size === 0) interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
+                    collector.on('end', (c: any) => { if (c.size == 0) interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
 
                 });
 

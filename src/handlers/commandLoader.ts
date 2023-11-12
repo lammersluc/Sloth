@@ -2,9 +2,9 @@ const { commandRegister } = require('./commandRegister');
 const { SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 
-async function commandLoader(client) {
+async function commandLoader(client: any) {
 
-    fs.readdirSync('./src/commands').map(file => {
+    fs.readdirSync('./src/commands').map((file: any) => {
 
         const command = require(`../commands/${file}`);
     
@@ -14,7 +14,7 @@ async function commandLoader(client) {
     
     });
 
-    const data = client.commands.map(cmd => {
+    const data = client.commands.map((cmd: any) => {
 
         if (!cmd.enabled) return;
             
@@ -22,11 +22,11 @@ async function commandLoader(client) {
             .setName(cmd.name)
             .setDescription('Sloth')
 
-        cmd.options.map(o => { 
+        cmd.options.map((o: any) => { 
             
             if (o.type === 'string') {
                 
-                commands.addStringOption(option => { option
+                commands.addStringOption((option: any) => { option
                 
                         .setName(o.name)
                         .setDescription('Sloth')
@@ -42,7 +42,7 @@ async function commandLoader(client) {
 
             )} else if (o.type === 'integer') { 
 
-                commands.addIntegerOption(option => { option
+                commands.addIntegerOption((option: any) => { option
 
                         .setName(o.name)
                         .setDescription('Sloth')
@@ -58,7 +58,7 @@ async function commandLoader(client) {
                 
             )} else if (o.type === 'user') { 
 
-                commands.addUserOption(option => { option
+                commands.addUserOption((option: any) => { option
 
                         .setName(o.name)
                         .setDescription('Sloth')
@@ -71,7 +71,7 @@ async function commandLoader(client) {
                 
             )} else if (o.type === 'boolean') {
                 
-                commands.addBooleanOption(option => { option
+                commands.addBooleanOption((option: any) => { option
                 
                         .setName(o.name)
                         .setDescription('Sloth')

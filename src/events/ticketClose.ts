@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 
-module.exports = async (client, channel) => {
+module.exports = async (client: any, channel: any) => {
     
     let embed = new EmbedBuilder().setColor(client.embedColor);
     const userid = channel.name.split('-').pop();
