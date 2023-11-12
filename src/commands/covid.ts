@@ -27,38 +27,38 @@ module.exports = {
                     .addFields(
                         {
                             name: 'Country',
-                            value: data.data.country.toString()
+                            value: data.country.toString()
                         },
                         {
                             name: 'Cases',
-                            value: data.data.cases.toLocaleString()
+                            value: data.cases.toLocaleString()
                         },
                         {
                             name: 'Deaths',
-                            value: data.data.deaths.toLocaleString()
+                            value: data.deaths.toLocaleString()
                         },
                         {
                             name: 'Recovered',
-                            value: data.data.recovered.toLocaleString()
+                            value: data.recovered.toLocaleString()
                         },
                         {
                             name: 'Active',
-                            value: data.data.active.toLocaleString()
+                            value: data.active.toLocaleString()
                         },
                         {
                             name: 'Critical',
-                            value: data.data.critical.toLocaleString()
+                            value: data.critical.toLocaleString()
                         },
                         {
                             name: 'Cases Today',
-                            value: data.data.todayCases.toLocaleString()
+                            value: data.todayCases.toLocaleString()
                         },
                         {
                             name: 'Deaths Today',
-                            value: data.data.todayDeaths.toLocaleString()
+                            value: data.todayDeaths.toLocaleString()
                         }
                     )
-                    .setThumbnail(data.data.countryInfo.flag)
+                    .setThumbnail(data.countryInfo.flag)
                 ]});
             
         } catch(e) { interaction.editReply({ embeds: [embed.setDescription('Country doesn\'t exist.')] }); }

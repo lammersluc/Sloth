@@ -25,15 +25,15 @@ module.exports = {
             const data = await response.json();
             let url = '';
 
-            if (data.data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data.data[0].data.children[0].data.url}`);
-            else url = data.data[0].data.children[0].data.url;
+            if (data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data[0].data.children[0].data.url}`);
+            else url = data[0].data.children[0].data.url;
             
             embed
-                .setAuthor({name:`${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}`})
-                .setTitle(`${data.data[0].data.children[0].data.title}`)
-                .setDescription(`${data.data[0].data.children[0].data.selftext}\n${url}`)
-                .setFooter({text:`u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)`})
-                .setURL(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`)
+                .setAuthor({name:`${data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}`})
+                .setTitle(`${data[0].data.children[0].data.title}`)
+                .setDescription(`${data[0].data.children[0].data.selftext}\n${url}`)
+                .setFooter({text:`u/${data[0].data.children[0].data.author} | ${data[0].data.children[0].data.ups} Upvotes | ${data[0].data.children[0].data.num_comments} Comment(s)`})
+                .setURL(`https://www.reddit.com${data[0].data.children[0].data.permalink}`)
                 .setColor(client.embedColor);
 
 
