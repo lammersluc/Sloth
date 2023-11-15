@@ -1,14 +1,14 @@
-# sloth
+# Sloth
 
 To install dependencies:
 
-```bash
+```sh
 bun install
 ```
 
 To run:
 
-```bash
+```sh
 bun run index.ts
 ```
 
