@@ -4,8 +4,8 @@ module.exports = async (client: any, message: any) => {
     
     if (message.author.id == client.user.id) return;
     let embed = new EmbedBuilder().setColor(client.embedColor);
-    const guild = client.guilds.cache.get('971056840123252736');
-    const tickets = guild.channels.cache.get('984118604805050398');
+    const guild = client.guilds.cache.get(process.env.TICKET_GUILD);
+    const tickets = guild.channels.cache.get(process.env.TICKET_CATEGORIE);
     const channel = guild.channels.cache.find((c: any) => c.name == `${message.author.username.toLowerCase().replace(/\W/g, '')}-${message.author.id}`);
 
     if (channel) return channel.send(message.content);

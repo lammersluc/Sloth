@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
 client.commands = new Discord.Collection();
-client.devs = ['431882442035691550'];
+client.devs = (process.env.DEVS ?? '').split(',');
 client.embedColor = '#fbd55a';
 client.queue = new Map();
 client.musicquiz = [];
@@ -37,14 +37,14 @@ client
 
     .on('messageCreate', (message: any) => {
 
-        if (message.channel.parentId == '984118604805050398') return require('./events/ticketMessageCreate.js') (client, message);
+        if (message.channel.parentId == process.env.TICKET_CATEGORIE) return require('./events/ticketMessageCreate.js') (client, message);
         if (message.channel.type == 1) return require('./events/dmMessageCreate.js') (client, message);
 
     })
 
     .on('channelDelete', (channel: any) => {
 
-        if (channel.parentId == '984118604805050398') require('./events/ticketClose.js') (client, channel);
+        if (channel.parentId == process.env.TICKET_CATEGORIE) require('./events/ticketClose.js') (client, channel);
 
     })
 
@@ -54,4 +54,4 @@ client
 
     })
 
-client.login(Bun.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN);
