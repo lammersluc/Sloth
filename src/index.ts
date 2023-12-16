@@ -29,7 +29,7 @@ client
         commandLoader(client);
 
         client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' });
-        console.log(`Logged in as ${client.user.tag}.`);
+        console.log(`Logged in as ${client.user.tag}`);
 
     })
 
