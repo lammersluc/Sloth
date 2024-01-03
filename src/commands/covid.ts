@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+import { EmbedBuilder } from 'discord.js';
 
 module.exports = {
     name: 'covid',
@@ -21,7 +21,7 @@ module.exports = {
         try {
 
             const response = await fetch(`https://disease.sh/v3/covid-19/countries/${interaction.options.getString('country')}`);
-            const data = await response.json();
+            const data = await response.json() as any;
 
             interaction.editReply({ embeds: [embed
                     .addFields(

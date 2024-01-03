@@ -1,7 +1,7 @@
 const { getVoiceConnection, createAudioResource } = require('@discordjs/voice');
-const moment = require('moment');
-const play = require('play-dl');
-const { EmbedBuilder } = require('discord.js');
+import moment from 'moment';
+import play from 'play-dl';
+import { EmbedBuilder } from 'discord.js';
 
 module.exports = {
     name: 'seek',

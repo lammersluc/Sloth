@@ -1,6 +1,6 @@
-const { PermissionsBitField, EmbedBuilder } = require("discord.js");
+import { PermissionsBitField, EmbedBuilder, BaseClient } from "discord.js";
 
-module.exports = async (client:any, interaction: any) => {
+module.exports = async (client: any, interaction: any) => {
     
     if (!interaction.isChatInputCommand()) return;
 

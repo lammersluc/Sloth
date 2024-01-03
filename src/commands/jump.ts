@@ -1,6 +1,6 @@
 const { createAudioResource, getVoiceConnection } = require('@discordjs/voice');
-const { EmbedBuilder } = require('discord.js');
-const play = require('play-dl');
+import { EmbedBuilder } from 'discord.js';
+import play from 'play-dl';
 
 module.exports = {
     name: 'jump',

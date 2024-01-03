@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 
 module.exports = {
     name: 'help',
@@ -15,7 +15,7 @@ module.exports = {
         let categories: string[] = [];
 
         client.commands.forEach((cmd: any) => { if(!categories.includes(cmd.category) && cmd.category !== 'dev') categories.push(cmd.category); });
-        categories.forEach((category: any) => { row.addComponents(new ButtonBuilder().setStyle('Primary').setLabel(category.capitalize()).setCustomId(category)); });
+        categories.forEach((category: any) => { row.addComponents(new ButtonBuilder().setStyle(1).setLabel(category.capitalize()).setCustomId(category)); });
 
         interaction.editReply({ embeds: [embed.setDescription('Choose a category to show help from.')], components: [row] }).then((msg: any) => {
 

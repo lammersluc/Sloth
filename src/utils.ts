@@ -80,7 +80,7 @@ function editDistance(s1: string, s2: string) {
   
 }
 
-module.exports = {
+export {
 
     sleep,
     similarity

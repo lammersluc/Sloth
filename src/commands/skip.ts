@@ -1,6 +1,6 @@
-const { EmbedBuilder } = require('discord.js');
-const { getVoiceConnection, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
-const play = require('play-dl');
+import { EmbedBuilder } from 'discord.js';
+const { getVoiceConnection, createAudioResource } = require('@discordjs/voice');
+import play from 'play-dl';
 
 module.exports = {
     name: 'skip',

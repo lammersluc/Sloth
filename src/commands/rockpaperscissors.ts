@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 
 module.exports = {
     name: 'rockpaperscissors',
@@ -14,7 +14,7 @@ module.exports = {
         const emojis = ['🪨', '📰', '✂'];
         let row = new ActionRowBuilder();
 
-        emojis.forEach(emoji => { row.addComponents(new ButtonBuilder().setLabel(emoji).setStyle('Primary').setCustomId(emoji)); });
+        emojis.forEach(emoji => { row.addComponents(new ButtonBuilder().setLabel(emoji).setStyle(1).setCustomId(emoji)); });
 
 
         interaction.editReply({ embeds: [embed.setDescription('Rock, Paper or Scissors?')], components: [row] }).then(async (reply: any) => {

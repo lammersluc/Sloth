@@ -1,5 +1,5 @@
 const { getVoiceConnection } = require('@discordjs/voice');
-const { EmbedBuilder } = require('discord.js');
+import { EmbedBuilder } from 'discord.js';
 
 module.exports = {
     name: 'leave',

@@ -1,6 +1,6 @@
-const { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
-const { createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice')
-const play = require('play-dl')
+import { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
+const { createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
+import play from 'play-dl';
 
 module.exports = {
     name: 'play',
@@ -118,8 +118,8 @@ module.exports = {
                 let row = new ActionRowBuilder();
                 let row2 = new ActionRowBuilder();
 
-                yt_info.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((yt_info.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(yt_info.indexOf(result).toString())); });
-                row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
+                yt_info.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((yt_info.indexOf(result) + 1).toString()).setStyle(1).setCustomId(yt_info.indexOf(result).toString())); });
+                row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle(1).setCustomId('cancel'));
 
                 interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then((msg: any) => {
                     const filter = (button: any) => button.user.id == interaction.user.id;

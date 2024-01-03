@@ -1,4 +1,4 @@
-const { EmbedBuilder, ChannelType } = require("discord.js");
+import { EmbedBuilder, ChannelType } from "discord.js";
 
 module.exports = async (client: any, message: any) => {
     

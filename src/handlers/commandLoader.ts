@@ -1,6 +1,6 @@
-const { commandRegister } = require('./commandRegister');
-const { SlashCommandBuilder } = require('discord.js');
-const fs = require('fs');
+import { commandRegister } from './commandRegister';
+import { SlashCommandBuilder } from 'discord.js';
+import fs from 'fs';
 
 async function commandLoader(client: any) {
 
@@ -94,4 +94,4 @@ async function commandLoader(client: any) {
     
 }
 
-module.exports = { commandLoader };
+export { commandLoader };

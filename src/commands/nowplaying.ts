@@ -1,6 +1,6 @@
 const { getVoiceConnection } = require('@discordjs/voice');
-const { EmbedBuilder } = require('discord.js');
-const moment = require('moment');
+import { EmbedBuilder } from 'discord.js';
+import moment from 'moment';
 
 module.exports = {
     name: 'nowplaying',

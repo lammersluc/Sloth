@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require('discord.js');
-const moment = require('moment');
+import { EmbedBuilder } from 'discord.js';
+import moment from 'moment';
 
 module.exports = {
     name: 'reddit',
@@ -22,7 +22,7 @@ module.exports = {
         try {
             
             const response = await fetch(`https://www.reddit.com/r/${interaction.options.getString('subreddit')}/random/.json`);
-            const data = await response.json();
+            const data = await response.json() as any;
             let url = '';
 
             if (data[0].data.children[0].data.url.includes('i.redd.it')) embed.setImage(`${data[0].data.children[0].data.url}`);

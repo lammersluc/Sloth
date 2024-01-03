@@ -1,8 +1,8 @@
-const { EmbedBuilder, PermissionsBitField } = require('discord.js');
-const play = require('play-dl');
-const fs = require('fs');
-const { similarity, sleep } = require('../utils.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } = require('@discordjs/voice');
+import { EmbedBuilder, PermissionsBitField } from 'discord.js';
+import play from 'play-dl';
+import fs from 'fs';
+import { similarity, sleep } from '../utils.js';
+import { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } from '@discordjs/voice';
 
 module.exports = {
     name: 'musicquiz',
@@ -62,7 +62,7 @@ module.exports = {
             }
         });
 
-        let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json'));
+        let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json').toString());
         let tracks = data[0].tracks;
 
         while (round < rounds) {

@@ -1,5 +1,5 @@
-const { EmbedBuilder } = require('discord.js');
-const { spawn } = require('child_process');
+import { EmbedBuilder } from 'discord.js';
+import { spawn } from 'child_process';
 
 function clean(string: string) {
     return string

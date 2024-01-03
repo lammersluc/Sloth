@@ -1,19 +1,22 @@
-require('./utils.js');
-const { commandLoader } = require('./handlers/commandLoader.js');
-const Discord = require('discord.js');
+import { Interaction } from "discord.js";
+
+import { commandLoader } from './handlers/commandLoader.js';
+import Discord from 'discord.js';
 const { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
+
+
 client.commands = new Discord.Collection();
-client.devs = (process.env.DEVS ?? '').split(',');
+client.devs = (process.env.DEVS || '').split(',');
 client.embedColor = '#fbd55a';
 client.queue = new Map();
 client.musicquiz = [];
 
-process.on('uncaughtException', (e) => {
+process.on('uncaughtException', (e: Error) => {
 
-    if (e.stack.includes('Sign in to confirm your age')) return;
+    if (e.stack!.includes('Sign in to confirm your age')) return;
 
-    client.devs.forEach((dev: string[]) => {
+    client.devs.forEach((dev: string) => {
 
         client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
@@ -33,7 +36,7 @@ client
 
     })
 
-    .on('interactionCreate', (interaction: any) => { return require('./events/interactionCreate.js') (client, interaction); })
+    .on('interactionCreate', (interaction: Interaction) => { return require('./events/interactionCreate.js') (client, interaction); })
 
     .on('messageCreate', (message: any) => {
 
