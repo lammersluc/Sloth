@@ -1,7 +1,7 @@
 const { getVoiceConnection, AudioPlayerStatus } = require('@discordjs/voice');
 import { EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'pause',
     description: 'Pauses/Resumes the current song.',
     category: 'music',

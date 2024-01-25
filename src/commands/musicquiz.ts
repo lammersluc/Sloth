@@ -4,7 +4,7 @@ import fs from 'fs';
 import { similarity, sleep } from '../utils.js';
 import { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } from '@discordjs/voice';
 
-module.exports = {
+export default {
     name: 'musicquiz',
     description: 'Starts a music quiz.',
     category: 'music',

@@ -2,7 +2,7 @@ const { getVoiceConnection } = require('@discordjs/voice');
 import { EmbedBuilder } from 'discord.js';
 import moment from 'moment';
 
-module.exports = {
+export default {
     name: 'nowplaying',
     description: 'Shows info about the current song that is playing.',
     category: 'music',

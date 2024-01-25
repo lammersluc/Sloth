@@ -3,7 +3,7 @@ import moment from 'moment';
 import play from 'play-dl';
 import { EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'seek',
     description: 'Seek to a specific time in the current song.',
     category: 'music',

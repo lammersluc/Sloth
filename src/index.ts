@@ -38,13 +38,6 @@ client
 
     .on('interactionCreate', (interaction: Interaction) => { return require('./events/interactionCreate.js') (client, interaction); })
 
-    .on('messageCreate', (message: any) => {
-
-        if (message.channel.parentId == process.env.TICKET_CATEGORIE) return require('./events/ticketMessageCreate.js') (client, message);
-        if (message.channel.type == 1) return require('./events/dmMessageCreate.js') (client, message);
-
-    })
-
     .on('channelDelete', (channel: any) => {
 
         if (channel.parentId == process.env.TICKET_CATEGORIE) require('./events/ticketClose.js') (client, channel);

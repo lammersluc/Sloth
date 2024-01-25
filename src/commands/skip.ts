@@ -2,7 +2,7 @@ import { EmbedBuilder } from 'discord.js';
 const { getVoiceConnection, createAudioResource } = require('@discordjs/voice');
 import play from 'play-dl';
 
-module.exports = {
+export default {
     name: 'skip',
     description: 'Skips to the next song.',
     category: 'music',

@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'ping',
     description: 'Ping to test delay.',
     category: 'tools',

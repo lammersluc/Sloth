@@ -1,5 +1,5 @@
 import { commandRegister } from './commandRegister';
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, SlashCommandUserOption } from 'discord.js';
 import fs from 'fs';
 
 async function commandLoader(client: any) {
@@ -8,7 +8,7 @@ async function commandLoader(client: any) {
 
         const command = require(`../commands/${file}`);
     
-        client.commands.set(command.name, command);
+        client.commands.set(command);
     
         for(let alias in command.aliases) { client.aliases.set(command.aliases[alias], command.name); }
     
@@ -16,7 +16,7 @@ async function commandLoader(client: any) {
 
     const data = client.commands.map((cmd: any) => {
 
-        if (!cmd.enabled) return;
+        if (!cmd || !cmd.enabled) return;
             
         let commands = new SlashCommandBuilder()
             .setName(cmd.name)
@@ -31,10 +31,10 @@ async function commandLoader(client: any) {
                         .setName(o.name)
                         .setDescription('Sloth')
                         
-                    if (o.required) option.setRequired(o.required);
-                    if (o.minLength) option.setMinLength(o.minLength);
-                    if (o.maxLength) option.setMaxLength(o.maxLength);
-                    if (o.choices) option.addChoices(...o.choices);
+                    o.require && option.setRequired(o.required);
+                    o.minLength && option.setMinLength(o.minLength);
+                    o.maxLength && option.setMaxLength(o.maxLength);
+                    o.choices && option.addChoices(...o.choices);
 
                     return option;
 
@@ -47,10 +47,10 @@ async function commandLoader(client: any) {
                         .setName(o.name)
                         .setDescription('Sloth')
 
-                    if (o.required) option.setRequired(o.required);
-                    if (o.minValue) option.setMinValue(o.minValue);
-                    if (o.maxValue) option.setMaxValue(o.maxValue);
-                    if (o.choices) option.addChoices(...o.choices);
+                        o.require && option.setRequired(o.required);
+                        o.minLength && option.setMinLength(o.minLength);
+                        o.maxLength && option.setMaxLength(o.maxLength);
+                        o.choices && option.addChoices(...o.choices);
 
                     return option;
 
@@ -63,7 +63,7 @@ async function commandLoader(client: any) {
                         .setName(o.name)
                         .setDescription('Sloth')
 
-                    if (o.required) option.setRequired(o.required);
+                    o.required && option.setRequired(o.required);
 
                     return option;
 
@@ -76,7 +76,7 @@ async function commandLoader(client: any) {
                         .setName(o.name)
                         .setDescription('Sloth')
                         
-                    if (o.required) option.setRequired(o.required);
+                    o.required && option.setRequired(o.required);
 
                     return option;
 

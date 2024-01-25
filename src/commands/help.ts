@@ -1,6 +1,6 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'help',
     description: 'Help command.',
     category: 'info',

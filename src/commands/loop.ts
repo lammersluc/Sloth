@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'loop',
     description: 'Enables/Disables loop mode.',
     category: 'music',

@@ -7,7 +7,7 @@ function clean(string: string) {
         .replace(/@/g, "@" + String.fromCharCode(8203))
 }
 
-module.exports = {
+export default {
     name: 'dev',
     description: 'Runs dev commands.',
     category: 'dev',

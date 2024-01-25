@@ -2,7 +2,7 @@ const { createAudioResource, getVoiceConnection } = require('@discordjs/voice');
 import { EmbedBuilder } from 'discord.js';
 import play from 'play-dl';
 
-module.exports = {
+export default {
     name: 'jump',
     description: 'Jumps to a song in the queue.',
     category: 'music',

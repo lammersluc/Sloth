@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'random',
     description: 'Chooses a randum number between 1 and the argument.',
     category: 'tools',

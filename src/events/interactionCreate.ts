@@ -1,4 +1,4 @@
-import { PermissionsBitField, EmbedBuilder, BaseClient } from "discord.js";
+import { PermissionsBitField, EmbedBuilder } from "discord.js";
 
 module.exports = async (client: any, interaction: any) => {
     

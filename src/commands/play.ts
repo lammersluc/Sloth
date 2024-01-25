@@ -2,7 +2,7 @@ import { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } fr
 const { createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
 import play from 'play-dl';
 
-module.exports = {
+export default {
     name: 'play',
     description: 'Plays music in your voice channel.',
     category: 'music',

@@ -1,7 +1,7 @@
 const { getVoiceConnection } = require('@discordjs/voice');
 import { EmbedBuilder } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'leave',
     description: 'Makes the bot leave voice channel.',
     category: 'music',
