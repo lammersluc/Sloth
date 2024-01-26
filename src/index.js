@@ -1,3 +1,4 @@
+require('dotenv').config();
 require('./utils.js').default;
 const { commandLoader } = require('./handlers/commandLoader.js');
 const Discord = require('discord.js');

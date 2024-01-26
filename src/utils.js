@@ -80,7 +80,7 @@ async function sleep(ms) {
 
 }
 
-export default {
+module.exports = {
 
     similarity,
     sleep
