@@ -1,8 +1,8 @@
 const { createAudioResource, getVoiceConnection } = require('@discordjs/voice');
-import { EmbedBuilder } from 'discord.js';
-import play from 'play-dl';
+const { EmbedBuilder } = require('discord.js');
+const play = require('play-dl');
 
-export default {
+module.exports = {
     name: 'jump',
     description: 'Jumps to a song in the queue.',
     category: 'music',
@@ -10,18 +10,18 @@ export default {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client: any, interaction: any) => {
+    run: async (client, interaction) => {
 
-        const queue = client.queue.get(interaction.guildId)
         let embed = new EmbedBuilder().setColor(client.embedColor);
         let embed2 = new EmbedBuilder().setColor(client.embedColor);
+        const queue = client.queue.get(interaction.guildId)
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
         if (queue.songs.length <= 1) return interaction.editReply({ embeds: [embed.setDescription('There is nothing to jump to.')] });
 
         const q = queue.songs
-            .map((song: any, i: number) => `${i == 0 ? 'Now Playing:' : `${i}.`} \`${song.title}\` - \`${song.durationRaw}\``)
+            .map((song, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} \`${song.title}\` - \`${song.durationRaw}\``)
             .join('\n')
 
         interaction.editReply({ embeds: [embed
@@ -29,9 +29,9 @@ export default {
             .setDescription(q)
         ]}).then(async () => {
 
-            const filter = (m: any) => m.author.id == interaction.member.id;
+            const filter = m => m.author.id === interaction.member.id;
 
-            interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors: ['time'] }).then(async (collected: any) => {
+            interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors: ['time'] }).then(async collected => {
 
                 let position = parseInt(collected.first().content);
 

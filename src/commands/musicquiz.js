@@ -1,10 +1,10 @@
-import { EmbedBuilder, PermissionsBitField } from 'discord.js';
-import play from 'play-dl';
-import fs from 'fs';
-import { similarity, sleep } from '../utils.js';
-import { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } from '@discordjs/voice';
+const { EmbedBuilder, PermissionsBitField } = require('discord.js');
+const play = require('play-dl');
+const fs = require('fs');
+const { similarity, sleep } = require('../utils.js');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } = require('@discordjs/voice');
 
-export default {
+module.exports = {
     name: 'musicquiz',
     description: 'Starts a music quiz.',
     category: 'music',
@@ -20,7 +20,7 @@ export default {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client:any , interaction: any) => {
+    run: async (client, interaction) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
         let rounds = interaction.options.getInteger('rounds');
@@ -31,11 +31,11 @@ export default {
         if (client.queue.get(interaction.guildId)) return interaction.editReply({ embeds: [embed.setTitle('I am already playing music.')] });
 
         client.musicquiz.push(interaction.guildId);
-        let scoreboard: any[] = [];
-        let textScoreboard: any[] = [];
-        let players: string[] = interaction.member.voice.channel.members.filter((member: any) => !member.user.bot).map((member: any) => member.id);
+        let scoreboard = [];
+        let textScoreboard = [];
+        let players = interaction.member.voice.channel.members.filter(member => !member.user.bot).map(member => member.id);
         let round = 0;
-        let played: number[] = [];
+        let played = [];
 
         players.forEach(member => scoreboard.push({ player: member, score: 0 }));
 
@@ -62,13 +62,13 @@ export default {
             }
         });
 
-        let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json').toString());
+        let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json'));
         let tracks = data[0].tracks;
 
         while (round < rounds) {
 
             let roundfinished = false;
-            let song: any;
+            let song;
             let random = Math.floor(Math.random() * tracks.length);
             while (played.includes(random)) random = Math.floor(Math.random() * tracks.length);
             song = tracks[random];
@@ -76,34 +76,33 @@ export default {
 
             let sguessed = '';
             let aguessed = '';
-            let passVotes: string[] = [];
+            let passVotes = [];
             let title = song.name.split(/[(-]/)[0].toLowerCase();
-            let artists: string[] = [];
-            if (song.artist && song.artist.constructor == Array) song.artist.forEach((a: string) => artists.push(a.toLowerCase()));
-            else if (song.artist) artists.push(song.artist.toLowerCase());
-
+            let artists = [];
+            if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
+            else artists.push(song.artist.toLowerCase());
 
             let result = await play.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 });
             let stream = await play.stream(result[0].url, { seek: Math.floor(result[0].durationInSec / 3) });
             let resource = createAudioResource(stream.stream, {
                 inputType: stream.type,
             });
-
+            
             player.play(resource);
 
             connection.subscribe(player);
 
-            const filter = (m: any) => players.includes(m.author.id);
+            const filter = m => players.includes(m.author.id);
             const collector = interaction.channel.createMessageCollector({ filter, time: 30000 });
 
-            collector.on('collect', async (m: any) => {
+            collector.on('collect', async m => {
 
-                if (m.content.toLowerCase() == 'stopquiz') {
+                if (m.content.toLowerCase() === 'stopquiz') {
                     rounds = round + 1;
                     return collector.stop();
                 }
 
-                if (m.content.toLowerCase() == 'pass' && !passVotes.includes(m.author.id)) {
+                if (m.content.toLowerCase() === 'pass' && !passVotes.includes(m.author.id)) {
 
                     passVotes.push(m.author.id);
                     m.react('⏭️')
@@ -133,7 +132,7 @@ export default {
 
                 if (sguessed && aguessed) {
 
-                    if (sguessed == aguessed) scoreboard.forEach(player => player.player == sguessed ? player.score ++ : null);
+                    if (sguessed === aguessed) scoreboard.forEach(player => player.player == sguessed ? player.score ++ : null);
 
                     collector.stop();
 

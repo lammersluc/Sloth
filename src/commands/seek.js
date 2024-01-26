@@ -1,9 +1,9 @@
 const { getVoiceConnection, createAudioResource } = require('@discordjs/voice');
-import moment from 'moment';
-import play from 'play-dl';
-import { EmbedBuilder } from 'discord.js';
+const moment = require('moment');
+const play = require('play-dl');
+const { EmbedBuilder } = require('discord.js');
 
-export default {
+module.exports = {
     name: 'seek',
     description: 'Seek to a specific time in the current song.',
     category: 'music',
@@ -17,7 +17,7 @@ export default {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client: any, interaction: any) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
         let queue = client.queue.get(interaction.guildId);

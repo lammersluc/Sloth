@@ -1,6 +1,6 @@
-import { EmbedBuilder } from 'discord.js';
+const { EmbedBuilder } = require('discord.js');
 
-export default {
+module.exports = {
     name: 'shuffle',
     description: 'Shuffles the queue.',
     category: 'music',
@@ -8,7 +8,7 @@ export default {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client: any, interaction: any) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.queue.get(interaction.guildId);

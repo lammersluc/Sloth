@@ -1,7 +1,7 @@
 const { getVoiceConnection } = require('@discordjs/voice');
-import { EmbedBuilder } from 'discord.js';
+const { EmbedBuilder } = require('discord.js');
 
-export default {
+module.exports = {
     name: 'leave',
     description: 'Makes the bot leave voice channel.',
     category: 'music',
@@ -9,7 +9,7 @@ export default {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client: any, interaction: any) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
 

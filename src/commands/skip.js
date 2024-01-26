@@ -1,8 +1,8 @@
-import { EmbedBuilder } from 'discord.js';
-const { getVoiceConnection, createAudioResource } = require('@discordjs/voice');
-import play from 'play-dl';
+const { EmbedBuilder } = require('discord.js');
+const { getVoiceConnection, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
+const play = require('play-dl');
 
-export default {
+module.exports = {
     name: 'skip',
     description: 'Skips to the next song.',
     category: 'music',
@@ -10,7 +10,7 @@ export default {
     enabled: true,
     devOnly: false,
     adminOnly: false,
-    run: async (client: any, interaction: any) => {
+    run: async (client, interaction) => {
         
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const queue = client.queue.get(interaction.guildId);

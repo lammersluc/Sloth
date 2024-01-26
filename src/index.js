@@ -1,22 +1,20 @@
-import { Interaction } from "discord.js";
-
-import { commandLoader } from './handlers/commandLoader.js';
-import Discord from 'discord.js';
+require('dotenv').config();
+require('./utils.js');
+const { commandLoader } = require('./handlers/commandLoader.js');
+const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType } = require('discord.js');
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.MessageContent, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessageReactions] });
-
-
 client.commands = new Discord.Collection();
-client.devs = (process.env.DEVS || '').split(',');
+client.devs = process.env.DEVS.split(',');
 client.embedColor = '#fbd55a';
 client.queue = new Map();
 client.musicquiz = [];
 
-process.on('uncaughtException', (e: Error) => {
+process.on('uncaughtException', (e) => {
 
-    if (e.stack!.includes('Sign in to confirm your age')) return;
+    if (e.stack.includes('Sign in to confirm your age')) return;
 
-    client.devs.forEach((dev: string) => {
+    client.devs.forEach(dev => {
 
         client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
@@ -32,17 +30,11 @@ client
         commandLoader(client);
 
         client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' });
-        console.log(`Logged in as ${client.user.tag}`);
+        console.log(`Logged in as ${client.user.tag}.`);
 
     })
 
-    .on('interactionCreate', (interaction: Interaction) => { return require('./events/interactionCreate.js') (client, interaction); })
-
-    .on('channelDelete', (channel: any) => {
-
-        if (channel.parentId == process.env.TICKET_CATEGORIE) require('./events/ticketClose.js') (client, channel);
-
-    })
+    .on('interactionCreate', interaction => { return require('./events/interactionCreate.js') (client, interaction); })
 
     .on('guildDelete', () => {
 
