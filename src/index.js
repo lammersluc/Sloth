@@ -1,5 +1,4 @@
-require('dotenv').config();
-require('./utils.js');
+require('./utils.js').default;
 const { commandLoader } = require('./handlers/commandLoader.js');
 const Discord = require('discord.js');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType } = require('discord.js');
@@ -34,12 +33,10 @@ client
 
     })
 
-    .on('interactionCreate', interaction => { return require('./events/interactionCreate.js') (client, interaction); })
+    .on('interactionCreate', interaction => require('./events/interactionCreate.js') (client, interaction))
 
-    .on('guildDelete', () => {
-
-        client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' });
-
-    })
+    .on('guildCreate', () => client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }))
+        
+    .on('guildDelete', () => client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }))
 
 client.login(process.env.DISCORD_TOKEN);
