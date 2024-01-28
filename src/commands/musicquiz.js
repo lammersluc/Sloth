@@ -62,6 +62,17 @@ module.exports = {
             }
         });
 
+        let startingResource = createAudioResource('./src/ext/countdown.mp3', {
+            inlineVolume: true
+        });
+
+        startingResource.volume.setVolume(client.volume);
+
+        player.play(startingResource);
+        connection.subscribe(player);
+
+        await new Promise((resolve) => player.on('idle', () => resolve() ));
+
         let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json'));
         let tracks = data[0].tracks;
 
@@ -85,11 +96,13 @@ module.exports = {
             let result = await play.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 });
             let stream = await play.stream(result[0].url, { seek: Math.floor(result[0].durationInSec / 3) });
             let resource = createAudioResource(stream.stream, {
+                inlineVolume: true,
                 inputType: stream.type,
             });
+
+            resource.volume.setVolume(client.volume);
             
             player.play(resource);
-
             connection.subscribe(player);
 
             const filter = m => players.includes(m.author.id);

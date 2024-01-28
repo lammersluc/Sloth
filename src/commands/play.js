@@ -39,7 +39,7 @@ module.exports = {
 
             let player = createAudioPlayer({
                 behaviors: {
-                    noSubscriber: NoSubscriberBehavior.Play
+                    noSubscriber: NoSubscriberBehavior.Stop
                 }
             });
 
@@ -60,8 +60,10 @@ module.exports = {
                     let stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url);
 
                     let resource = createAudioResource(stream.stream, {
+                        inlineVolume: true,
                         inputType: stream.type
                     });
+                    resource.volume.setVolume(client.volume);
 
                     player.play(resource);
 
@@ -102,8 +104,10 @@ module.exports = {
                 let stream = await play.stream(song.url);
             
                 let resource = createAudioResource(stream.stream, {
+                    inlineVolume: true,
                     inputType: stream.type
                 });
+                resource.volume.setVolume(client.volume);
             
                 player.play(resource);
             
@@ -165,9 +169,11 @@ module.exports = {
                         let stream = await play.stream(song.url);
                     
                         let resource = createAudioResource(stream.stream, {
+                            inlineVolume: true,
                             inputType: stream.type
                         });
-                    
+                        resource.volume.setVolume(client.volume);
+
                         player.play(resource);
                     
                         connection.subscribe(player);
