@@ -41,8 +41,6 @@ module.exports = {
 
             player.addListener('stateChange', async (oldState, newState) => {
 
-                if (newState.status === AudioPlayerStatus.AutoPaused) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
-
                 let queue = client.queue.get(interaction.guildId);
 
                 if (newState.status === AudioPlayerStatus.Idle && !player.resource && queue) {
