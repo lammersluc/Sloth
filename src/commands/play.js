@@ -21,7 +21,7 @@ module.exports = {
         let embed = new EmbedBuilder().setColor(client.embedColor);
         const string = interaction.options.getString('search');
         const voiceChannel = interaction.member.voice.channel;
-        let yt_info;
+        let search;
         let song;
 
         if (!voiceChannel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
@@ -68,14 +68,12 @@ module.exports = {
                 }
             });
 
-            yt_info = await play.search(string, {
-                limit: 5
-            })
+            search = (await play.search(string)).filter(v => !v.discretionAdvised).slice(0, 5);
 
             if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
 
-                yt_info[0].user = interaction.user;
-                song = yt_info[0];
+                search[0].user = interaction.user;
+                song = search[0];
                 song.startedTime = 0;
 
                 interaction.editReply({ embeds: [embed
@@ -113,14 +111,14 @@ module.exports = {
 
             } else {
 
-                const list = yt_info
+                const list = search
                     .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
                     .join('\n\n')
 
                 let row = new ActionRowBuilder();
                 let row2 = new ActionRowBuilder();
 
-                yt_info.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((yt_info.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(yt_info.indexOf(result).toString())); });
+                search.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((search.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(search.indexOf(result).toString())); });
                 row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
 
                 interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
@@ -139,8 +137,8 @@ module.exports = {
 
                         }
 
-                        yt_info[parseInt(button.customId)].user = interaction.user;
-                        song = yt_info[parseInt(button.customId)];
+                        search[parseInt(button.customId)].user = interaction.user;
+                        song = search[parseInt(button.customId)];
                         song.startedTime = 0;
 
                         interaction.editReply({ embeds: [embed
