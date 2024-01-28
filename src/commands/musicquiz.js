@@ -62,13 +62,12 @@ module.exports = {
             }
         });
 
-        let startingResource = createAudioResource('./src/ext/countdown.mp3', {
+        let resource = createAudioResource('./src/ext/countdown.mp3', {
             inlineVolume: true
         });
+        resource.volume.setVolume(client.volume);
 
-        startingResource.volume.setVolume(client.volume);
-
-        player.play(startingResource);
+        player.play(resource);
         connection.subscribe(player);
 
         await new Promise((resolve) => player.on('idle', () => resolve() ));
@@ -93,13 +92,12 @@ module.exports = {
             if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
             else artists.push(song.artist.toLowerCase());
 
-            let result = await play.search(`${title} ${artists.join(' ')} lyrics`, { limit: 1 });
+            let result = await play.search(`${title} ${artists.join(' ')}`, { limit: 1 });
             let stream = await play.stream(result[0].url, { seek: Math.floor(result[0].durationInSec / 3) });
             let resource = createAudioResource(stream.stream, {
                 inlineVolume: true,
                 inputType: stream.type,
             });
-
             resource.volume.setVolume(client.volume);
             
             player.play(resource);

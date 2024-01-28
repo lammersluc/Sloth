@@ -1,5 +1,5 @@
 const { PermissionsBitField, EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
-const { createAudioPlayer, createAudioResource, joinVoiceChannel, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice')
+const { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } = require('@discordjs/voice')
 const play = require('play-dl')
 
 module.exports = {
@@ -37,13 +37,11 @@ module.exports = {
                 selfDeaf: true
             });
 
-            let player = createAudioPlayer({
-                behaviors: {
-                    noSubscriber: NoSubscriberBehavior.Stop
-                }
-            });
+            let player = createAudioPlayer();
 
             player.addListener('stateChange', async (oldState, newState) => {
+
+                if (newState.status === AudioPlayerStatus.AutoPaused) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
 
                 let queue = client.queue.get(interaction.guildId);
 
