@@ -87,7 +87,7 @@ module.exports = {
             let sguessed = '';
             let aguessed = '';
             let passVotes = [];
-            let title = song.name.split(/[(-]/)[0].toLowerCase();
+            let title = song.name.split(/[-]/)[0].replace(/\([^()]*\)/g, '').trim().toLowerCase();
             let artists = [];
             if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
             else artists.push(song.artist.toLowerCase());
