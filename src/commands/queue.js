@@ -17,7 +17,7 @@ module.exports = {
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         const q = queue.songs
-            .map((song, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} [\`${song.title}\`](${song.url}) - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
+            .map((song, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} [\`${song.title}\`](${song.url}) - \`${song.live ? "live" : song.durationRaw}\``)
             .join('\n');
 
         interaction.editReply({ embeds: [embed.setTitle('**Server Queue**').setDescription(q)] });

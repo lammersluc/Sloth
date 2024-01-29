@@ -43,11 +43,12 @@ module.exports = {
 
                 let player = connection.state.subscription.player;
 
-                let stream = await play.stream(queue.songs[0].url);
+                let stream = await play.stream(queue.songs[0].url, { quality: 2 });
             
                 let resource = createAudioResource(stream.stream, {
                     inputType: stream.type
                 });
+                resource.volume.setVolume(client.volume);
         
                 player.play(resource);
 

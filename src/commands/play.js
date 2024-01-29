@@ -44,15 +44,31 @@ module.exports = {
 
                 if (newState.status === AudioPlayerStatus.Idle && !player.resource && queue) {
 
-                    if (!queue.loop) {
+                    let stream;
 
-                        queue.songs.shift();
+                    if (queue.loop) stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url, { quality: 2 });
+                    else {
 
-                        if (queue.songs.length === 0) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
+                        while (true) {
+
+                            queue.songs.shift();
+        
+                            if (queue.songs.length <= 0) { connection.state.subscription.player.stop(); connection.destroy(); return client.queue.delete(interaction.guildId); }
+        
+    
+                            try {
+    
+                                stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url, { quality: 2 });
+    
+                            } catch(e) {
+                                continue;
+                            }
+    
+                            break;
+
+                        }
 
                     }
-                    
-                    let stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url, { quality: 2 });
 
                     let resource = createAudioResource(stream.stream, {
                         inlineVolume: true,
@@ -63,132 +79,92 @@ module.exports = {
                     player.play(resource);
 
                 }
+
             });
 
+            const search = await play.search(string, { limit: 5 });
 
-            if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+            if (search.length === 0) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] }); 
 
-                const song = await play.search(string, { limit: 1 })[0];
+            const list = search
+                .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.live ? "live" : song.durationRaw}\``)
+                .join('\n\n')
 
-                if (!song) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] });
+            let row = new ActionRowBuilder();
+            let row2 = new ActionRowBuilder();
 
-                if(song.discretionAdvised) return interaction.editReply({ embeds: [embed.setDescription('This video is marked as discretion advised.')] });
+            search.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((search.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(search.indexOf(result).toString())); });
+            row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
 
-                search[0].user = interaction.user;
-                song.startedTime = 0;
+            interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
+                const filter = (button) => button.user.id === interaction.user.id;
 
-                interaction.editReply({ embeds: [embed
+                collector = msg.createMessageComponentCollector({ filter, time: 30000 })
+                collector.on('collect', async (button) => {
 
-                    .setAuthor({ name: 'Added Song' })
-                    .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
-                    .setURL(song.url)
-                    .setDescription(null)
-                    .setThumbnail(song.thumbnails[0].url)
-                    .setTimestamp(song.user.time)
-                    .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
+                    collector.stop();
 
-                });
+                    if (button.component.customId === 'cancel') {
 
-                if (client.queue.has(interaction.guildId)) return client.queue.get(interaction.guildId).songs.push(song);
+                        if (client.queue.get(interaction.guildId) === undefined) connection.destroy();
+
+                        return interaction.editReply({embeds: [embed.setDescription('Cancelled.')], components: [] });
+
+                    }
+
+                    const song = search[parseInt(button.customId)];
+
+                    song.user = interaction.user;
+                    song.startedTime = 0;
+
+                    interaction.editReply({ embeds: [embed
+
+                        .setAuthor({ name: 'Added Song' })
+                        .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
+                        .setURL(song.url)
+                        .setDescription(null)
+                        .setThumbnail(song.thumbnails[0].url)
+                        .setTimestamp(song.user.time)
+                        .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
+
+                    });
+            
+                    if (client.queue.has(interaction.guildId)) return client.queue.get(interaction.guildId).songs.push(song);
 
                     client.queue.set(interaction.guildId, {
                         songs: [],
                         loop: false,
                     });
             
-                client.queue.get(interaction.guildId).songs.push(song);
-            
-                let stream = await play.stream(song.url, { quality: 2 });
-            
-                let resource = createAudioResource(stream.stream, {
-                    inlineVolume: true,
-                    inputType: stream.type
-                });
-                resource.volume.setVolume(client.volume);
-            
-                player.play(resource);
-            
-                connection.subscribe(player);
-
-            } else {
-
-                const search = await play.search(string, { limit: 5 });
-
-                if (search.length === 0) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] }); 
-
-                const list = search
-                    .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
-                    .join('\n\n')
-
-                let row = new ActionRowBuilder();
-                let row2 = new ActionRowBuilder();
-
-                search.forEach(result => { row.addComponents(new ButtonBuilder().setLabel((search.indexOf(result) + 1).toString()).setStyle('Primary').setCustomId(search.indexOf(result).toString())); });
-                row2.addComponents(new ButtonBuilder().setLabel('❌').setStyle('Primary').setCustomId('cancel'));
-
-                interaction.editReply({ embeds: [embed.setTitle(`**Which song do you want to play?**`).setDescription(list)], components: [row, row2] }).then(msg => {
-                    const filter = (button) => button.user.id === interaction.user.id;
-
-                    collector = msg.createMessageComponentCollector({ filter, time: 30000 })
-                    collector.on('collect', async (button) => {
-
-                        collector.stop();
-
-                        if (button.component.customId === 'cancel') {
-
-                            if (client.queue.get(interaction.guildId) === undefined) connection.destroy();
-
-                            return interaction.editReply({embeds: [embed.setDescription('Cancelled.')], components: [] });
-
-                        }
-
-                        const song = search[parseInt(button.customId)];
-
-                        if (song.discretionAdvised) return interaction.editReply({ embeds: [embed.setDescription('This video is marked as discretion advised.')] });
-
-                        song.user = interaction.user;
-                        song.startedTime = 0;
-
-                        interaction.editReply({ embeds: [embed
-
-                            .setAuthor({ name: 'Added Song' })
-                            .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
-                            .setURL(song.url)
-                            .setDescription(null)
-                            .setThumbnail(song.thumbnails[0].url)
-                            .setTimestamp(song.user.time)
-                            .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
-
-                        });
-                
-                        if (client.queue.has(interaction.guildId)) return client.queue.get(interaction.guildId).songs.push(song);
-
-                        client.queue.set(interaction.guildId, {
-                            songs: [],
-                            loop: false,
-                        });
-                
-                        client.queue.get(interaction.guildId).songs.push(song);
+                    client.queue.get(interaction.guildId).songs.push(song);
                     
-                        let stream = await play.stream(song.url, { quality: 2 });
+                    let stream;
                     
-                        let resource = createAudioResource(stream.stream, {
-                            inlineVolume: true,
-                            inputType: stream.type
-                        });
-                        resource.volume.setVolume(client.volume);
+                    try {
 
-                        player.play(resource);
-                    
-                        connection.subscribe(player);
+                        stream = await play.stream(song.url, { quality: 2 });
 
-                    })
+                    } catch(e) {
+                        client.queue.delete(interaction.guildId);
+                        connection.destroy();
+                        return interaction.editReply({ embeds: [embed.setAuthor({ name: 'Couldn\'t add song' }).setDescription('This video is age restricted.')] });
+                    }
                 
-                    collector.on('end', c => { if (c.size === 0) interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
+                    let resource = createAudioResource(stream.stream, {
+                        inlineVolume: true,
+                        inputType: stream.type
+                    });
+                    resource.volume.setVolume(client.volume);
 
-                });
+                    player.play(resource);
+                
+                    connection.subscribe(player);
 
-            }
+                })
+            
+                collector.on('end', c => { if (c.size === 0) interaction.editReply({ embeds: [embed.setDescription('You didn\'t choose anything after 30 seconds.')], components: [] }); });
+
+            });
 
         } catch (e) {
 

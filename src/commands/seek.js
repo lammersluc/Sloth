@@ -31,10 +31,13 @@ module.exports = {
         if (time < 0) time = 0;
         else if (time > (song.durationInSec - 5)) time = song.durationInSec - 5;
 
-        let stream = await play.stream(song.url, { seek: time });
+        let stream = await play.stream(song.url, { seek: time, quality: 2 });
+
         let resource = createAudioResource(stream.stream, {
+            inlineVolume: true,
             inputType: stream.type,
         });
+        resource.volume.setVolume(client.volume);
 
         getVoiceConnection(interaction.guild.id).state.subscription.player.play(resource);
 

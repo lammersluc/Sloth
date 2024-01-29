@@ -55,7 +55,7 @@ Click on the emoji below to join the quiz.`)
         await startMsg.react('🙋‍♂️');
 
         await new Promise((resolve) => {
-            startMsg.awaitReactions({ time: 15000 }).then(collected => {
+            startMsg.awaitReactions({ time: 2000 }).then(collected => {
                 collected.forEach(r => r.users.cache.forEach(u => !u.bot && players.push(u.id)));
                 startMsg.reactions.removeAll();
                 resolve();
@@ -95,27 +95,46 @@ Click on the emoji below to join the quiz.`)
         await new Promise((resolve) => player.on('idle', () => resolve() ));
 
         let data = await JSON.parse(fs.readFileSync('./src/ext/spotify.json'));
-        let tracks = data[0].tracks;
+        const tracks = data[0].tracks;
 
         while (round < rounds) {
 
             let roundfinished = false;
-            let song;
-            let random = Math.floor(Math.random() * tracks.length);
-            while (played.includes(random)) random = Math.floor(Math.random() * tracks.length);
-            song = tracks[random];
-            played.push(random);
-
             let tGuessed = '';
             let aGuessed = '';
             let passVotes = [];
-            let title = song.name.split(/[-]/)[0].replace(/\([^()]*\)/g, '').trim().toLowerCase();
-            let artists = [];
-            if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
-            else artists.push(song.artist.toLowerCase());
 
-            let search = (await play.search(`${title} ${artists.join(' ')} official`)).filter(v => !v.discretionAdvised)[0];
-            let stream = await play.stream(search.url, { seek: Math.floor(search.durationInSec / 3), quality: 2 });
+            let song;
+            let random = Math.floor(Math.random() * tracks.length);;
+            let title;
+            let artists = [];
+
+            let search;
+            let stream;
+
+            while (true) {
+
+                while (played.includes(random)) random = Math.floor(Math.random() * tracks.length);
+                song = tracks[random];
+                title = song.name.split(/[-]/)[0].replace(/\([^()]*\)/g, '').trim().toLowerCase();
+                played.push(random);
+
+                if (song.artist.constructor === Array) song.artist.forEach(a => artists.push(a.toLowerCase()));
+                else artists.push(song.artist.toLowerCase());
+
+                search = (await play.search(`${title} ${artists.join(' ')} official`))[0];
+
+                
+                try {
+                    stream = await play.stream(search.url, { seek: Math.floor(search.durationInSec / 3), quality: 2 });
+                } catch(e) {
+                    continue;
+                }
+
+                break;
+
+            }
+
             let resource = createAudioResource(stream.stream, {
                 inlineVolume: true,
                 inputType: stream.type,

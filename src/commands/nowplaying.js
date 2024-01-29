@@ -23,7 +23,7 @@ module.exports = {
         let time = song.startedTime * 1000 + getVoiceConnection(interaction.guildId).state.subscription.player._state.resource.playbackDuration;
         
         let watchBar;
-        if (song.durationInSec === 0) {
+        if (song.live) {
 
             watchBar = '──────────────────────────────────────────────────⚪'
 
@@ -39,7 +39,7 @@ module.exports = {
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
             .setURL(song.url)
-            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${moment(time).format('m:ss')} / ${song.live ? "live" : song.durationRaw} | ${search.uploadedAt}\``)
+            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${moment(time).format('m:ss')} / ${song.live ? "live" : song.durationRaw} | ${song.uploadedAt}\``)
             .setThumbnail(song.thumbnails[0].url)
             .setTimestamp(Date.now() - time)
             .setFooter({ text: song.user.username, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]

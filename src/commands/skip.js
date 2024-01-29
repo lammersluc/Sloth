@@ -19,15 +19,29 @@ module.exports = {
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
-        if (!queue.songs[1]) { player.stop(); connection.destroy(); client.queue.delete(interaction.guildId); return interaction.editReply({ embeds: [embed.setDescription('There is nothing in the queue to skip to. So the bot has left the voice channel.')] }); }
+        
+        let stream;
 
-        client.queue.get(interaction.guildId).songs.shift();
+        while (queue.songs.length > 0) {
 
-        let stream = await play.stream(queue.songs[0].url);
+            queue.songs.shift();
+
+            if (!queue.songs[0]) { player.stop(); connection.destroy(); client.queue.delete(interaction.guildId); return interaction.editReply({ embeds: [embed.setDescription('There is nothing in the queue to skip to. So the bot has left the voice channel.')] }); }
+
+            try {
+                stream = await play.stream(queue.songs[0].url, { quality: 2 });
+            } catch (e) {
+                continue;
+            }
+
+            break;
+
+        }
             
         let resource = createAudioResource(stream.stream, {
             inputType: stream.type
         });
+        resource.volume.setVolume(client.volume);
 
         player.play(resource);
 
