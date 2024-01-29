@@ -55,7 +55,7 @@ Click on the emoji below to join the quiz.`)
         await startMsg.react('🙋‍♂️');
 
         await new Promise((resolve) => {
-            startMsg.awaitReactions({ time: 2000 }).then(collected => {
+            startMsg.awaitReactions({ time: 15000 }).then(collected => {
                 collected.forEach(r => r.users.cache.forEach(u => !u.bot && players.push(u.id)));
                 startMsg.reactions.removeAll();
                 resolve();
