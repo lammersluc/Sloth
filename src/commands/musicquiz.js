@@ -2,7 +2,7 @@ const { EmbedBuilder, PermissionsBitField } = require('discord.js');
 const play = require('play-dl');
 const fs = require('fs');
 const { similarity, sleep } = require('../utils.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, NoSubscriberBehavior } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
 
 module.exports = {
     name: 'musicquiz',
@@ -33,38 +33,48 @@ module.exports = {
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('A music quiz is already in progress.')] });
 
         client.musicquiz.push(interaction.guildId);
-        let players = interaction.member.voice.channel.members.filter(member => !member.user.bot).map(member => member.id);
+
+        const startMsg = await interaction.editReply({ embeds: [embed
+            .setTitle('Music Quiz')
+            .setDescription(`
+The music quiz is starting soon...
+
+* You have **30 seconds** to guess each song.
+* There are **${rounds} rounds**.
+* If you don't know a song you can type \`pass\`.
+* You can stop the quiz at any time by typing \`stopquiz\`.
+
+Click on the emoji below to join the quiz.`)
+            .addFields(
+                { name: 'Points', value: '\`\`\`markdown\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 1 point for both\`\`\`' },
+            )
+        ]});
+
+        let players = [];
+
+        await startMsg.react('🙋‍♂️');
+
+        await new Promise((resolve) => {
+            startMsg.awaitReactions({ time: 15000 }).then(collected => {
+                collected.forEach(r => r.users.cache.forEach(u => !u.bot && players.push(u.id)));
+                startMsg.reactions.removeAll();
+                resolve();
+            });
+        });
+
+        if (players.length < 1) {
+
+            interaction.editReply({ embeds: [embed.setDescription('Not enough players.').setFields()] });
+            startMsg.reactions.removeAll();
+            return client.musicquiz.splice(client.musicquiz.indexOf(interaction.guildId), 1);
+
+        }
+
         let round = 0;
         let played = [];
 
         let scoreboard = players.map(p => { return { player: p, score: 0 }});
         let textScoreboard = [];
-
-        interaction.editReply({ embeds: [embed
-            .setTitle('Music Quiz')
-            .setDescription(`
-                The music quiz is starting soon...
-                * You have **30 seconds** to guess each song.
-                * There are **${rounds} rounds**.
-                * If you don\'t know a song you can type \`pass\`.
-                * You can stop the quiz at any time by typing \`stopquiz\`.
-                * Click on the emoji below to join the quiz.
-                `)
-            .addFields(
-                { name: 'Points', value: '\`\`\`diff\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 1 point for both\`\`\`' },
-                )
-        ]}).then(async m => {
-
-            m.react('🙋‍♂️');
-
-            const filter = (reaction, user) => reaction.emoji.name === '🙋‍♂️' && !user.bot;
-            
-            await m.awaitReactions({ filter, max: players.length, time: 30000 }).then(collected => {
-                players = collected;
-                console.log(players);
-            });
-        });
-                    
 
         let connection = joinVoiceChannel({
             channelId: interaction.member.voice.channel.id,
@@ -73,12 +83,7 @@ module.exports = {
             selfDeaf: true
         });
 
-        let player = createAudioPlayer({
-            behaviors: {
-                noSubscriber: NoSubscriberBehavior.Play
-            }
-        });
-
+        let player = createAudioPlayer();
         let resource = createAudioResource('./src/ext/countdown.mp3', {
             inlineVolume: true
         });
