@@ -12,16 +12,12 @@ client.musicquiz = [];
 client.volume = 0.3;
 
 process.on('uncaughtException', (e) => {
-
-    if (e.stack.includes('Sign in to confirm your age')) return;
     
-    // client.devs.forEach(dev => {
+    client.devs.forEach(dev => {
 
-    //     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+        client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
-    // });
-
-    console.log(e.stack);
+    });
 
 });
 
