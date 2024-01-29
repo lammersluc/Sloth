@@ -42,13 +42,29 @@ module.exports = {
 
         interaction.editReply({ embeds: [embed
             .setTitle('Music Quiz')
-            .setDescription(`The music quiz has started. You have **30 seconds** to guess each song. There are **${rounds} rounds**. If you don\'t know a song you can type \`pass\`.
-            You can stop the quiz at any time by typing \`stopquiz\`.`)
+            .setDescription(`
+                The music quiz is starting soon...
+                * You have **30 seconds** to guess each song.
+                * There are **${rounds} rounds**.
+                * If you don\'t know a song you can type \`pass\`.
+                * You can stop the quiz at any time by typing \`stopquiz\`.
+                * Click on the emoji below to join the quiz.
+                `)
             .addFields(
                 { name: 'Points', value: '\`\`\`diff\n+ 1 point for the song name\n+ 1 point for the artist name\n+ 1 point for both\`\`\`' },
-                { name: 'Players', value: scoreboard.map(p => `<@${p.player}>`).toString().replace(/,/g, '\n') }
                 )
-        ]});
+        ]}).then(async m => {
+
+            m.react('🙋‍♂️');
+
+            const filter = (reaction, user) => reaction.emoji.name === '🙋‍♂️' && !user.bot;
+            
+            await m.awaitReactions({ filter, max: players.length, time: 30000 }).then(collected => {
+                players = collected;
+                console.log(players);
+            });
+        });
+                    
 
         let connection = joinVoiceChannel({
             channelId: interaction.member.voice.channel.id,
