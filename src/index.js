@@ -21,8 +21,6 @@ process.on('uncaughtException', (e) => {
 
 });
 
-setInterval(() => { client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' }); }, 60 * 60000);
-
 client
     .on('ready', async () => {
 
@@ -35,8 +33,8 @@ client
 
     .on('interactionCreate', interaction => require('./events/interactionCreate.js') (client, interaction))
 
-    .on('guildCreate', () => client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }))
+    .on('guildCreate', () => client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }))
         
-    .on('guildDelete', () => client.user.setPresence({ activities: [{ name: `${client.prefix}Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }))
+    .on('guildDelete', () => client.user.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' }))
 
 client.login(process.env.DISCORD_TOKEN);
