@@ -71,10 +71,8 @@ module.exports = {
                     }
 
                     let resource = createAudioResource(stream.stream, {
-                        inlineVolume: true,
                         inputType: stream.type
                     });
-                    resource.volume.setVolume(client.volume);
 
                     player.play(resource);
 
@@ -151,10 +149,8 @@ module.exports = {
                     }
                 
                     let resource = createAudioResource(stream.stream, {
-                        inlineVolume: true,
                         inputType: stream.type
                     });
-                    resource.volume.setVolume(client.volume);
 
                     player.play(resource);
                 

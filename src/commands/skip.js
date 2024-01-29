@@ -41,7 +41,6 @@ module.exports = {
         let resource = createAudioResource(stream.stream, {
             inputType: stream.type
         });
-        resource.volume.setVolume(client.volume);
 
         player.play(resource);
 

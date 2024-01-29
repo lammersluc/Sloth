@@ -84,10 +84,7 @@ Click on the emoji below to join the quiz.`)
         });
 
         let player = createAudioPlayer();
-        let resource = createAudioResource('./src/ext/countdown.mp3', {
-            inlineVolume: true
-        });
-        resource.volume.setVolume(client.volume);
+        let resource = createAudioResource('./src/ext/countdown.mp3');
 
         player.play(resource);
         connection.subscribe(player);
@@ -136,10 +133,8 @@ Click on the emoji below to join the quiz.`)
             }
 
             let resource = createAudioResource(stream.stream, {
-                inlineVolume: true,
                 inputType: stream.type,
             });
-            resource.volume.setVolume(client.volume);
             
             player.play(resource);
             connection.subscribe(player);

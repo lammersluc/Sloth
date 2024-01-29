@@ -34,10 +34,8 @@ module.exports = {
         let stream = await play.stream(song.url, { seek: time, quality: 2 });
 
         let resource = createAudioResource(stream.stream, {
-            inlineVolume: true,
             inputType: stream.type,
         });
-        resource.volume.setVolume(client.volume);
 
         getVoiceConnection(interaction.guild.id).state.subscription.player.play(resource);
 
