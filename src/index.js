@@ -13,11 +13,13 @@ client.volume = 0.3;
 
 process.on('uncaughtException', (e) => {
     
-    client.devs.forEach(dev => {
+    // client.devs.forEach(dev => {
 
-        client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
+    //     client.users.cache.get(dev).send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
 
-    });
+    // });
+
+    console.log(e.stack);
 
 });
 

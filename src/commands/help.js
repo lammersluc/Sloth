@@ -19,7 +19,7 @@ module.exports = {
 
         interaction.editReply({ embeds: [embed.setDescription('Choose a category to show help from.')], components: [row] }).then(msg => {
 
-            const filter = (button) => button.member.id === interaction.member.id;
+            const filter = (button) => button.user.id === interaction.user.id;
 
             msg.awaitMessageComponent({ filter, time: 30000, errors: ['time'] }).then(button => {
 

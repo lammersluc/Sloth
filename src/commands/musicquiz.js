@@ -25,6 +25,7 @@ module.exports = {
         let embed = new EmbedBuilder().setColor(client.embedColor);
         let rounds = interaction.options.getInteger('rounds');
 
+        if (!interaction.guild) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
         if (!interaction.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setDescription('I need permissions to send messages in this channel in order to play a music quiz.')] });
         if (!interaction.member.voice.channel) return interaction.editReply({ embeds: [embed.setDescription('You are not in a voice channel.')] });
         if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Connect) || !interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Speak)) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to join or speak in this voice channel.')] });
@@ -93,7 +94,7 @@ module.exports = {
             else artists.push(song.artist.toLowerCase());
 
             let search = (await play.search(`${title} ${artists.join(' ')} official`)).filter(v => !v.discretionAdvised)[0];
-            let stream = await play.stream(search.url, { seek: Math.floor(search.durationInSec / 3) });
+            let stream = await play.stream(search.url, { seek: Math.floor(search.durationInSec / 3), quality: 2 });
             let resource = createAudioResource(stream.stream, {
                 inlineVolume: true,
                 inputType: stream.type,
@@ -109,6 +110,7 @@ module.exports = {
             collector.on('collect', async m => {
 
                 if (m.content.toLowerCase() === 'stopquiz') {
+                    m.react('🔴');
                     rounds = round + 1;
                     return collector.stop();
                 }
@@ -177,7 +179,7 @@ module.exports = {
                     .setColor(client.embedColor)
                     .setTitle(`\`${song.name}\` - \`${song.artist.toString().replace(/,/g, ', ')}\``)
                     .setURL(search.url)
-                    .setDescription(`\`${search.views.toLocaleString()} 👀 | ${search.durationRaw}\``)
+                    .setDescription(`\`${search.views.toLocaleString()} 👀 | ${search.durationRaw} | ${search.uploadedAt}\``)
                     .setThumbnail(search.thumbnails[0].url)
                     .addFields({ name: 'Scoreboard', value: textScoreboard.map(p => `${p.player} - ${p.score} pts`).toString().replace(/,/g, '\n') })
                     .setFooter({ text: `Round ${round + 1} / ${rounds}` })

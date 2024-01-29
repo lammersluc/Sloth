@@ -29,7 +29,7 @@ module.exports = {
             .setDescription(q)
         ]}).then(async () => {
 
-            const filter = m => m.author.id === interaction.member.id;
+            const filter = m => m.author.id === interaction.user.id;
 
             interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors: ['time'] }).then(async collected => {
 

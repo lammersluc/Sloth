@@ -19,16 +19,15 @@ module.exports = {
     run: async (client, interaction) => {
 
         let embed = new EmbedBuilder().setColor(client.embedColor);
-        const string = interaction.options.getString('search');
-        const voiceChannel = interaction.member.voice.channel;
-        let search;
-        let song;
 
-        if (!voiceChannel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
+        if (!interaction.guild) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
+        if (!interaction.member.voice.channel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
         if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Connect) || !interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has(PermissionsBitField.Flags.Speak)) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to join or speak in this voice channel.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         try {
+
+            const string = interaction.options.getString('search');
 
             let connection = joinVoiceChannel({
                 channelId: interaction.member.voice.channel.id,
@@ -53,7 +52,7 @@ module.exports = {
 
                     }
                     
-                    let stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url);
+                    let stream = await play.stream(client.queue.get(interaction.guildId).songs[0].url, { quality: 2 });
 
                     let resource = createAudioResource(stream.stream, {
                         inlineVolume: true,
@@ -69,10 +68,9 @@ module.exports = {
 
             if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
 
-                search = await play.search(string, { limit: 1 });
+                const song = await play.search(string, { limit: 1 })[0];
 
-                if (search.length === 0) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] });
-                song = search[0];
+                if (!song) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] });
 
                 if(song.discretionAdvised) return interaction.editReply({ embeds: [embed.setDescription('This video is marked as discretion advised.')] });
 
@@ -100,7 +98,7 @@ module.exports = {
             
                 client.queue.get(interaction.guildId).songs.push(song);
             
-                let stream = await play.stream(song.url);
+                let stream = await play.stream(song.url, { quality: 2 });
             
                 let resource = createAudioResource(stream.stream, {
                     inlineVolume: true,
@@ -114,7 +112,7 @@ module.exports = {
 
             } else {
 
-                search = await play.search(string, { limit: 5 });
+                const search = await play.search(string, { limit: 5 });
 
                 if (search.length === 0) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] }); 
 
@@ -144,7 +142,7 @@ module.exports = {
 
                         }
 
-                        song = search[parseInt(button.customId)];
+                        const song = search[parseInt(button.customId)];
 
                         if (song.discretionAdvised) return interaction.editReply({ embeds: [embed.setDescription('This video is marked as discretion advised.')] });
 
@@ -172,7 +170,7 @@ module.exports = {
                 
                         client.queue.get(interaction.guildId).songs.push(song);
                     
-                        let stream = await play.stream(song.url);
+                        let stream = await play.stream(song.url, { quality: 2 });
                     
                         let resource = createAudioResource(stream.stream, {
                             inlineVolume: true,
