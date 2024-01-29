@@ -39,7 +39,7 @@ module.exports = {
             .setAuthor({ name: 'Now Playing' })
             .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
             .setURL(song.url)
-            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${moment(time).format('m:ss')} / ${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
+            .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${moment(time).format('m:ss')} / ${song.live ? "live" : song.durationRaw} | ${search.uploadedAt}\``)
             .setThumbnail(song.thumbnails[0].url)
             .setTimestamp(Date.now() - time)
             .setFooter({ text: song.user.username, iconURL: song.user.displayAvatarURL({ dynamic: true, format: "png" }) })]
