@@ -130,20 +130,20 @@ module.exports = {
                 if (!tGuessed && tScore >= 0.75) {
 
                     m.react('✅'); 
-                    scoreboard.forEach(player => player.player == m.author.id && player.score ++);
+                    scoreboard.forEach(player => player.player === m.author.id && player.score ++);
                     tGuessed = m.author.id; 
 
                 } else if (!aGuessed && aScore >= 0.75) {
 
                     m.react('✅');
-                    scoreboard.forEach(player => player.player == m.author.id && player.score ++);
+                    scoreboard.forEach(player => player.player === m.author.id && player.score ++);
                     aGuessed = m.author.id;
 
                 } else m.react('❌');
 
                 if (tGuessed && aGuessed) {
 
-                    if (tGuessed === aGuessed) scoreboard.forEach(player => player.player == tGuessed && player.score ++);
+                    if (tGuessed === aGuessed) scoreboard.forEach(player => player.player === tGuessed && player.score ++);
 
                     collector.stop();
 

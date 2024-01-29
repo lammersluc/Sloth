@@ -12,8 +12,6 @@ client.musicquiz = [];
 client.volume = 0.3;
 
 process.on('uncaughtException', (e) => {
-
-    if (e.stack.includes('Sign in to confirm your age')) return;
     
     client.devs.forEach(dev => {
 

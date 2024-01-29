@@ -39,7 +39,7 @@ module.exports = {
         let action = interaction.options.getString('action');
         let input = interaction.options.getString('input');
 
-        if (action=== 'cmd') {
+        if (action === 'cmd') {
 
             embed.setTitle('CMD');
             let stdout;
@@ -70,8 +70,6 @@ module.exports = {
         } else if (action === 'code') {
 
             try {
-
-                // if (!input) return interaction.editReply({ embeds: [embed.setDescription(`Please provide code to run.`)] });
 
                 embed.setTitle('Code');
 

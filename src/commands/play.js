@@ -66,12 +66,17 @@ module.exports = {
                 }
             });
 
-            search = (await play.search(string)).filter(v => !v.discretionAdvised).slice(0, 5);
 
             if (string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
 
-                search[0].user = interaction.user;
+                search = await play.search(string, { limit: 1 });
+
+                if (search.length === 0) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] });
                 song = search[0];
+
+                if(song.discretionAdvised) return interaction.editReply({ embeds: [embed.setDescription('This video is marked as discretion advised.')] });
+
+                search[0].user = interaction.user;
                 song.startedTime = 0;
 
                 interaction.editReply({ embeds: [embed
@@ -80,7 +85,7 @@ module.exports = {
                     .setTitle(`\`${song.title}\` - \`${song.channel.name}\``)
                     .setURL(song.url)
                     .setDescription(null)
-                    .setThumbnail(song.thumbnails.slice[0].url)
+                    .setThumbnail(song.thumbnails[0].url)
                     .setTimestamp(song.user.time)
                     .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL({ dynamic: true, format: "png" }) })], components: []
 
@@ -109,6 +114,10 @@ module.exports = {
 
             } else {
 
+                search = await play.search(string, { limit: 5 });
+
+                if (search.length === 0) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] }); 
+
                 const list = search
                     .map((song, i) => `${i+1}. \`${song.title}\` - \`${song.durationRaw === "0:00" ? "live" : song.durationRaw}\``)
                     .join('\n\n')
@@ -135,8 +144,11 @@ module.exports = {
 
                         }
 
-                        search[parseInt(button.customId)].user = interaction.user;
                         song = search[parseInt(button.customId)];
+
+                        if (song.discretionAdvised) return interaction.editReply({ embeds: [embed.setDescription('This video is marked as discretion advised.')] });
+
+                        song.user = interaction.user;
                         song.startedTime = 0;
 
                         interaction.editReply({ embeds: [embed

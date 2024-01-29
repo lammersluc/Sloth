@@ -18,7 +18,7 @@ function similarity(s1, s2) {
 
     var longerLength = longer.length;
 
-    if (longerLength == 0) {
+    if (longerLength === 0) {
 
       return 1.0;
 
@@ -41,7 +41,7 @@ function editDistance(s1, s2) {
 
     for (var j = 0; j <= s2.length; j++) {
 
-      if (i == 0)
+      if (i === 0)
 
         costs[j] = j;
 
@@ -51,7 +51,7 @@ function editDistance(s1, s2) {
 
           var newValue = costs[j - 1];
 
-          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+          if (s1.charAt(i - 1) !== s2.charAt(j - 1))
 
             newValue = Math.min(Math.min(newValue, lastValue),
               costs[j]) + 1;
