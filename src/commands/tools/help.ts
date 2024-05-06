@@ -45,7 +45,8 @@ export default {
 
             embed.setFields([]);
 
-            embed.addFields(category.map((cmd) => {
+            if (category.length === 0) embed.addFields({ name: 'No commands found.', value: 'This category is empty.' });
+            else embed.addFields(category.map((cmd) => {
                 const command = client.commands.get(cmd)!;
 
                 return { name: `**${command.data.name.capitalize()}**`, value: command.data.description, inline: true };

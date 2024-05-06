@@ -1,7 +1,8 @@
-import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, BaseInteraction } from 'discord.js';
+import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, BaseInteraction, type PresenceData } from 'discord.js';
 import { Queue } from 'play-dl';
 
 import { commandLoader } from './handlers/commandLoader';
+import { getPresence } from './utils';
 
 const client = new Client({
     partials: [Partials.Channel],
@@ -23,22 +24,20 @@ client.queue = new Collection<string, Queue>();
 client.musicquiz = [];
 client.volume = 0.3;
 
-process.on('uncaughtException', (e) => {
-    client.devs.forEach((dev: string) => {
-        const user = client.users.cache.get(dev);
-
-        if (user) user.send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] });
-    });
-});
+process.on('uncaughtException', (e) => 
+    client.devs.forEach((dev: string) => 
+        client.users.cache.get(dev)?.send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] })
+    )
+);
 
 client
     .on('ready', async () => {
         commandLoader(client);
-        client.user?.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' });
+        client.user?.setPresence(getPresence(client));
         console.log(`Logged in as ${client.user?.tag}.`);
     })
-    .on('interactionCreate', (interaction: BaseInteraction) => { require('./events/interactionCreate').default(client, interaction); })
-    .on('guildCreate', () => {client.user?.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })})
-    .on('guildDelete', () => {client.user?.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })});
+    .on('interactionCreate', (interaction: BaseInteraction) => require('./events/interactionCreate').default(client, interaction))
+    .on('guildCreate', () => client.user?.setPresence(getPresence(client)))
+    .on('guildDelete', () => client.user?.setPresence(getPresence(client)));
 
 client.login(process.env.DISCORD_TOKEN);

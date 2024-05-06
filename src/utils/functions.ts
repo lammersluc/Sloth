@@ -1,3 +1,4 @@
+import { Client, ActivityType, type PresenceData } from 'discord.js';
 import { setTimeout } from 'timers/promises';
 
 declare global {
@@ -52,7 +53,9 @@ Array.prototype.shuffle = function() {
         [this[i], this[j]] = [this[j], this[i]]; 
     } 
     return this; 
-}; 
+};
+
+const getPresence = (client: Client): PresenceData => ({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }] });
 
 function similarity(s1: string, s2: string): number {
     let longer = s1;
@@ -108,6 +111,7 @@ async function sleep(ms: number): Promise<void> {
 }
 
 export {
+    getPresence,
     similarity,
     sleep
 };

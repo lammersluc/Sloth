@@ -1,1 +1,1 @@
-export { similarity, sleep } from './functions';
+export { getPresence, similarity, sleep } from './functions';
