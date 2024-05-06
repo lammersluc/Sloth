@@ -1,7 +1,6 @@
 import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, GuildMember, PermissionsBitField, ButtonStyle, ButtonInteraction, ComponentType } from 'discord.js';
 import { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus, VoiceConnectionStatus } from '@discordjs/voice';
 import play from 'play-dl';
-import {  } from '@discordjs/builders';
 
 export default {
     data: new SlashCommandBuilder()

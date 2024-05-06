@@ -1,7 +1,6 @@
 import { Client, ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getVoiceConnection, createAudioResource, VoiceConnectionStatus } from '@discordjs/voice';
 import play from 'play-dl';
-import moment from 'moment';
 
 export default {
     data: new SlashCommandBuilder()
@@ -39,7 +38,7 @@ export default {
         if (connection && connection.state.status !== VoiceConnectionStatus.Destroyed) {
             connection.state.subscription?.player.play(resource);
             song.startedTime = time;
-            return interaction.editReply({ embeds: [embed.setDescription(`Seeked to \`${moment(time * 1000).format('m:ss')}\`.`)] });
+            return interaction.editReply({ embeds: [embed.setDescription(`Seeked to \`${time.toTimestamp()}\`.`)] });
         }
 
         interaction.editReply({ embeds: [embed.setDescription('I am not connected to any voice channel.')] });

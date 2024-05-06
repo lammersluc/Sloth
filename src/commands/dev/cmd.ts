@@ -23,14 +23,10 @@ export default {
         cmd.stderr.on('data', (data) => { stderr += data.toString(); });
 
         cmd.on('close', () => {
-            if (!stdout) stdout = 'No output.';
-            if (!stderr) stderr = 'No error.';
 
-            embed.addFields(
-                { name: 'Input', value: `\`\`\`${input}\`\`\`` },
-                { name: 'Output', value: `\`\`\`${stdout}\`\`\`` },
-                { name: 'Error', value: `\`\`\`${stderr}\`\`\`` }
-            );
+            embed.addFields({ name: 'Input', value: `\`\`\`sh\n${input}\`\`\`` });
+            if (stdout) embed.addFields({ name: 'Output', value: `\`\`\`sh\n${stdout}\`\`\`` });
+            if (stderr) embed.addFields({ name: 'Error', value: `\`\`\`sh\n${stderr}\`\`\`` });
 
             interaction.editReply({ embeds: [embed] });
         });

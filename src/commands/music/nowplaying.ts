@@ -1,6 +1,5 @@
 import { ChatInputCommandInteraction, Client, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { getVoiceConnection, type AudioPlayerPlayingState, type VoiceConnectionReadyState } from '@discordjs/voice';
-import moment from 'moment';
 
 export default {
     data: new SlashCommandBuilder()
@@ -34,7 +33,7 @@ export default {
                 .setAuthor({ name: 'Now Playing' })
                 .setTitle(`\`${song.title}\` - \`${song.channel?.name}\``)
                 .setURL(song.url)
-                .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${moment(time).format('m:ss')} / ${song.live ? "live" : song.durationRaw} | ${song.uploadedAt}\``)
+                .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${time.toTimestamp} / ${song.live ? "live" : song.durationRaw} | ${song.uploadedAt}\``)
                 .setThumbnail(song.thumbnails[0].url)
                 .setTimestamp(Date.now() - time)
                 .setFooter({ text: song.member.displayName, iconURL: song.member.displayAvatarURL() })

@@ -1,6 +1,4 @@
 import { Client, ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import axios from 'axios';
-import moment from 'moment';
 
 export default {
     data: new SlashCommandBuilder()
@@ -14,28 +12,24 @@ export default {
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder();
 
-        try {
-            const data = await axios.get(`https://www.reddit.com/r/${interaction.options.getString('subreddit')}/random/.json`);
-            let url = '';
+        const data = await (await fetch(`https://www.reddit.com/r/${interaction.options.getString('subreddit')}/random/.json`)).json();
 
-            if (data.data[0].data.children[0].data.url.includes('i.redd.it')) {
-                embed.setImage(`${data.data[0].data.children[0].data.url}`);
-            } else {
-                url = data.data[0].data.children[0].data.url;
-            }
+        if (!Array.isArray(data)) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Subreddit doesn\'t exist.')] });
 
-            embed
-                .setAuthor({ name: `${data.data[0].data.children[0].data.subreddit_name_prefixed} | ${moment(Number(data.data[0].data.children[0].data.created * 1000)).format('Do MMMM YYYY, h:mm a')}` })
-                .setTitle(data.data[0].data.children[0].data.title)
-                .setDescription(`${data.data[0].data.children[0].data.selftext}\n${url}`)
-                .setFooter({ text: `u/${data.data[0].data.children[0].data.author} | ${data.data[0].data.children[0].data.ups} Upvotes | ${data.data[0].data.children[0].data.num_comments} Comment(s)` })
-                .setURL(`https://www.reddit.com${data.data[0].data.children[0].data.permalink}`)
-                .setColor(client.embedColor);
+        const first = data[0].data.children[0].data;
+        let url = '';
 
-            interaction.editReply({ embeds: [embed] });
-        } catch (e) {
-            interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.embedColor).setDescription('Subreddit doesn\'t exist.')] });
-            console.log(e);
-        }
+        if (first.url.includes('i.redd.it')) embed.setImage(`${first.url}`);
+        else url = first.url;
+
+        embed
+            .setAuthor({ name: `${first.subreddit_name_prefixed} | ${first.created_utc.timeAgo()}` })
+            .setTitle(first.title)
+            .setDescription(`${first.selftext}\n${url}`)
+            .setFooter({ text: `u/${first.author} | ${first.ups} Upvotes | ${first.num_comments} Comment(s)` })
+            .setURL(`https://www.reddit.com${first.permalink}`)
+            .setColor(client.embedColor);
+
+        interaction.editReply({ embeds: [embed] });
     }
 }

@@ -1,5 +1,4 @@
 import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import axios from 'axios';
 
 export default {
     data: new SlashCommandBuilder()
@@ -14,7 +13,7 @@ export default {
 
         try {
             const country = interaction.options.getString('country');
-            const { data } = await axios.get(`https://disease.sh/v3/covid-19/countries/${country}`);
+            const data = await (await fetch(`https://disease.sh/v3/covid-19/countries/${country}`)).json();
 
             interaction.editReply({
                 embeds: [embed
