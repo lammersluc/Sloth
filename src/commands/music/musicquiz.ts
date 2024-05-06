@@ -1,5 +1,5 @@
-import { ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, PermissionsBitField, SlashCommandBuilder, TextChannel } from "discord.js";
-import { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } from '@discordjs/voice';
+import { Client, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, PermissionsBitField, SlashCommandBuilder, TextChannel } from "discord.js";
+import { joinVoiceChannel, createAudioPlayer, createAudioResource } from '@discordjs/voice';
 import play from 'play-dl';
 import fs from 'fs';
 
@@ -20,13 +20,13 @@ export default {
                 .setRequired(true)
                 .setMinValue(3)
                 .setMaxValue(100)),
-    async execute(client: any, interaction: ChatInputCommandInteraction) {
+    async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
         let rounds = interaction.options.getInteger('rounds')!;
 
-        if (!interaction.guild) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
+        if (!interaction.guildId) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
         if (!(interaction.channel instanceof TextChannel) || !(interaction.member?.permissions as PermissionsBitField).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setDescription('I need permissions to send messages in this channel in order to play a music quiz.')] });
-        if (!(interaction.member as GuildMember).voice.channel) return interaction.editReply({ embeds: [embed.setDescription('You are not in a voice channel.')] });
+        if (!(interaction.member as GuildMember).voice.channelId) return interaction.editReply({ embeds: [embed.setDescription('You are not in a voice channel.')] });
         if (client.queue.get(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am already playing music.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('A music quiz is already in progress.')] });
 
@@ -73,9 +73,9 @@ Click on the emoji below to join the quiz.`)
         let textScoreboard: Player[] = [];
 
         let connection = joinVoiceChannel({
-            channelId: (interaction.member as GuildMember).voice.channelId as string,
-            guildId: interaction.guild.id,
-            adapterCreator: interaction.guild.voiceAdapterCreator,
+            channelId: (interaction.member as GuildMember).voice.channelId!,
+            guildId: interaction.guildId,
+            adapterCreator: interaction.guild!.voiceAdapterCreator,
             selfDeaf: true
         });
 

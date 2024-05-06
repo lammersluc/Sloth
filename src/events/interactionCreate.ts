@@ -1,12 +1,12 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { BaseInteraction, Client } from "discord.js";
 
-import { type Command } from "../utils";
-
-export default async (client: any, interaction: ChatInputCommandInteraction) => {
+export default async (client: Client, interaction: BaseInteraction) => {
     
     if (!interaction.isChatInputCommand()) return;
 
-    const cmd = client.commands.get(interaction.commandName) as Command;
+    const cmd = client.commands.get(interaction.commandName);
+
+    if (!cmd) return;
 
     await interaction.deferReply();
 

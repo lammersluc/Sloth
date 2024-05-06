@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 import { commandRegister } from './commandRegister';
-import { type Command } from '../utils';
+import { type Command } from 'discord.js';
 
 async function commandLoader(client: any) {
     const folders = fs.readdirSync('./src/commands');

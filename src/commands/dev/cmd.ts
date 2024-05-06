@@ -1,15 +1,16 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { spawn } from 'child_process';
 
 export default {
     data: new SlashCommandBuilder()
         .setName('cmd')
         .setDescription('Runs commands.')
-        .addStringOption(option =>
-            option.setName('input')
-                .setDescription('The command to run.')
-                .setRequired(true)),
-    async execute(client: any, interaction: ChatInputCommandInteraction) {
+        .addStringOption(opt => opt
+            .setName('input')
+            .setDescription('The command to run.')
+            .setRequired(true)
+        ),
+    async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor).setTitle('CMD');
         const input = interaction.options.getString('input')!;
 

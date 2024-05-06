@@ -1,17 +1,31 @@
-import type { SlashCommandBuilder } from "discord.js";
-import type { YouTubeVideo } from "play-dl";
+import type { Collection, GuildMember, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
+import type { Queue, YouTubeVideo } from "play-dl";
 
-type Command = {
-    data: SlashCommandBuilder;
-    execute: (client: any, interaction: any) => void;
-};
+declare module "discord.js" {
+    interface Client {
+        commands: Collection<string, Command>;
+        categories: Collection<string, string[]>;
+        devs: string[];
+        embedColor: ColorResolvable;
+        queue: Collection<string, Queue>;
+        musicquiz: string[];
+        volume: number;
+    }
 
-type Queue = {
-    songs: YouTubeVideo[];
-    loop: boolean;
-};
+    interface Command {
+        data: SlashCommandBuilder;
+        execute: (client: any, interaction: ChatInputCommandInteraction) => void;
+    }
+}
 
-export {
-    type Command,
-    type Queue
-};
+declare module "play-dl" {
+    interface YouTubeVideo {
+        member: GuildMember;
+        startedTime: number;
+    }
+
+    class Queue {
+        songs: YouTubeVideo[];
+        loop: boolean;
+    }
+}

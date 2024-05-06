@@ -4,9 +4,22 @@ declare global {
     interface String {
         capitalize(): string;
     }
+    interface Array<T> {
+        shuffle(): T[];
+    }
 };
 
-String.prototype.capitalize = function() { return this.charAt(0).toUpperCase() + this.slice(1) };
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1)
+};
+
+Array.prototype.shuffle = function() { 
+    for (let i = this.length - 1; i > 0; i--) { 
+        const j = Math.floor(Math.random() * (i + 1)); 
+        [this[i], this[j]] = [this[j], this[i]]; 
+    } 
+    return this; 
+}; 
 
 function similarity(s1: string, s2: string): number {
     let longer = s1;

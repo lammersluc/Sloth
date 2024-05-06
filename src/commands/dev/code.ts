@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 
 function clean(string: string): string {
     if (typeof string === "string") {
@@ -17,7 +17,7 @@ export default {
             option.setName('input')
                 .setDescription('The code to run.')
                 .setRequired(true)),
-    async execute(client: any, interaction: ChatInputCommandInteraction) {
+    async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor).setTitle('Code');
         const input = interaction.options.getString('input')!;
 

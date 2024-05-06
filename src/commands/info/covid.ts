@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import axios from 'axios';
 
 export default {
@@ -9,7 +9,7 @@ export default {
             option.setName('country')
                 .setDescription('The country for which you want to see COVID-19 data.')
                 .setRequired(true)),
-    async execute(client: any, interaction: ChatInputCommandInteraction) {
+    async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
 
         try {

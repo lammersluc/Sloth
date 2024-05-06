@@ -1,10 +1,9 @@
-import { Client, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, CommandInteraction } from 'discord.js';
+import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, BaseInteraction } from 'discord.js';
+import { Queue } from 'play-dl';
 
-import './utils';
 import { commandLoader } from './handlers/commandLoader';
-import type { Command, Queue } from './utils';
 
-const client: any = new Client({
+const client = new Client({
     partials: [Partials.Channel],
     intents: [
         GatewayIntentBits.MessageContent,
@@ -38,7 +37,7 @@ client
         client.user?.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }], status: 'online' });
         console.log(`Logged in as ${client.user?.tag}.`);
     })
-    .on('interactionCreate', (interaction: CommandInteraction) => require('./events/interactionCreate').default(client, interaction))
+    .on('interactionCreate', (interaction: BaseInteraction) => { require('./events/interactionCreate').default(client, interaction); })
     .on('guildCreate', () => {client.user?.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })})
     .on('guildDelete', () => {client.user?.setPresence({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds` }], status: 'online' })});
 
