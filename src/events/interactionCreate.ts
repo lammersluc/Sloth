@@ -16,5 +16,5 @@ export default async (client: Client, interaction: BaseInteraction) => {
         
     } else await interaction.deferReply();
 
-    try { cmd.execute(client, interaction); } catch(e) { console.error(e); }
+    cmd.execute(client, interaction);
 }
