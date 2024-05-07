@@ -1,12 +1,17 @@
-FROM oven/bun as base
+FROM node:lts-alpine as builder
+WORKDIR /build
+
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+COPY package.json .
+RUN npm install --production
+
+FROM oven/bun as runner
 WORKDIR /app
 
-FROM base AS builder
-COPY package.json bun.lockb .
+COPY --from=builder /build/package.json package.json
+COPY --from=builder /build/node_modules node_modules
+COPY src src
 RUN bun install --frozen-lockfile --production
 
-FROM base AS release
-COPY --from=builder node_modules node_modules
-COPY src .
-
-ENTRYPOINT [ "bun", "start" ]
+USER bun
+ENTRYPOINT ["bun", "start"]

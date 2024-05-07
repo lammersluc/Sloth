@@ -1,5 +1,5 @@
-import type { Collection, GuildMember, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
-import type { Queue, YouTubeVideo } from "play-dl";
+import type { Collection, GuildMember, SlashCommandBuilder } from "discord.js";
+import type { Queue } from "play-dl";
 
 declare module "discord.js" {
     interface Client {
