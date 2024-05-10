@@ -1,8 +1,8 @@
-import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, BaseInteraction, type PresenceData } from 'discord.js';
-import { Queue } from 'play-dl';
+import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, BaseInteraction, type PresenceData, ChatInputCommandInteraction } from 'discord.js';
 
 import { commandLoader } from './handlers/commandLoader';
 import { getPresence } from './utils';
+import { Player } from 'discord-player';
 
 const client = new Client({
     partials: [Partials.Channel],
@@ -20,7 +20,6 @@ client.commands = new Collection<string, Command>();
 client.categories = new Collection<string, string[]>();
 client.devs = process.env.DEVS?.split(',') || [];
 client.embedColor = '#fbd55a';
-client.queue = new Collection<string, Queue>();
 client.musicquiz = [];
 client.volume = 0.3;
 
@@ -28,6 +27,20 @@ process.on('uncaughtException', (e) =>
     client.devs.forEach((dev: string) => 
         client.users.cache.get(dev)?.send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] })
     )
+);
+
+const player = new Player(client);
+player.extractors.loadDefault();
+player.events.on('playerStart', (queue, track) =>
+    (queue.metadata as ChatInputCommandInteraction).channel?.send({ embeds: [new EmbedBuilder()
+        .setAuthor({ name: 'Added song' })
+        .setTitle(`\`${track.title}\` - \`${track.author}\``)
+        .setDescription(null)
+        .setURL(track.url)
+        .setThumbnail(track.thumbnail)
+        .setTimestamp()
+        .setFooter({ text: track?.requestedBy?.username ?? '', iconURL: track.requestedBy?.displayAvatarURL()})]
+    })
 );
 
 client

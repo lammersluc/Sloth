@@ -1,6 +1,5 @@
+import { useQueue } from "discord-player";
 import { Client, ChatInputCommandInteraction, EmbedBuilder, Message, SlashCommandBuilder } from "discord.js";
-import { VoiceConnectionStatus, createAudioResource, getVoiceConnection } from '@discordjs/voice';
-import play, { Queue } from 'play-dl';
 
 export default {
     data: new SlashCommandBuilder()
@@ -9,16 +8,16 @@ export default {
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
 
-        if (!interaction.guildId) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
+        if (!interaction.guild) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
 
-        const queue = client.queue.get(interaction.guildId);
+        const queue = useQueue(interaction.guild.id);
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
-        if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
-        if (queue.songs.length <= 1) return interaction.editReply({ embeds: [embed.setDescription('There is nothing to jump to.')] });
+        if (client.musicquiz.includes(interaction.guild.id)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (queue.tracks.size <= 1) return interaction.editReply({ embeds: [embed.setDescription('There is nothing to jump to.')] });
 
-        const q = (queue as Queue).songs
-            .map((song, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} \`${song.title}\` - \`${song.durationRaw}\``)
+        const q = queue.tracks
+            .map((track, i) => `${i === 0 ? 'Now Playing:' : `${i}.`} \`${track.title}\` - \`${track.duration}\``)
             .join('\n');
 
         await interaction.editReply({ embeds: [embed.setTitle('**Which song do you want to jump to?**').setDescription(q)] }).catch();
@@ -30,21 +29,9 @@ export default {
 
         let position = parseInt(msg!.content ?? '');
 
-        if (isNaN(position) || position < 1 || position > queue.songs.length) return interaction.editReply({ embeds: [embed.setDescription('Please provide a valid position.')] });
+        if (isNaN(position) || position < 1 || position > queue.tracks.size) return interaction.editReply({ embeds: [embed.setDescription('Please provide a valid position.')] });
 
-        queue.songs = queue.songs.slice(position);
-
-        const connection = getVoiceConnection(interaction.guildId!);
-
-        if (!connection || connection.state.status === VoiceConnectionStatus.Destroyed) return interaction.editReply({ embeds: [embed.setDescription('I am not playing anything right now.')] });
-        
-        const player = connection.state.subscription?.player;
-        const stream = await play.stream(queue.songs[0].url, { quality: 2 });
-        const resource = createAudioResource(stream.stream, {
-            inputType: stream.type
-        });
-
-        player?.play(resource);
+        queue.node.jump(position);
 
         interaction.editReply({ embeds: [embed.setDescription(`Jumped to song position \`${position}\` in the queue.`)] });
     }

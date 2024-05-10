@@ -1,5 +1,4 @@
 import type { Collection, GuildMember, SlashCommandBuilder } from "discord.js";
-import type { Queue } from "play-dl";
 
 declare module "discord.js" {
     interface Client {
@@ -7,7 +6,6 @@ declare module "discord.js" {
         categories: Collection<string, string[]>;
         devs: string[];
         embedColor: ColorResolvable;
-        queue: Collection<string, Queue>;
         musicquiz: string[];
         volume: number;
     }
@@ -15,17 +13,5 @@ declare module "discord.js" {
     interface Command {
         data: SlashCommandBuilder;
         execute: (client: any, interaction: ChatInputCommandInteraction) => void;
-    }
-}
-
-declare module "play-dl" {
-    interface YouTubeVideo {
-        member: GuildMember;
-        startedTime: number;
-    }
-
-    class Queue {
-        songs: YouTubeVideo[];
-        loop: boolean;
     }
 }

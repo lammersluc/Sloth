@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, Client, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { getVoiceConnection, type AudioPlayerPlayingState, type VoiceConnectionReadyState } from '@discordjs/voice';
+import { useQueue } from 'discord-player';
 
 export default {
     data: new SlashCommandBuilder()
@@ -10,33 +10,24 @@ export default {
 
         if (!interaction.guildId) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
 
-        const queue = client.queue.get(interaction.guildId);
+        const queue = useQueue(interaction.guildId);
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
-        const song = queue.songs[0];
+        const track = queue.currentTrack;
 
-        let time = song.startedTime * 1000 + ((getVoiceConnection(interaction.guildId)?.state as VoiceConnectionReadyState).subscription?.player.state as AudioPlayerPlayingState).resource.playbackDuration;
-
-        let watchBar;
-        if (song.live) {
-            watchBar = '──────────────────────────────────────────────────⚪';
-        } else {
-            watchBar = '──────────────────────────────────────────────────'.split('');
-            watchBar[Math.floor(time / song.durationInSec / 20)] = '⚪';
-            watchBar = watchBar.join('');
-        }
+        if (!track) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
 
         interaction.editReply({
             embeds: [embed
                 .setAuthor({ name: 'Now Playing' })
-                .setTitle(`\`${song.title}\` - \`${song.channel?.name}\``)
-                .setURL(song.url)
-                .setDescription(`\`${watchBar}\`\n\`${song.views.toLocaleString()} 👀 | ${time.toTimestamp} / ${song.live ? "live" : song.durationRaw} | ${song.uploadedAt}\``)
-                .setThumbnail(song.thumbnails[0].url)
-                .setTimestamp(Date.now() - time)
-                .setFooter({ text: song.member.displayName, iconURL: song.member.displayAvatarURL() })
+                .setTitle(`\`${track.title}\` - \`${track.author}\``)
+                .setURL(track.url)
+                .setDescription(`\`${queue.node.createProgressBar()}\`\n\`${track.views.toLocaleString()} 👀 | ${queue.node.getTimestamp()} / ${track.duration}\``)
+                .setThumbnail(track.thumbnail)
+                .setTimestamp((track.metadata as ChatInputCommandInteraction).createdTimestamp)
+                .setFooter({ text: track.requestedBy?.displayName ?? '', iconURL: track.requestedBy?.displayAvatarURL() })
             ]
         });
     }

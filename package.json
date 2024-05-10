@@ -8,15 +8,13 @@
   "devDependencies": {
     "@types/bun": "latest"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
-    "@discordjs/opus": "^0.9.0",
-    "@discordjs/voice": "^0.17.0",
+    "discord-player": "^6.6.8",
     "discord.js": "^14.15.2",
     "ffmpeg-static": "^5.2.0",
-    "play-dl": "^1.9.7",
-    "sodium-native": "^4.0.6"
+    "mediaplex": "^0.0.9",
+    "sodium-native": "^4.0.6",
+    "ts-node": "^10.9.2",
+    "youtube-ext": "^1.1.25"
   }
 }
