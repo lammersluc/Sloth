@@ -7,8 +7,8 @@ export default {
         .setName('play')
         .setDescription('Plays music in your voice channel.')
         .addStringOption(option =>
-            option.setName('search')
-                .setDescription('Enter the search query for the music')
+            option.setName('query')
+                .setDescription('Enter the query to search for.')
                 .setRequired(true)
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
