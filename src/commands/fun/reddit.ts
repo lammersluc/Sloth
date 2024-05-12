@@ -4,10 +4,10 @@ export default {
     data: new SlashCommandBuilder()
         .setName('reddit')
         .setDescription('Searches a random post from subreddit.')
-        .addStringOption(option =>
-            option.setName('subreddit')
-                .setDescription('Enter the subreddit name')
-                .setRequired(true)
+        .addStringOption(o => o
+            .setName('subreddit')
+            .setDescription('Enter the subreddit name')
+            .setRequired(true)
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder();

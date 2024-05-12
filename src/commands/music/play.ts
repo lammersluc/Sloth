@@ -1,15 +1,14 @@
 import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, GuildMember, ButtonStyle, ButtonInteraction, ComponentType } from 'discord.js';
 import { useMainPlayer, useQueue } from 'discord-player';
-import { sleep } from '../../utils';
 
 export default {
     data: new SlashCommandBuilder()
         .setName('play')
         .setDescription('Plays music in your voice channel.')
-        .addStringOption(option =>
-            option.setName('query')
-                .setDescription('Enter the query to search for.')
-                .setRequired(true)
+        .addStringOption(o => o
+            .setName('query')
+            .setDescription('Enter the query to search for.')
+            .setRequired(true)
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);

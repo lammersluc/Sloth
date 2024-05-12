@@ -5,7 +5,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName('cmd')
         .setDescription('Runs commands.')
-        .addStringOption(opt => opt
+        .addStringOption(o => o
             .setName('input')
             .setDescription('The command to run.')
             .setRequired(true)

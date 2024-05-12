@@ -8,10 +8,10 @@ export default {
     data: new SlashCommandBuilder()
         .setName('code')
         .setDescription('Runs code.')
-        .addStringOption(option =>
-            option.setName('input')
-                .setDescription('The code to run.')
-                .setRequired(true)),
+        .addStringOption(o => o
+            .setName('input')
+            .setDescription('The code to run.')
+            .setRequired(true)),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor).setTitle('Code');
         const input = interaction.options.getString('input')!;

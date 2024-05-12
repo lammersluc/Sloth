@@ -41,8 +41,6 @@ player.events.on('playerStart', (queue, track) =>
         .setTimestamp()
         .setFooter({ text: track?.requestedBy?.username ?? '', iconURL: track.requestedBy?.displayAvatarURL()})]
     })
-).on('error', (_, error) =>
-    console.log(error)
 );
 
 client
