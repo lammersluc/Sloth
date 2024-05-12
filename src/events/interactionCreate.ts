@@ -8,7 +8,7 @@ export default async (client: Client, interaction: BaseInteraction) => {
 
     if (!cmd) return;
 
-    if (client.categories.get('dev')?.includes(cmd.data.name)) {
+    if (client.categories.get('hidden')?.includes(cmd.data.name)) {
 
         await interaction.deferReply({ ephemeral: true });
         

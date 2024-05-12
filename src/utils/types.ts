@@ -7,7 +7,6 @@ declare module "discord.js" {
         devs: string[];
         embedColor: ColorResolvable;
         musicquiz: string[];
-        volume: number;
     }
 
     interface Command {

@@ -4,7 +4,7 @@ import { useQueue } from 'discord-player';
 export default {
     data: new SlashCommandBuilder()
         .setName('nowplaying')
-        .setDescription('Shows info about the current song that is playing.'),
+        .setDescription('Shows info about the current song that is playing'),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
 

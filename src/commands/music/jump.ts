@@ -4,7 +4,7 @@ import { Client, ChatInputCommandInteraction, EmbedBuilder, Message, SlashComman
 export default {
     data: new SlashCommandBuilder()
         .setName('jump')
-        .setDescription('Jumps to a song in the queue.'),
+        .setDescription('Jumps to a song in the queue'),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
 

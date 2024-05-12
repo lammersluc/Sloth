@@ -3,10 +3,10 @@ import { Client, ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder 
 export default {
     data: new SlashCommandBuilder()
         .setName('reddit')
-        .setDescription('Searches a random post from subreddit.')
+        .setDescription('Searches a random post from subreddit')
         .addStringOption(o => o
             .setName('subreddit')
-            .setDescription('Enter the subreddit name')
+            .setDescription('Subreddit to search for')
             .setRequired(true)
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {

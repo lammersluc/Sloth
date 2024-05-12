@@ -9,7 +9,7 @@ enum Choices {
 export default {
     data: new SlashCommandBuilder()
         .setName('rockpaperscissors')
-        .setDescription('Play rock paper scissors with the bot.'),
+        .setDescription('Play rock paper scissors with the bot'),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
         const row = new ActionRowBuilder<ButtonBuilder>();

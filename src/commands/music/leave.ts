@@ -4,7 +4,7 @@ import { useQueue } from "discord-player";
 export default {
     data: new SlashCommandBuilder()
         .setName('leave')
-        .setDescription('Makes the bot leave voice channel.'),
+        .setDescription('Makes the bot leave voice channel'),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
 

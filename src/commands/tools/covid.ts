@@ -3,10 +3,10 @@ import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder 
 export default {
     data: new SlashCommandBuilder()
         .setName('covid')
-        .setDescription('Shows current COVID-19 data for a country.')
+        .setDescription('Shows current COVID-19 data for a country')
         .addStringOption(o => o
             .setName('country')
-            .setDescription('The country for which you want to see COVID-19 data.')
+            .setDescription('The country for which you want to see COVID-19 data')
             .setRequired(true)),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);

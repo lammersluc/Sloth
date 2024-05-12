@@ -4,10 +4,10 @@ import { useMainPlayer, useQueue } from 'discord-player';
 export default {
     data: new SlashCommandBuilder()
         .setName('play')
-        .setDescription('Plays music in your voice channel.')
+        .setDescription('Plays music in your voice channel')
         .addStringOption(o => o
             .setName('query')
-            .setDescription('Enter the query to search for.')
+            .setDescription('Enter the query to search for')
             .setRequired(true)
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {

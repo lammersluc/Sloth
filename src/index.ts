@@ -1,8 +1,8 @@
-import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, ActivityType, Collection, BaseInteraction, type PresenceData, ChatInputCommandInteraction } from 'discord.js';
+import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, Collection, BaseInteraction, ChatInputCommandInteraction } from 'discord.js';
 
 import { commandLoader } from './handlers/commandLoader';
 import { getPresence } from './utils';
-import { Player } from 'discord-player';
+import { Player, QueueRepeatMode } from 'discord-player';
 
 const client = new Client({
     partials: [Partials.Channel],
@@ -21,7 +21,6 @@ client.categories = new Collection<string, string[]>();
 client.devs = process.env.DEVS?.split(',') || [];
 client.embedColor = '#fbd55a';
 client.musicquiz = [];
-client.volume = 0.3;
 
 process.on('uncaughtException', (e) => 
     client.devs.forEach((dev: string) => 
@@ -30,7 +29,7 @@ process.on('uncaughtException', (e) =>
 );
 
 const player = new Player(client);
-await player.extractors.loadDefault();
+player.extractors.loadDefault();
 player.events.on('playerStart', (queue, track) =>
     (queue.metadata as ChatInputCommandInteraction).channel?.send({ embeds: [new EmbedBuilder()
         .setAuthor({ name: 'Added song' })
