@@ -15,7 +15,7 @@ export default {
 
         if (!queue) return interaction.editReply({ embeds: [embed.setDescription('There is nothing playing right now.')] });
         
-        queue.node.stop();
+        queue.delete();
         interaction.editReply({ embeds: [embed.setDescription('The bot has left the voice channel.')] });
     }
 }

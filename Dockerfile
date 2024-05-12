@@ -14,4 +14,4 @@ COPY --from=builder /build/node_modules node_modules
 COPY src src
 
 USER bun
-ENTRYPOINT ["bun", "start"]
+ENTRYPOINT ["bun", "run", "src/index.ts"]

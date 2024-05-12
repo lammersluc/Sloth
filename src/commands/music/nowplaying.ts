@@ -24,7 +24,7 @@ export default {
                 .setAuthor({ name: 'Now Playing' })
                 .setTitle(`\`${track.title}\` - \`${track.author}\``)
                 .setURL(track.url)
-                .setDescription(`\`${queue.node.createProgressBar()}\`\n\`${track.views.toLocaleString()} 👀 | ${queue.node.getTimestamp()} / ${track.duration}\``)
+                .setDescription(`\`${queue.node.createProgressBar()}\``)
                 .setThumbnail(track.thumbnail)
                 .setTimestamp((track.metadata as ChatInputCommandInteraction).createdTimestamp)
                 .setFooter({ text: track.requestedBy?.displayName ?? '', iconURL: track.requestedBy?.displayAvatarURL() })

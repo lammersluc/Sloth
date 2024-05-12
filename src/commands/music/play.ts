@@ -1,5 +1,6 @@
-import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, GuildMember, PermissionsBitField, ButtonStyle, ButtonInteraction, ComponentType } from 'discord.js';
-import { QueryType, useMainPlayer, useQueue } from 'discord-player';
+import { Client, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, GuildMember, ButtonStyle, ButtonInteraction, ComponentType } from 'discord.js';
+import { useMainPlayer, useQueue } from 'discord-player';
+import { sleep } from '../../utils';
 
 export default {
     data: new SlashCommandBuilder()
@@ -15,22 +16,21 @@ export default {
         const member = interaction.member as GuildMember;
         const channel = member.voice.channel;
 
-        if (!interaction.guild) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
         if (!channel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
         if (!channel.viewable) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to view this voice channel.')] });
         if (!channel.joinable) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to join this voice channel.')] });
         if (channel.full) return interaction.editReply({ embeds: [embed.setDescription('The voice channel is full.')] });
-        if (client.musicquiz.includes(interaction.guild.id)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (client.musicquiz.includes(channel.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
-        const query = interaction.options.getString('query')!;
+        const query = interaction.options.getString('query', true);
     
         const player = useMainPlayer();
-        const queue = useQueue(interaction.guild.id);
+        const queue = useQueue(channel.guildId);
 
-        if (queue && queue.channel?.id !== channel.id) return interaction.editReply({ embeds: [embed.setDescription('I am already playing music in a different channel.')] });
+        if (queue && queue.channel?.id !== channel.id) return interaction.editReply({ embeds: [embed.setDescription('I\'m already playing music in a different channel.')] });
     
         const result = await player
-            .search(query, { requestedBy: interaction.user })
+            .search(query, { searchEngine: 'youtube', requestedBy: interaction.user })
             .catch(() => null);
 
         if (!result?.hasTracks) return interaction.editReply({ embeds: [embed.setDescription('No results found.')] });
@@ -60,7 +60,7 @@ export default {
         const msg = await interaction.editReply({ embeds: [embed.setTitle('Which song do you want to play?').setDescription(list)], components: [row, row2] });
 
         const filter = (b: ButtonInteraction) => b.user.id === interaction.user.id;
-        const collector = msg.createMessageComponentCollector({ filter, componentType: ComponentType.Button, time: 30000 });
+        const collector = msg.createMessageComponentCollector({ filter, componentType: ComponentType.Button, max: 1, time: 30000 });
 
         collector.on('collect', async (button) => {
             collector.stop();
@@ -70,11 +70,12 @@ export default {
             const track = result.tracks[parseInt(button.customId)];
 
             if (queue) queue.addTrack(track);
-                player.play(channel, track, {
+            else player.play(channel, track, {
                     nodeOptions: {
                         metadata: interaction
                     }
-                }).catch(() => interaction.editReply({ embeds: [embed.setDescription('An error occurred while trying to play the song.')] }));
+                });
+
             interaction.editReply({
                 embeds: [embed
                     .setAuthor({ name: 'Added song' })
@@ -88,5 +89,7 @@ export default {
                 components: []
             });
         });
+
+        collector.on('end', (collected) => collected.size === 0 && interaction.editReply({ embeds: [embed.setTitle(null).setDescription('You did not choose a song in time.')], components: [] }));
     }
 }

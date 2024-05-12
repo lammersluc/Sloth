@@ -30,7 +30,7 @@ process.on('uncaughtException', (e) =>
 );
 
 const player = new Player(client);
-player.extractors.loadDefault();
+await player.extractors.loadDefault();
 player.events.on('playerStart', (queue, track) =>
     (queue.metadata as ChatInputCommandInteraction).channel?.send({ embeds: [new EmbedBuilder()
         .setAuthor({ name: 'Added song' })
@@ -41,6 +41,8 @@ player.events.on('playerStart', (queue, track) =>
         .setTimestamp()
         .setFooter({ text: track?.requestedBy?.username ?? '', iconURL: track.requestedBy?.displayAvatarURL()})]
     })
+).on('error', (_, error) =>
+    console.log(error)
 );
 
 client
