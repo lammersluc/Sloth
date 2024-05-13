@@ -1,4 +1,5 @@
 import type { Collection, SlashCommandBuilder } from "discord.js";
+import type spotify from "@external/spotify.json";
 
 interface Track {
     name: string;
@@ -20,7 +21,7 @@ declare module "discord.js" {
         devs: string[];
         embedColor: ColorResolvable;
         musicquiz: string[];
-        playlist: Playlist
+        playlist: spotify
     }
 
     interface Command {

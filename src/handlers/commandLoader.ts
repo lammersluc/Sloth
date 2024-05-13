@@ -1,9 +1,9 @@
-import * as fs from 'fs';
+import { Client, type Command } from 'discord.js';
+import fs from 'fs';
 
 import { commandRegister } from './commandRegister';
-import { type Command } from 'discord.js';
 
-async function commandLoader(client: any) {
+async function commandLoader(client: Client) {
     const folders = fs.readdirSync('./src/commands'); 
     
     for (const folder of folders) {
@@ -11,7 +11,7 @@ async function commandLoader(client: any) {
         let commands = [];
 
         for (const file of files) {
-            const command: Command = require(`../commands/${folder}/${file}`).default;
+            const command: Command = require(`@../commands/${folder}/${file}`).default;
             client.commands.set(command.data.name, command);
             commands.push(command.data.name);
         }

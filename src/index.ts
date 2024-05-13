@@ -1,9 +1,9 @@
 import { Client, type Command, GatewayIntentBits, Partials, EmbedBuilder, Collection, BaseInteraction, ChatInputCommandInteraction } from 'discord.js';
 import { Player } from 'discord-player';
-import fs from 'fs';
 
-import { commandLoader } from '@handlers/commandLoader';
-import { getPresence } from '@utils/functions/discord';
+import { commandLoader } from './handlers/commandLoader';
+import { getPresence } from '@functions/discord';
+import spotify from '@external/spotify.json';
 
 const client = new Client({
     partials: [Partials.Channel],
@@ -22,7 +22,7 @@ client.categories = new Collection<string, string[]>();
 client.devs = process.env.DEVS?.split(',') || [];
 client.embedColor = '#fbd55a';
 client.musicquiz = [];
-client.playlist = JSON.parse(fs.readFileSync('./src/ext/spotify.json').toString());
+client.playlist = spotify;
 
 process.on('uncaughtException', (e) => 
     client.devs.forEach((dev: string) => 
@@ -50,7 +50,7 @@ client
         client.user?.setPresence(getPresence(client));
         console.log(`Logged in as ${client.user?.tag}.`);
     })
-    .on('interactionCreate', (interaction: BaseInteraction) => require('@events/interactionCreate').default(client, interaction))
+    .on('interactionCreate', (interaction: BaseInteraction) => require('./events/interactionCreate').default(client, interaction))
     .on('guildCreate', () => client.user?.setPresence(getPresence(client)))
     .on('guildDelete', () => client.user?.setPresence(getPresence(client)));
 

@@ -1,7 +1,7 @@
 import { Client, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, PermissionsBitField, SlashCommandBuilder, TextChannel, ChannelType, type GuildTextBasedChannel } from "discord.js";
 import { useMainPlayer, useQueue } from "discord-player";
 
-import { similarity, sleep } from '@utils/functions/global';
+import { similarity, sleep } from '@functions/global';
 
 type Player = {
     player: string;

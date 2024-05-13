@@ -26,7 +26,10 @@ export default {
 
         if (time > (track.durationMS / 1000 - 5)) time = track.durationMS / 1000 - 5;
 
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+
         await queue.node.seek(time)
-        interaction.editReply({ embeds: [embed.setDescription(`Sought to \`${time.toTimestamp()}\` in the current track.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`Sought to \`${minutes}:${seconds}\` in the current track.`)] });
     }
 }
