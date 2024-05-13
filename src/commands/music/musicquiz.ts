@@ -1,9 +1,7 @@
-import { Client, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, PermissionsBitField, SlashCommandBuilder, TextChannel } from "discord.js";
-import { joinVoiceChannel, createAudioPlayer, createAudioResource } from '@discordjs/voice';
-import play from 'play-dl';
-import fs from 'fs';
+import { Client, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, PermissionsBitField, SlashCommandBuilder, TextChannel, ChannelType, type GuildTextBasedChannel } from "discord.js";
+import { useMainPlayer, useQueue } from "discord-player";
 
-import { similarity, sleep } from '../../utils';
+import { similarity, sleep } from '@utils/functions/global';
 
 type Player = {
     player: string;
@@ -23,12 +21,16 @@ export default {
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
         let rounds = interaction.options.getInteger('rounds')!;
+        const textChannel = interaction.channel;
+        const voiceChannel = (interaction.member as GuildMember).voice.channel;
 
         if (!interaction.guildId) return interaction.editReply({ embeds: [embed.setDescription('This command can only be used in a server.')] });
-        if (!(interaction.channel instanceof TextChannel) || !(interaction.member?.permissions as PermissionsBitField).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setDescription('I need permissions to send messages in this channel in order to play a music quiz.')] });
-        if (!(interaction.member as GuildMember).voice.channelId) return interaction.editReply({ embeds: [embed.setDescription('You are not in a voice channel.')] });
-        if (client.queue.get(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am already playing music.')] });
+        if (!textChannel || !interaction.guild?.members.me?.permissionsIn(textChannel as GuildTextBasedChannel).has(PermissionsBitField.Flags.SendMessages)) return interaction.editReply({ embeds: [embed.setDescription('I need permissions to send messages in this channel in order to play a music quiz.')] });
+        if (!voiceChannel) return interaction.editReply({ embeds: [embed.setDescription('You are not in a voice channel.')] });
         if (client.musicquiz.includes(interaction.guildId)) return interaction.editReply({ embeds: [embed.setDescription('A music quiz is already in progress.')] });
+        
+        let queue = useQueue(interaction.guildId);
+        if (queue) return interaction.editReply({ embeds: [embed.setDescription('I am already playing music.')] });
 
         client.musicquiz.push(interaction.guildId);
 
@@ -72,21 +74,17 @@ Click on the emoji below to join the quiz.`)
         let scoreboard = players.map(p => { return { player: p, score: 0 }});
         let textScoreboard: Player[] = [];
 
-        let connection = joinVoiceChannel({
-            channelId: (interaction.member as GuildMember).voice.channelId!,
-            guildId: interaction.guildId,
-            adapterCreator: interaction.guild!.voiceAdapterCreator,
-            selfDeaf: true
-        });
+        const player = useMainPlayer();
 
-        let player = createAudioPlayer();
-        let resource = createAudioResource('./src/ext/countdown.mp3');
+        player.play(voiceChannel, './src/ext/countdown.mp3', {
+            searchEngine: 'file'
+        })
 
-        player.play(resource);
-        connection.subscribe(player);
+        queue = useQueue(voiceChannel.guildId);
 
-        let data = JSON.parse(fs.readFileSync('./src/ext/spotify.json').toString());
-        const tracks = data[0].tracks;
+        if (!queue) return interaction.editReply({ embeds: [embed.setDescription('An error occurred.')] });
+
+        const tracks = client.playlist.tracks;
 
         while (round < rounds) {
             let roundfinished = false;
@@ -99,35 +97,20 @@ Click on the emoji below to join the quiz.`)
             let title;
             let artists = [];
 
-            let search;
-            let stream;
+            while (played.includes(random)) random = Math.floor(Math.random() * tracks.length);
 
-            while (true) {
-                while (played.includes(random)) random = Math.floor(Math.random() * tracks.length);
-                song = tracks[random];
-                title = song.name.split(/[-]/)[0].replace(/\([^()]*\)/g, '').trim().toLowerCase();
-                played.push(random);
+            song = tracks[random];
+            title = song.name.split(/[-]/)[0].replace(/\([^()]*\)/g, '').trim().toLowerCase();
+            played.push(random);
 
-                if (song.artist.constructor === Array) song.artist.forEach((a: string) => artists.push(a.toLowerCase()));
-                else artists.push(song.artist.toLowerCase());
+            if (Array.isArray(song.artist)) song.artist.forEach((a: string) => artists.push(a.toLowerCase()));
+            else artists.push(song.artist.toLowerCase());
 
-                search = (await play.search(`${title} ${artists.join(' ')} official`))[0];
+            const track = (await player.search(song.uri, { searchEngine: 'spotifySong' })).tracks[0];
 
-                try {
-                    stream = await play.stream(search.url, { seek: Math.floor(search.durationInSec / 3), quality: 2 });
-                } catch(e) {
-                    continue;
-                }
+            if (queue.isPlaying()) queue.node.skip();
 
-                break;
-            }
-
-            let resource = createAudioResource(stream.stream, {
-                inputType: stream.type,
-            });
-            
-            player.play(resource);
-            connection.subscribe(player);
+            queue.play(track)
 
             const filter = (m: Message) => players.includes(m.author.id);
             const collector = interaction.channel.createMessageCollector({ filter, time: 30000 });
@@ -186,9 +169,9 @@ Click on the emoji below to join the quiz.`)
                 interaction.channel?.send({ embeds: [new EmbedBuilder()
                     .setColor(client.embedColor)
                     .setTitle(`\`${song.name}\` - \`${song.artist.toString().replace(/,/g, ', ')}\``)
-                    .setURL(search.url)
-                    .setDescription(`\`${search.views.toLocaleString()} 👀 | ${search.durationRaw} | ${search.uploadedAt}\``)
-                    .setThumbnail(search.thumbnails[0].url)
+                    .setURL(track.url)
+                    .setDescription(`\`${track.views.toLocaleString()} 👀 | ${track.duration}\``)
+                    .setThumbnail(track.thumbnail)
                     .addFields({ name: 'Scoreboard', value: textScoreboard.map(p => `${p.player} - ${p.score} pts`).toString().replace(/,/g, '\n') })
                     .setFooter({ text: `Round ${round + 1} / ${rounds}` })
                 ]});
@@ -200,8 +183,7 @@ Click on the emoji below to join the quiz.`)
             while (!roundfinished) await sleep(1000);
         }
 
-        player.stop();
-        connection.destroy();
+        queue.delete();
         client.musicquiz.splice(client.musicquiz.indexOf(interaction.guildId), 1);
         interaction.channel.send({ embeds: [new EmbedBuilder()
             .setColor(client.embedColor)

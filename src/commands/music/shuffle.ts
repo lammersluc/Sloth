@@ -25,6 +25,6 @@ export default {
         if (shuffle) queue.enableShuffle();
         else queue.disableShuffle();
 
-        interaction.editReply({ embeds: [embed.setDescription(`Set shuffle mode to \`${shuffle ? 'Enabled': 'Disabled'}\`.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`Set shuffle mode to \`${shuffle ? 'enabled': 'disabled'}\`.`)] });
     }
 }

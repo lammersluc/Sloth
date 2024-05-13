@@ -1,4 +1,17 @@
-import type { Collection, GuildMember, SlashCommandBuilder } from "discord.js";
+import type { Collection, SlashCommandBuilder } from "discord.js";
+
+interface Track {
+    name: string;
+    artist: string;
+    album: string;
+    uri: string;
+}
+
+interface Playlist {
+    name: string;
+    public: boolean;
+    tracks: Track[];
+}
 
 declare module "discord.js" {
     interface Client {
@@ -7,6 +20,7 @@ declare module "discord.js" {
         devs: string[];
         embedColor: ColorResolvable;
         musicquiz: string[];
+        playlist: Playlist
     }
 
     interface Command {

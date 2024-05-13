@@ -12,7 +12,8 @@ export default {
             .addChoices([
                 { name: 'Off', value: QueueRepeatMode.OFF },
                 { name: 'Track', value: QueueRepeatMode.TRACK },
-                { name: 'Queue', value: QueueRepeatMode.QUEUE }
+                { name: 'Queue', value: QueueRepeatMode.QUEUE },
+                { name: 'Autoplay', value: QueueRepeatMode.AUTOPLAY }
             ])
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
@@ -27,6 +28,6 @@ export default {
         const repeatMode = interaction.options.getInteger('looping', true);
 
         queue.setRepeatMode(repeatMode);
-        interaction.editReply({ embeds: [embed.setDescription(`Set the repeat mode to \`${QueueRepeatMode[repeatMode].toLowerCase().capitalize()}\`.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`Set the repeat mode to \`${QueueRepeatMode[repeatMode].toLowerCase()}\`.`)] });
     }
 }

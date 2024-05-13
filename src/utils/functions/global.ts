@@ -1,6 +1,3 @@
-import { Client, ActivityType, type PresenceData } from 'discord.js';
-import { setTimeout } from 'timers/promises';
-
 declare global {
     interface String {
         capitalize(): string;
@@ -55,63 +52,51 @@ Array.prototype.shuffle = function() {
     return this; 
 };
 
-const getPresence = (client: Client): PresenceData => ({ activities: [{ name: `/Help | ${client.guilds.cache.size} Guilds`, type: ActivityType.Listening }] });
+function similarity(s1: string, s2: string) {
+    const longer = s1.length >= s2.length ? s1 : s2;
+    const shorter = s1.length < s2.length ? s1 : s2;
 
-function similarity(s1: string, s2: string): number {
-    let longer = s1;
-    let shorter = s2;
-    
-    if (s1.length < s2.length) {
-        longer = s2;
-        shorter = s1;
-    }
+    if (longer.length === 0) return 1.0;
 
-    const longerLength = longer.length;
-
-    if (longerLength === 0)
-        return 1.0;
-
-    return (longerLength - editDistance(longer, shorter)) / longerLength;
+    return (longer.length - editDistance(longer, shorter)) / longer.length;
 }
 
-function editDistance(s1: string, s2: string): number {
+function editDistance(s1: string, s2: string) {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
 
-    const costs: number[] = new Array();
+    const costs: number[] = [];
 
     for (let i = 0; i <= s1.length; i++) {
         let lastValue = i;
 
         for (let j = 0; j <= s2.length; j++) {
-            if (i === 0) {
-                costs[j] = j;
-            } else {
+
+            if (i === 0) costs[j] = j;
+            else {
+
                 if (j > 0) {
                     let newValue = costs[j - 1];
-                    if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
-                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                    }
+
+                    if (s1.charAt(i - 1) !== s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+
                     costs[j - 1] = lastValue;
                     lastValue = newValue;
                 }
             }
         }
 
-        if (i > 0) {
-            costs[s2.length] = lastValue;
-        }
+        if (i > 0) costs[s2.length] = lastValue;
     }
 
     return costs[s2.length];
 }
 
-async function sleep(ms: number): Promise<void> {
-    await setTimeout(ms);
+async function sleep(ms: number) {
+    await new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export {
-    getPresence,
-    similarity,
-    sleep
-};
+    sleep,
+    similarity
+}

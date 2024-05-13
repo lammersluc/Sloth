@@ -8,6 +8,7 @@ export default {
         .addIntegerOption(o => o
             .setName('time')
             .setDescription('Enter the time to seek to in seconds')
+            .setMinValue(0)
             .setRequired(true)
         ),
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
@@ -23,11 +24,9 @@ export default {
         const track = queue.currentTrack!;
         let time = interaction.options.getInteger('time')!;
 
-        if (time < 0) time = 0;
-        else if (time > (track.durationMS / 1000 - 5)) time = track.durationMS / 1000 - 5;
-
+        if (time > (track.durationMS / 1000 - 5)) time = track.durationMS / 1000 - 5;
 
         await queue.node.seek(time)
-        interaction.editReply({ embeds: [embed.setDescription(`Seeked to ${time} seconds in the current track.`)] });
+        interaction.editReply({ embeds: [embed.setDescription(`Sought to \`${time.toTimestamp()}\` in the current track.`)] });
     }
 }

@@ -13,20 +13,19 @@ export default {
     async execute(client: Client, interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder().setColor(client.embedColor);
         const member = interaction.member as GuildMember;
-        const channel = member.voice.channel;
+        const voiceChannel = member.voice.channel;
 
-        if (!channel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
-        if (!channel.viewable) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to view this voice channel.')] });
-        if (!channel.joinable) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to join this voice channel.')] });
-        if (channel.full) return interaction.editReply({ embeds: [embed.setDescription('The voice channel is full.')] });
-        if (client.musicquiz.includes(channel.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
+        if (!voiceChannel) return interaction.editReply({ embeds: [embed.setDescription(`You are currently not connected to any voice channel.`)] });
+        if (!voiceChannel.joinable) return interaction.editReply({ embeds: [embed.setDescription('I do not have permission to join this voice channel.')] });
+        if (voiceChannel.full) return interaction.editReply({ embeds: [embed.setDescription('The voice channel is full.')] });
+        if (client.musicquiz.includes(voiceChannel.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         const query = interaction.options.getString('query', true);
     
         const player = useMainPlayer();
-        const queue = useQueue(channel.guildId);
+        const queue = useQueue(voiceChannel.guildId);
 
-        if (queue && queue.channel?.id !== channel.id) return interaction.editReply({ embeds: [embed.setDescription('I\'m already playing music in a different channel.')] });
+        if (queue && queue.channel?.id !== voiceChannel.id) return interaction.editReply({ embeds: [embed.setDescription('I\'m already playing music in a different channel.')] });
     
         const result = await player
             .search(query, { searchEngine: 'youtube', requestedBy: interaction.user })
@@ -69,7 +68,7 @@ export default {
             const track = result.tracks[parseInt(button.customId)];
 
             if (queue) queue.addTrack(track);
-            else player.play(channel, track, {
+            else player.play(voiceChannel, track, {
                     nodeOptions: {
                         metadata: interaction
                     }

@@ -1,5 +1,5 @@
-import { useQueue } from "discord-player";
 import { Client, ChatInputCommandInteraction, EmbedBuilder, Message, SlashCommandBuilder } from "discord.js";
+import { useQueue } from "discord-player";
 
 export default {
     data: new SlashCommandBuilder()
