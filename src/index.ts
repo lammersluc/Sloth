@@ -30,6 +30,8 @@ process.on('uncaughtException', (e) =>
     )
 );
 
+setInterval(() => client.user?.setPresence(getPresence(client)), 3 * 60 * 60 * 1000);
+
 const player = new Player(client);
 player.extractors.loadDefault();
 player.events.on('playerStart', (queue, track) =>
