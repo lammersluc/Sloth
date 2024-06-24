@@ -15,7 +15,7 @@ const client = new Client({
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.GuildMessageReactions
     ]
- });
+});
 
 client.commands = new Collection<string, Command>();
 client.categories = new Collection<string, string[]>();
@@ -24,8 +24,8 @@ client.embedColor = '#fbd55a';
 client.musicquiz = [];
 client.playlist = spotify;
 
-process.on('uncaughtException', (e) => 
-    client.devs.forEach((dev: string) => 
+process.on('uncaughtException', (e) =>
+    client.devs.forEach((dev: string) =>
         client.users.cache.get(dev)?.send({ embeds: [new EmbedBuilder().setTitle('Error').setDescription(`\`\`\`${e.stack}\`\`\``).setColor(client.embedColor)] })
     )
 );
@@ -35,14 +35,16 @@ setInterval(() => client.user?.setPresence(getPresence(client)), 3 * 60 * 60 * 1
 const player = new Player(client);
 player.extractors.loadDefault();
 player.events.on('playerStart', (queue, track) =>
-    (queue.metadata as ChatInputCommandInteraction).channel?.send({ embeds: [new EmbedBuilder()
-        .setAuthor({ name: 'Added song' })
-        .setTitle(`\`${track.title}\` - \`${track.author}\``)
-        .setDescription(null)
-        .setURL(track.url)
-        .setThumbnail(track.thumbnail)
-        .setTimestamp()
-        .setFooter({ text: track?.requestedBy?.username ?? '', iconURL: track.requestedBy?.displayAvatarURL()})]
+    (queue.metadata as ChatInputCommandInteraction).channel?.send({
+        embeds: [
+            new EmbedBuilder()
+                .setColor(client.embedColor)
+                .setAuthor({ name: 'Now playing' })
+                .setTitle(`\`${track.title}\` - \`${track.author}\``)
+                .setURL(track.url)
+                .setThumbnail(track.thumbnail)
+                .setTimestamp()
+                .setFooter({ text: track?.requestedBy?.username ?? '', iconURL: track.requestedBy?.displayAvatarURL() })]
     })
 );
 

@@ -21,12 +21,17 @@ export default {
         if (client.musicquiz.includes(voiceChannel.guildId)) return interaction.editReply({ embeds: [embed.setDescription('I am currently playing a music quiz.')] });
 
         const query = interaction.options.getString('query', true);
-    
+
         const player = useMainPlayer();
         const queue = useQueue(voiceChannel.guildId);
 
-        if (queue && queue.channel?.id !== voiceChannel.id) return interaction.editReply({ embeds: [embed.setDescription('I\'m already playing music in a different channel.')] });
-    
+        if (queue && queue.channel?.id !== voiceChannel.id)
+            return interaction.editReply({
+                embeds: [
+                    embed
+                        .setDescription('I\'m already playing music in a different channel.')]
+            });
+
         const result = await player
             .search(query, { searchEngine: 'youtube', requestedBy: interaction.user })
             .catch(() => null);
@@ -36,7 +41,7 @@ export default {
         const tracks = result.tracks.slice(0, 5);
 
         const list = tracks.map((track, i) => `${i + 1}. \`${track.title}\` - \`${track.duration}\``).join('\n\n');
-        
+
         const row = new ActionRowBuilder<ButtonBuilder>();
         const row2 = new ActionRowBuilder<ButtonBuilder>();
 
@@ -69,20 +74,20 @@ export default {
 
             if (queue) queue.addTrack(track);
             else player.play(voiceChannel, track, {
-                    nodeOptions: {
-                        metadata: interaction
-                    }
-                });
+                nodeOptions: {
+                    metadata: interaction
+                }
+            });
 
             interaction.editReply({
-                embeds: [embed
-                    .setAuthor({ name: 'Added song' })
-                    .setTitle(`\`${track.title}\` - \`${track.author}\``)
-                    .setDescription(null)
-                    .setURL(track.url)
-                    .setThumbnail(track.thumbnail)
-                    .setTimestamp()
-                    .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
+                embeds: [
+                    embed
+                        .setAuthor({ name: 'Added song' })
+                        .setTitle(`\`${track.title}\` - \`${track.author}\``)
+                        .setURL(track.url)
+                        .setThumbnail(track.thumbnail)
+                        .setTimestamp()
+                        .setFooter({ text: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
                 ],
                 components: []
             });
